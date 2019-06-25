@@ -7,16 +7,6 @@ public class Customer extends User {
     private double score;
     private int sale;
 
-    Customer(String login, String password, String name, String address, String phoneNumber, double score, int sale){
-        super.setLogin(login);
-        super.setPassword(password);
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.score = score;
-        this.sale = sale;
-    }
-
     public double getScore() {
         return score;
     }
@@ -35,6 +25,16 @@ public class Customer extends User {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    @Override
+    public void setLogin(String login) {
+        super.setLogin(login);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        super.setPassword(password);
     }
 
     public void setAddress(String address) {
