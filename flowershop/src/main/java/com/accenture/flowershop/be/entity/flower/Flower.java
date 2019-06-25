@@ -1,5 +1,8 @@
 package com.accenture.flowershop.be.entity.flower;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Flower {
     private int id;
     private String name;

@@ -1,7 +1,10 @@
 package com.accenture.flowershop.be.entity.order;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component
 public class Order {
     private Integer id;
     private double sumPrice;

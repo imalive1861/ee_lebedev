@@ -1,11 +1,24 @@
 package com.accenture.flowershop.be.entity.user;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Customer extends User {
     private String name;
     private String address;
     private String phoneNumber;
     private double score;
     private int sale;
+
+    @Override
+    public String getLogin() {
+        return super.getLogin();
+    }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
 
     public double getScore() {
         return score;
