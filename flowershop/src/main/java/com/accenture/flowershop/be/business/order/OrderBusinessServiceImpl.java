@@ -1,14 +1,17 @@
 package com.accenture.flowershop.be.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
-import com.accenture.flowershop.be.access.order.OrderAccessImpl;
 import com.accenture.flowershop.be.entity.order.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderBusinessServiceImpl implements OrderBusinessService {
 
-    private OrderAccess orderAccess = new OrderAccessImpl();
+    @Autowired
+    private OrderAccess orderAccess;
 
     public void save(Order order) {
         if(order!=null) {

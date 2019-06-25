@@ -1,11 +1,14 @@
 package com.accenture.flowershop.be.access.order;
 
 import com.accenture.flowershop.be.entity.order.Order;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class OrderAccessImpl implements OrderAccess {
+
     private List<Order> orders = new ArrayList<>();
 
     public void save(Order order) {

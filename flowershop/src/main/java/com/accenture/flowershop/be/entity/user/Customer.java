@@ -1,8 +1,5 @@
 package com.accenture.flowershop.be.entity.user;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Customer extends User {
     private String name;
     private String address;

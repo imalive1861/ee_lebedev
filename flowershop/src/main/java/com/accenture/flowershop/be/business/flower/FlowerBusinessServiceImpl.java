@@ -1,14 +1,17 @@
 package com.accenture.flowershop.be.business.flower;
 
 import com.accenture.flowershop.be.access.flower.FlowerAccess;
-import com.accenture.flowershop.be.access.flower.FlowerAccessImpl;
 import com.accenture.flowershop.be.entity.flower.Flower;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
-    private FlowerAccess flowerAccess = new FlowerAccessImpl();
+    @Autowired
+    private FlowerAccess flowerAccess;
 
     public void save(Flower flower) {
         if(flower!=null) {
