@@ -1,30 +1,29 @@
-package com.accenture.flowershop.be.entity.user;
+package com.accenture.flowershop.fe.dto;
 
-public class Customer extends User {
+public class UserDTO {
+    private int id;
+    private String login;
+    private String password;
     private String name;
     private String address;
     private String phoneNumber;
     private double score;
     private int sale;
 
-    @Override
     public int getId() {
-        return super.getId();
+        return id;
     }
 
-    @Override
     public void setId(int id) {
-        super.setId(id);
+        this.id = id;
     }
 
-    @Override
     public String getLogin() {
-        return super.getLogin();
+        return login;
     }
 
-    @Override
     public String getPassword() {
-        return super.getPassword();
+        return password;
     }
 
     public double getScore() {
@@ -47,14 +46,12 @@ public class Customer extends User {
         return phoneNumber;
     }
 
-    @Override
     public void setLogin(String login) {
-        super.setLogin(login);
+        this.login = login;
     }
 
-    @Override
     public void setPassword(String password) {
-        super.setPassword(password);
+        this.password = password;
     }
 
     public void setAddress(String address) {
@@ -76,4 +73,5 @@ public class Customer extends User {
     public void setScore(double score) {
         this.score = score;
     }
+
 }

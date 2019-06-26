@@ -11,11 +11,21 @@ public class UserAccessImpl implements UserAccess {
 
     private Map<String, Customer> users = new HashMap<>();
 
-    UserAccessImpl() {
+    public void userAccessImpl123() {
         Customer admin = new Customer();
+        admin.setId(1);
         admin.setLogin("admin");
         admin.setPassword("admin123");
         users.put("admin", admin);
+        Customer user1 = new Customer();
+        user1.setLogin("user1");
+        user1.setPassword("user123");
+        user1.setAddress("ABC");
+        user1.setId(2);
+        user1.setName("Vasia");
+        user1.setPhoneNumber("123123123");
+        user1.setSale(3);
+        user1.setScore(2000.00);
     }
 
     public void saveUser(Customer user){
