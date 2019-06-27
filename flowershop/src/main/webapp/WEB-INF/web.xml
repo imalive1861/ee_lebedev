@@ -6,37 +6,24 @@
          xmlns = "http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation = "http://java.sun.com/xml/ns/j2ee
-   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <display-name>Archetype Created Web Application</display-name>
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.accenture.flowershop.fe.servlets.LoginServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>OrderServlet</servlet-name>
-        <servlet-class>com.accenture.flowershop.fe.servlets.OrderServlet</servlet-class>
-    </servlet>
+
     <servlet>
         <servlet-name>flowershop</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>OrderServlet</servlet-name>
-        <url-pattern>/order</url-pattern>
-    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>flowershop</servlet-name>
         <url-pattern>/flowershop/*</url-pattern>
     </servlet-mapping>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+        <param-value>/WEB-INF/flowershop-servlet.xml</param-value>
     </context-param>
 
     <listener>
@@ -44,4 +31,5 @@
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
+
 </web-app>

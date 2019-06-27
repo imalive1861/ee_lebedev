@@ -21,11 +21,11 @@ public class User {
         return password;
     }
 
-    void setLogin(String login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 
-    void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }

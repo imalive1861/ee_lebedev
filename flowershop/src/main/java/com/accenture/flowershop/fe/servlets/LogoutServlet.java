@@ -7,18 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "OrderServlet", urlPatterns = "/order")
-public class OrderServlet extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
+public class LogoutServlet extends HttpServlet {
 
-    public OrderServlet(){
+    public LogoutServlet(){
         super();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        this.doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
+        request.getSession().invalidate();
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }

@@ -2,7 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.utils.MyUtils;
+import com.accenture.flowershop.be.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -18,11 +18,16 @@ import java.io.IOException;
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
+    @Autowired
     private UserBusinessService userBusinessService;
 
-    @Autowired
-    LoginServlet(UserBusinessService userBusinessService){
-        this.userBusinessService = userBusinessService;
+    public LoginServlet(){
+        super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
     }
 
     @Override
@@ -46,18 +51,12 @@ public class LoginServlet extends HttpServlet {
             hasError = true;
             errorString = "Required username and password!";
         } else {
-            try {
-                // Найти user.
-                user = userBusinessService.getUserDTObyLogin(userName);
+            // Найти user.
+            user = userBusinessService.getUserDTObyLogin(userName);
 
-                if (user == null) {
-                    hasError = true;
-                    errorString = "User Name or password invalid";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (user == null) {
                 hasError = true;
-                errorString = e.getMessage();
+                errorString = "User Name or password invalid";
             }
         }
         // В случае, если есть ошибка,

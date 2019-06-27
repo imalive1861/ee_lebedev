@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,7 +19,7 @@
     <table border="0">
         <tr>
             <td>User Name</td>
-            <td><input type="text" name="userName" value= "${user.userName}" /> </td>
+            <td><input type="text" name="userName" value= "${user.login}" /> </td>
         </tr>
         <tr>
             <td>Password</td>
@@ -36,8 +37,5 @@
         </tr>
     </table>
 </form>
-
-<p style="color:blue;">User Name: tom, password: tom001 or jerry/jerry001</p>
-
 </body>
 </html>

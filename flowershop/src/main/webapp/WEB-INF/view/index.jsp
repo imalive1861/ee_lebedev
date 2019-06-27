@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,9 +12,9 @@
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
 
-<h3>Hello: ${user.userName}</h3>
+<h3>Hello: ${loginedUser.login}</h3>
 
-User Name: <b>${user.userName}</b>
+User Name: <b>${loginedUser.login}</b>
 <br />
 
 
