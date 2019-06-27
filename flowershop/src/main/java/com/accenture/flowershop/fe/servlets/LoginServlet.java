@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,8 +18,12 @@ import java.io.IOException;
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
+    private UserBusinessService userBusinessService;
+
     @Autowired
-    UserBusinessService userBusinessService;
+    LoginServlet(UserBusinessService userBusinessService){
+        this.userBusinessService = userBusinessService;
+    }
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -56,7 +61,7 @@ public class LoginServlet extends HttpServlet {
             }
         }
         // В случае, если есть ошибка,
-        // forward (перенаправить) к /WEB-INF/views/login.jsp
+        // forward (перенаправить) к /WEB-INF/view/login.jsp
         if (hasError) {
             user = new UserDTO();
             user.setLogin(userName);
@@ -66,8 +71,10 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("errorString", errorString);
             request.setAttribute("user", user);
 
-            // Forward (перенаправить) к странице /WEB-INF/views/login.jsp
-            request.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(request, response);
+            // Forward (перенаправить) к странице /WEB-INF/view/login.jsp
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp");
+
+            dispatcher.forward(request, response);
         }
         // В случае, если нет ошибки.
         // Сохранить информацию пользователя в Session.

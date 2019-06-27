@@ -12,8 +12,12 @@ import java.util.Map;
 @Service
 public class UserBusinessServiceImpl implements UserBusinessService{
 
-    @Autowired
     private UserAccess userAccess;
+
+    @Autowired
+    UserBusinessServiceImpl(UserAccess userAccess){
+        this.userAccess = userAccess;
+    }
 
     public void saveUser(Customer user) {
         if (user != null) {
@@ -56,7 +60,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setScore(user.getScore());
         userDTO.setSale(user.getSale());
-        userAccess.userAccessImpl123();
+
         return userDTO;
     }
 
