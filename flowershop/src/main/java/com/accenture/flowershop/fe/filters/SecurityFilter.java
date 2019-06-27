@@ -24,7 +24,7 @@ public class SecurityFilter implements Filter {
         // (После успешного входа в систему).
         UserDTO loginedUser = MyUtils.getLoginedUser(request.getSession());
 
-        if (servletPath.equals("/login")) {
+        if (servletPath.equals("/login") || servletPath.equals("/registration")) {
             chain.doFilter(request, response);
             return;
         }

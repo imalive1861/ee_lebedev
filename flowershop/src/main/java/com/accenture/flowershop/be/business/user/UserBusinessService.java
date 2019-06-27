@@ -2,9 +2,11 @@ package com.accenture.flowershop.be.business.user;
 
 import com.accenture.flowershop.be.entity.user.Customer;
 import com.accenture.flowershop.fe.dto.UserDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public interface UserBusinessService {
     void saveUser(Customer user);
 
@@ -14,5 +16,11 @@ public interface UserBusinessService {
 
     Map<String, UserDTO> getAllUserAsUserDTO();
 
-    public UserDTO getUserDTObyLogin(String login);
+    UserDTO getUserDTO(String login, String password);
+
+    boolean uniqueLogin(String login);
+
+    int setMaxId();
+
+    void setNewUser(UserDTO userDTO);
 }

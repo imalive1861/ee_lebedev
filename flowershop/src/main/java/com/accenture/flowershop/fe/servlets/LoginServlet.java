@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userName = request.getParameter("userName");
+        String login = request.getParameter("login");
         String password = request.getParameter("password");
         String rememberMeStr = request.getParameter("rememberMe");
         boolean remember = "Y".equals(rememberMeStr);
@@ -47,23 +47,29 @@ public class LoginServlet extends HttpServlet {
         boolean hasError = false;
         String errorString = null;
 
-        if (userName == null || password == null || userName.length() == 0 || password.length() == 0) {
+        if (login == null || password == null || login.length() == 0 || password.length() == 0) {
             hasError = true;
             errorString = "Required username and password!";
         } else {
             // Найти user.
-            user = userBusinessService.getUserDTObyLogin(userName);
+            try{
+                user = userBusinessService.getUserDTO(login, password);
 
-            if (user == null) {
+                if (user == null) {
+                    hasError = true;
+                    errorString = "User Name or password invalid";
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
                 hasError = true;
-                errorString = "User Name or password invalid";
+                errorString = e.getMessage();
             }
         }
         // В случае, если есть ошибка,
         // forward (перенаправить) к /WEB-INF/view/login.jsp
         if (hasError) {
             user = new UserDTO();
-            user.setLogin(userName);
+            user.setLogin(login);
             user.setPassword(password);
 
             // Сохранить информацию в request attribute перед forward.

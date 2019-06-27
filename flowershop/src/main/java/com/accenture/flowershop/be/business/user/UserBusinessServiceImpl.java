@@ -15,7 +15,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     private UserAccess userAccess;
 
     @Autowired
-    UserBusinessServiceImpl(UserAccess userAccess){
+    public UserBusinessServiceImpl(UserAccess userAccess){
         this.userAccess = userAccess;
     }
 
@@ -64,8 +64,38 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userDTO;
     }
 
-    public UserDTO getUserDTObyLogin(String login) {
+    public UserDTO getUserDTO(String login, String password) {
+        UserDTO userDTO = userDTOs.get(login);
+        if (userDTO.getPassword().equals(password)){
+            return userDTO;
+        }
+        return null;
+    }
 
-        return userDTOs.get(login);
+    public boolean uniqueLogin(String login){
+        return userDTOs.containsKey(login);
+    }
+
+    public int setMaxId(){
+        int i = 0;
+        for (UserDTO user: userDTOs.values()){
+            if (user.getId() > i){
+                i = user.getId();
+            }
+        }
+        return i;
+    }
+    public void setNewUser(UserDTO userDTO){
+        Customer customer = new Customer();
+        customer.setLogin(userDTO.getLogin());
+        customer.setId(userDTO.getId());
+        customer.setName(userDTO.getName());
+        customer.setAddress(userDTO.getAddress());
+        customer.setPhoneNumber(userDTO.getPhoneNumber());
+        customer.setScore(userDTO.getScore());
+        customer.setSale(userDTO.getSale());
+        userAccess.saveUser(customer);
+        userDTOs.put(userDTO.getLogin(), userDTO);
+
     }
 }

@@ -11,7 +11,7 @@ public class UserAccessImpl implements UserAccess {
 
     private Map<String, Customer> users = new HashMap<>();
 
-    public void userAccessImpl123() {
+    public UserAccessImpl() {
         Customer admin = new Customer();
         admin.setId(1);
         admin.setLogin("admin");
@@ -26,6 +26,7 @@ public class UserAccessImpl implements UserAccess {
         user1.setPhoneNumber("123123123");
         user1.setSale(3);
         user1.setScore(2000.00);
+        users.put("user1", user1);
     }
 
     public void saveUser(Customer user){

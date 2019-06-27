@@ -12,7 +12,8 @@
                 <a href="${pageContext.request.contextPath}/logout"> Log out</a>
             </c:when>
             <c:otherwise>
-                Log in, pls!
+                <a href="${pageContext.request.contextPath}/login">Log in</a> or
+                <a href="${pageContext.request.contextPath}/registration">Reg</a>
             </c:otherwise>
         </c:choose>
         <br/>
