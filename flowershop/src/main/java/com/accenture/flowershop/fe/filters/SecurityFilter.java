@@ -36,7 +36,7 @@ public class SecurityFilter implements Filter {
         }
         HttpServletRequest wrapRequest = request;
 
-        if (loginedUser == null) {
+        if (loginedUser != null) {
             String userName = loginedUser.getLogin();
             String role = loginedUser.getRole();
             wrapRequest = new UserRoleRequestWrapper(userName, role, request);
@@ -56,13 +56,12 @@ public class SecurityFilter implements Filter {
             boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
             if (!hasPermission) {
 
-                RequestDispatcher dispatcher //
-                        = request.getRequestDispatcher("/WEB-INF/views/accessDeniedView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/accessDeniedView.jsp");
 
                 dispatcher.forward(request, response);
                 return;
             }
-        chain.doFilter(req, resp);
+            chain.doFilter(wrapRequest, response);
         }
     }
 
