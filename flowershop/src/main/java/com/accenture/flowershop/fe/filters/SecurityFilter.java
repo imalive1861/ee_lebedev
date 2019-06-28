@@ -1,5 +1,7 @@
 package com.accenture.flowershop.fe.filters;
 
+import com.accenture.flowershop.be.utils.SecurityUtils;
+import com.accenture.flowershop.be.utils.UserRoleRequestWrapper;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.MyUtils;
 
@@ -11,6 +13,10 @@ import java.io.IOException;
 
 @WebFilter(filterName = "SecurityFilter", urlPatterns = "/*")
 public class SecurityFilter implements Filter {
+
+    public SecurityFilter(){
+    }
+
     public void destroy() {
     }
 
@@ -28,16 +34,36 @@ public class SecurityFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        HttpServletRequest wrapRequest = request;
 
         if (loginedUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
+            String userName = loginedUser.getLogin();
+            String role = loginedUser.getRole();
+            wrapRequest = new UserRoleRequestWrapper(userName, role, request);
         }
-        request.setAttribute("user", loginedUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/index.jsp");
-        dispatcher.forward(request, response);
 
+        if (SecurityUtils.isSecurityPage(request)) {
+
+            if (loginedUser == null) {
+                String requestUri = request.getRequestURI();
+
+                int redirectId = MyUtils.storeRedirectAfterLoginUrl(request.getSession(), requestUri);
+
+                response.sendRedirect(wrapRequest.getContextPath() + "/login?redirectId=" + redirectId);
+                return;
+            }
+
+            boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
+            if (!hasPermission) {
+
+                RequestDispatcher dispatcher //
+                        = request.getRequestDispatcher("/WEB-INF/views/accessDeniedView.jsp");
+
+                dispatcher.forward(request, response);
+                return;
+            }
         chain.doFilter(req, resp);
+        }
     }
 
     public void init(FilterConfig config) throws ServletException {

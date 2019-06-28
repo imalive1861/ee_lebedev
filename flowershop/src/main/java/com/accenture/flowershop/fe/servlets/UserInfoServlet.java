@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "IndexServlet", urlPatterns = "/")
-public class IndexServlet extends HttpServlet {
+@WebServlet(name = "UserInfoServlet", urlPatterns = "/userInfo")
+public class UserInfoServlet extends HttpServlet {
 
-    public IndexServlet(){
+    public UserInfoServlet(){
         super();
     }
 

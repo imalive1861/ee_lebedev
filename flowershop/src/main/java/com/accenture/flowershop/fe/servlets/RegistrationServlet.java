@@ -76,17 +76,7 @@ public class RegistrationServlet extends HttpServlet {
 
             dispatcher.forward(request, response);
         } else {
-            Random random = new Random();
-            user = new UserDTO();
-            user.setId(userBusinessService.setMaxId());
-            user.setLogin(login);
-            user.setPassword(password);
-            user.setName(name);
-            user.setAddress(address);
-            user.setPhoneNumber(phoneNumber);
-            user.setSale(random.nextInt(10));
-            user.setScore(2000.00);
-            userBusinessService.setNewUser(user);
+            userBusinessService.setNewUser(login,password,name,address,phoneNumber);
             okString = "Registration completed successfully!";
 
             request.setAttribute("okString", okString);

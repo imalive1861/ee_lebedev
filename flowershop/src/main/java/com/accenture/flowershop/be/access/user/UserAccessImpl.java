@@ -1,43 +1,44 @@
 package com.accenture.flowershop.be.access.user;
 
-import com.accenture.flowershop.be.entity.user.Customer;
+import com.accenture.flowershop.be.entity.user.User;
+import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Repository
 public class UserAccessImpl implements UserAccess {
 
-    private Map<String, Customer> users = new HashMap<>();
+    private Map<String, User> users = new TreeMap<>();
 
     public UserAccessImpl() {
-        Customer admin = new Customer();
-        admin.setId(1);
-        admin.setLogin("admin");
-        admin.setPassword("admin123");
-        users.put("admin", admin);
-        Customer user1 = new Customer();
-        user1.setLogin("user1");
-        user1.setPassword("user123");
-        user1.setAddress("ABC");
-        user1.setId(2);
-        user1.setName("Vasia");
-        user1.setPhoneNumber("123123123");
-        user1.setSale(3);
-        user1.setScore(2000.00);
+        User admin = new User(setNextId(),"admin","admin123","",
+                "","",0,0, SecurityConfig.ROLE_ADMIN);
+        users.put(admin.getLogin(), admin);
+        User user1 = new User(setNextId(),"user1","user123","Vasia",
+                "ABC","8800553535",2000.00,3, SecurityConfig.ROLE_CUSTOMER);
         users.put("user1", user1);
     }
 
-    public void saveUser(Customer user){
+    private int setNextId(){
+        int i = 0;
+        for (User user: users.values()){
+            if (user.getId() > i){
+                i = user.getId();
+            }
+        }
+        return i;
+    }
+
+    public void saveUser(String login, String password, String name, String address,
+                         String phoneNumber, double score, int sale, String role){
+        User user = new User(setNextId(), login, password, name, address,
+                phoneNumber ,score, sale, role);
         users.put(user.getLogin(), user);
     }
 
-    public Map<String, Customer> getAllUsers(){
+    public Map<String, User> getAllUsers(){
         return users;
-    }
-
-    public Customer getByLogin(String login){
-        return users.get(login);
     }
 }

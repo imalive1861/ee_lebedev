@@ -12,9 +12,19 @@
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
 
-<h3>Hello: ${loginedUser.login}</h3>
+<h3>Hello,
+    <c:choose>
+        <c:when test="${loginedUser.login != null}">
+            ${loginedUser.login}!
+        </c:when>
+        <c:otherwise>
+            visitor. To use this site you need
+            <a href="${pageContext.request.contextPath}/login">Log in</a> or
+            <a href="${pageContext.request.contextPath}/registration">Reg</a>
+        </c:otherwise>
+    </c:choose>
+</h3>
 
-User Name: <b>${loginedUser.login}</b>
 <br />
 
 

@@ -1,7 +1,6 @@
 package com.accenture.flowershop.fe.dto;
 
 public class UserDTO {
-    private int id;
     private String login;
     private String password;
     private String name;
@@ -9,13 +8,21 @@ public class UserDTO {
     private String phoneNumber;
     private double score;
     private int sale;
+    private String role;
 
-    public int getId() {
-        return id;
+    public UserDTO(){
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public UserDTO(String login, String password, String name,
+                   String address, String phoneNumber, double score, int sale, String role){
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.score = score;
+        this.sale = sale;
+        this.role = role;
     }
 
     public String getLogin() {
@@ -72,6 +79,14 @@ public class UserDTO {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

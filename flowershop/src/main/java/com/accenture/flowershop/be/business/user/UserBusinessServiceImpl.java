@@ -1,72 +1,43 @@
 package com.accenture.flowershop.be.business.user;
 
 import com.accenture.flowershop.be.access.user.UserAccess;
-import com.accenture.flowershop.be.entity.user.Customer;
+import com.accenture.flowershop.be.entity.user.User;
+import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 
 @Service
 public class UserBusinessServiceImpl implements UserBusinessService{
 
+
     private UserAccess userAccess;
+
+    private Map<String, UserDTO> userDTOs;
 
     @Autowired
     public UserBusinessServiceImpl(UserAccess userAccess){
         this.userAccess = userAccess;
-    }
-
-    public void saveUser(Customer user) {
-        if (user != null) {
-            Map<String,Customer> users = userAccess.getAllUsers();
-            if (!users.isEmpty()) {
-                userAccess.saveUser(user);
-            }
+        userDTOs = new TreeMap<>();
+        for (User u: userAccess.getAllUsers().values()){
+            UserDTO userDTO = new UserDTO(u.getLogin(),u.getPassword(),u.getName(),u.getAddress(),
+                    u.getPhoneNumber(),u.getScore(),u.getSale(),u.getRoles());
+            userDTOs.put(userDTO.getLogin(), userDTO);
         }
     }
 
-    public Map<String, Customer> getAllUsers(){
-        return userAccess.getAllUsers();
-    }
-
-    public Customer getByLogin(String login){
-        if (login != null) {
-            return userAccess.getByLogin(login);
-        }
-        return null;
-    }
-
-    private Map<String, UserDTO> userDTOs;
-
-    public Map<String, UserDTO> getAllUserAsUserDTO() {
-        userDTOs = new HashMap<>();
-
-        for(Customer user : userAccess.getAllUsers().values()) {
-            userDTOs.put(user.getLogin() ,constructUserDTO(user));
-        }
-
-        return userDTOs;
-    }
-
-    private UserDTO constructUserDTO(Customer user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setLogin(user.getLogin());
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setAddress(user.getAddress());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setScore(user.getScore());
-        userDTO.setSale(user.getSale());
-
-        return userDTO;
+    public void saveUser(String login, String password, String name, String address,
+                         String phoneNumber, double score, int sale, String role) {
+        userAccess.saveUser(login, password, name, address, phoneNumber, score, sale, role);
     }
 
     public UserDTO getUserDTO(String login, String password) {
         UserDTO userDTO = userDTOs.get(login);
-        if (userDTO.getPassword().equals(password)){
+        if (userDTO != null && userDTO.getPassword().equals(password)){
             return userDTO;
         }
         return null;
@@ -76,26 +47,13 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userDTOs.containsKey(login);
     }
 
-    public int setMaxId(){
-        int i = 0;
-        for (UserDTO user: userDTOs.values()){
-            if (user.getId() > i){
-                i = user.getId();
-            }
-        }
-        return i;
-    }
-    public void setNewUser(UserDTO userDTO){
-        Customer customer = new Customer();
-        customer.setLogin(userDTO.getLogin());
-        customer.setId(userDTO.getId());
-        customer.setName(userDTO.getName());
-        customer.setAddress(userDTO.getAddress());
-        customer.setPhoneNumber(userDTO.getPhoneNumber());
-        customer.setScore(userDTO.getScore());
-        customer.setSale(userDTO.getSale());
-        userAccess.saveUser(customer);
+    public void setNewUser(String login, String password, String name,
+                           String address, String phoneNumber){
+        Random random = new Random();
+        UserDTO userDTO = new UserDTO(login, password, name, address,
+                phoneNumber, 2000.00, random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
+        saveUser(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),userDTO.getAddress(),
+                userDTO.getPhoneNumber(),userDTO.getScore(),userDTO.getSale(),userDTO.getRole());
         userDTOs.put(userDTO.getLogin(), userDTO);
-
     }
 }
