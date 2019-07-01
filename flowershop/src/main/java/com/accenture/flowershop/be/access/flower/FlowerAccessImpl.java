@@ -11,8 +11,18 @@ public class FlowerAccessImpl implements FlowerAccess {
 
     private List<Flower> flowers = new ArrayList<>();
 
-    public void save(Flower flower) {
-        flowers.add(flower);
+    public void saveFlower(String name, double price, int number) {
+        flowers.add(new Flower(setNextId(), name, price, number));
+    }
+
+    private int setNextId(){
+        int i = 0;
+        for (Flower user: flowers){
+            if (user.getId() > i){
+                i = user.getId();
+            }
+        }
+        return i;
     }
 
     public void delete(Flower flower) {
@@ -23,7 +33,7 @@ public class FlowerAccessImpl implements FlowerAccess {
         return flowers;
     }
 
-    public Flower getById(Integer id) {
+    public Flower getById(int id) {
         return flowers.get(id);
     }
 }

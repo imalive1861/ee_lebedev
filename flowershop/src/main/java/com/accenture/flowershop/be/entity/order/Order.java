@@ -3,11 +3,20 @@ package com.accenture.flowershop.be.entity.order;
 import java.util.Date;
 
 public class Order {
-    private Integer id;
+    private int id;
     private double sumPrice;
     private Date dateCreate;
     private Date dateClose;
     private boolean status;
+
+    public Order(){}
+
+    public Order(int id, double sumPrice, Date dateCreate, boolean status) {
+        this.id = id;
+        this.sumPrice = sumPrice;
+        this.dateCreate = dateCreate;
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

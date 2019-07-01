@@ -19,7 +19,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
             if(!flowers.isEmpty()) {
                 Flower lastFlower = flowers.get(flowers.size() - 1);
                 flower.setId(lastFlower.getId() + 1);
-                flowerAccess.save(flower);
+                //flowerAccess.save(flower);
             }
         }
     }

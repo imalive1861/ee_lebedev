@@ -19,7 +19,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
             if(!orders.isEmpty()) {
                 Order lastOrder = orders.get(orders.size() - 1);
                 order.setId(lastOrder.getId()+1);
-                orderAccess.save(order);
+                //orderAccess.save(order);
             }
         }
     }
