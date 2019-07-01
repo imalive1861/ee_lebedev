@@ -27,9 +27,9 @@ public class SecurityUtils {
     public static boolean hasPermission(HttpServletRequest request) {
         String urlPattern = request.getServletPath();
 
-        Set<String> allRoles = SecurityConfig.getAllAppRoles();
+        Set<String> roles = SecurityConfig.getAllAppRoles();
 
-        for (String role : allRoles) {
+        for (String role : roles) {
             if (!request.isUserInRole(role)) {
                 continue;
             }

@@ -5,13 +5,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>User Info</title>
+    <title>Welcome!</title>
 </head>
 <body>
-
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-
 <h3>Hello,
     <c:choose>
         <c:when test="${loginedUser.login != null}">
@@ -24,9 +22,6 @@
         </c:otherwise>
     </c:choose>
 </h3>
-
 <br />
-
-
 </body>
 </html>

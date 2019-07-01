@@ -20,6 +20,8 @@ public class SecurityConfig {
         List<String> urlPatterns1 = new ArrayList<>();
 
         urlPatterns1.add("/userInfo");
+        urlPatterns1.add("/customer");
+        urlPatterns1.add("/order");
 
         mapConfig.put(ROLE_CUSTOMER, urlPatterns1);
 

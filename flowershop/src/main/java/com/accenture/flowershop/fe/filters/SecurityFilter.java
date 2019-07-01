@@ -36,32 +36,29 @@ public class SecurityFilter implements Filter {
         }
         HttpServletRequest wrapRequest = request;
 
+        if (loginedUser == null) {
+            response.sendRedirect(wrapRequest.getContextPath() + "/login");
+            return;
+        }
+
         if (loginedUser != null) {
             String userName = loginedUser.getLogin();
             String role = loginedUser.getRole();
             wrapRequest = new UserRoleRequestWrapper(userName, role, request);
-        }
 
-        if (SecurityUtils.isSecurityPage(request)) {
+            if (SecurityUtils.isSecurityPage(request)) {
+                boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
+                if (!hasPermission) {
 
-            if (loginedUser == null) {
-                String requestUri = request.getRequestURI();
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/accessDenied.jsp");
 
-                int redirectId = MyUtils.storeRedirectAfterLoginUrl(request.getSession(), requestUri);
-
-                response.sendRedirect(wrapRequest.getContextPath() + "/login?redirectId=" + redirectId);
-                return;
+                    dispatcher.forward(request, response);
+                    return;
+                }
+                chain.doFilter(request, response);
             }
 
-            boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
-            if (!hasPermission) {
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/accessDeniedView.jsp");
-
-                dispatcher.forward(request, response);
-                return;
-            }
-            chain.doFilter(wrapRequest, response);
+            chain.doFilter(request, response);
         }
     }
 
