@@ -55,9 +55,7 @@ public class SecurityFilter implements Filter {
                     dispatcher.forward(request, response);
                     return;
                 }
-                chain.doFilter(request, response);
             }
-
             chain.doFilter(request, response);
         }
     }

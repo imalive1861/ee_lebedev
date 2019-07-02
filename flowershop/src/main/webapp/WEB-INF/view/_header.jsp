@@ -10,6 +10,15 @@
             <c:when test="${loginedUser.login != null}">
                 Hello <b>${loginedUser.login}</b>
                 <a href="${pageContext.request.contextPath}/logout"> Log out</a>
+                <c:choose>
+                    <c:when test="${!(loginedUser.login eq 'admin')}">
+                        <br/>
+                        Your score: <b>${loginedUser.score}</b>
+                        <br/>
+                        Your sale: <b>${loginedUser.sale} %</b>
+                        <br/>
+                    </c:when>
+                </c:choose>
             </c:when>
             <c:otherwise>
                 <a href="${pageContext.request.contextPath}/login">Log in</a> or
