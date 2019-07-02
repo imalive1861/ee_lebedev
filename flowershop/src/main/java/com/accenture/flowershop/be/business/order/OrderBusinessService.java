@@ -5,12 +5,12 @@ import com.accenture.flowershop.be.entity.order.Order;
 import java.util.List;
 
 public interface OrderBusinessService {
-    void save(Order order);
-
-    void delete(Order order);
+    void saveNewOrder(Order order);
 
     List<Order> getAll();
 
     Order getById(Integer id);
+
+    void closeOrder(Order order);
 
 }

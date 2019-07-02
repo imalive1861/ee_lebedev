@@ -33,10 +33,6 @@ public class OrderAccessImpl implements OrderAccess {
         return i;
     }
 
-    public void delete(Order order) {
-        orders.remove(order);
-    }
-
     public List<Order> getAll() {
         return orders;
     }

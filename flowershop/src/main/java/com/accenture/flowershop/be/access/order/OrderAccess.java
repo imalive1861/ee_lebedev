@@ -11,8 +11,6 @@ public interface OrderAccess {
 
     void closeOrder(int id);
 
-    void delete(Order order);
-
     List<Order> getAll();
 
     Order getById(Integer id);

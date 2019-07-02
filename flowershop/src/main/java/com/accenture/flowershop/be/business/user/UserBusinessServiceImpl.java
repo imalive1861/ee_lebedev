@@ -4,6 +4,8 @@ import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.user.User;
 import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.TreeMap;
 
 @Service
 public class UserBusinessServiceImpl implements UserBusinessService{
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserBusinessServiceImpl.class);
 
 
     private UserAccess userAccess;
@@ -55,5 +59,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         saveUser(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),userDTO.getAddress(),
                 userDTO.getPhoneNumber(),userDTO.getScore(),userDTO.getSale(),userDTO.getRole());
         userDTOs.put(userDTO.getLogin(), userDTO);
+        LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
+
     }
 }
