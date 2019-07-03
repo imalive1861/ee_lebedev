@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -17,7 +18,6 @@ import java.util.TreeMap;
 public class UserBusinessServiceImpl implements UserBusinessService{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserBusinessServiceImpl.class);
-
 
     private UserAccess userAccess;
 
@@ -35,7 +35,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     public void saveUser(String login, String password, String name, String address,
-                         String phoneNumber, double score, int sale, String role) {
+                         String phoneNumber, BigDecimal score, int sale, String role) {
         userAccess.saveUser(login, password, name, address, phoneNumber, score, sale, role);
     }
 
@@ -55,7 +55,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
                            String address, String phoneNumber){
         Random random = new Random();
         UserDTO userDTO = new UserDTO(login, password, name, address,
-                phoneNumber, 2000.00, random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
+                phoneNumber, new BigDecimal(2000.00).setScale(2), random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
         saveUser(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),userDTO.getAddress(),
                 userDTO.getPhoneNumber(),userDTO.getScore(),userDTO.getSale(),userDTO.getRole());
         userDTOs.put(userDTO.getLogin(), userDTO);

@@ -1,9 +1,12 @@
 package com.accenture.flowershop.be.access.user;
 
 import com.accenture.flowershop.be.entity.user.User;
-import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,33 +15,41 @@ public class UserAccessImpl implements UserAccess {
 
     private Map<String, User> users = new TreeMap<>();
 
-    public UserAccessImpl() {
-        User admin = new User(setNextId(),"admin","admin123","",
-                "","",0,0, SecurityConfig.ROLE_ADMIN);
-        users.put(admin.getLogin(), admin);
-        User user1 = new User(setNextId(),"user1","user123","Vasia",
-                "ABC","8800553535",2000.00,3, SecurityConfig.ROLE_CUSTOMER);
-        users.put("user1", user1);
-    }
+    public EntityManager usersEntityManager = Persistence.createEntityManagerFactory("FLOWERSHOP").createEntityManager();
 
-    private int setNextId(){
-        int i = 0;
-        for (User user: users.values()){
-            if (user.getId() > i){
-                i = user.getId();
-            }
-        }
-        return i;
+    public UserAccessImpl() {
     }
 
     public void saveUser(String login, String password, String name, String address,
-                         String phoneNumber, double score, int sale, String role){
-        User user = new User(setNextId(), login, password, name, address,
+                         String phoneNumber, BigDecimal score, int sale, String role){
+        User user = new User(login, password, name, address,
                 phoneNumber ,score, sale, role);
-        users.put(user.getLogin(), user);
+        usersEntityManager.getTransaction().begin();
+        usersEntityManager.merge(user);
+        usersEntityManager.getTransaction().commit();
+    }
+
+    public void delete(long id){
+        usersEntityManager.getTransaction().begin();
+        usersEntityManager.remove(get(id));
+        usersEntityManager.getTransaction().commit();
+    }
+
+    public User get(long id){
+        return usersEntityManager.find(User.class, id);
+    }
+
+    public void update(User user){
+        usersEntityManager.getTransaction().begin();
+        usersEntityManager.merge(user);
+        usersEntityManager.getTransaction().commit();
     }
 
     public Map<String, User> getAllUsers(){
+        TypedQuery<User> namedQuery = usersEntityManager.createNamedQuery("User.getAll", User.class);
+        for (User list: namedQuery.getResultList()){
+            users.put(list.getLogin(),list);
+        }
         return users;
     }
 }

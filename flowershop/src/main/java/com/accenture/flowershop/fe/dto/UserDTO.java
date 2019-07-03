@@ -1,12 +1,14 @@
 package com.accenture.flowershop.fe.dto;
 
+import java.math.BigDecimal;
+
 public class UserDTO {
     private String login;
     private String password;
     private String name;
     private String address;
     private String phoneNumber;
-    private double score;
+    private BigDecimal score;
     private int sale;
     private String role;
 
@@ -14,7 +16,7 @@ public class UserDTO {
     }
 
     public UserDTO(String login, String password, String name,
-                   String address, String phoneNumber, double score, int sale, String role){
+                   String address, String phoneNumber, BigDecimal score, int sale, String role){
         this.login = login;
         this.password = password;
         this.name = name;
@@ -33,7 +35,7 @@ public class UserDTO {
         return password;
     }
 
-    public double getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
@@ -77,7 +79,7 @@ public class UserDTO {
         this.sale = sale;
     }
 
-    public void setScore(double score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 

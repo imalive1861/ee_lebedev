@@ -1,23 +1,46 @@
 package com.accenture.flowershop.be.entity.user;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "USER")
+@NamedQuery(name = "User.getAll", query = "SELECT c from User c")
 public class User {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(name = "login")
     private String login;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "phoneNumber")
     private String phoneNumber;
-    private double score;
+
+    @Column(name = "score")
+    private BigDecimal score;
+
+    @Column(name = "sale")
     private int sale;
+
+    @Column(name = "role")
     private String role;
 
     public User(){
-        super();
     }
 
-    public User(int id, String login, String password, String name,
-                String address, String phoneNumber, double score, int sale, String role){
-        this.id = id;
+    public User(String login, String password, String name,
+                String address, String phoneNumber, BigDecimal score, int sale, String role){
         this.login = login;
         this.password = password;
         this.name = name;
@@ -28,7 +51,7 @@ public class User {
         this.role = role;
     }
 
-    public double getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
@@ -64,7 +87,7 @@ public class User {
         this.sale = sale;
     }
 
-    public void setScore(double score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 
@@ -76,12 +99,8 @@ public class User {
         this.role = role;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getLogin() {
