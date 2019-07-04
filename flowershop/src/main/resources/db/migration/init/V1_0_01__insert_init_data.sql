@@ -1,2 +1,2 @@
-INSERT INTO USER (login, password, NAME,address,phoneNumber,score,sale,role) VALUES('admin','admin123','','','',0,0,'ADMIN');
-INSERT INTO USER (login, password, NAME,address,phoneNumber,score,sale,role) VALUES('user1','user123','Testov Ivan','g. Test','88005553535',2000.00,3,'CUSTOMER');
+INSERT INTO USERS (login, password, NAME,address,phoneNumber,score,sale,role) VALUES('admin','admin123','','','',0,0,'ADMIN');
+INSERT INTO USERS (login, password, NAME,address,phoneNumber,score,sale,role) VALUES('user1','user123','Testov Ivan','g. Test','88005553535',2000.00,3,'CUSTOMER');

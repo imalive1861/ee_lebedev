@@ -27,16 +27,10 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     public UserBusinessServiceImpl(UserAccess userAccess){
         this.userAccess = userAccess;
         userDTOs = new TreeMap<>();
-        for (User u: userAccess.getAllUsers().values()){
-            UserDTO userDTO = new UserDTO(u.getLogin(),u.getPassword(),u.getName(),u.getAddress(),
-                    u.getPhoneNumber(),u.getScore(),u.getSale(),u.getRoles());
+        for (User u: userAccess.getAll().values()){
+            UserDTO userDTO = toUserDTO(u);
             userDTOs.put(userDTO.getLogin(), userDTO);
         }
-    }
-
-    public void saveUser(String login, String password, String name, String address,
-                         String phoneNumber, BigDecimal score, int sale, String role) {
-        userAccess.saveUser(login, password, name, address, phoneNumber, score, sale, role);
     }
 
     public UserDTO getUserDTO(String login, String password) {
@@ -51,15 +45,40 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userDTOs.containsKey(login);
     }
 
-    public void setNewUser(String login, String password, String name,
+    public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
         Random random = new Random();
-        UserDTO userDTO = new UserDTO(login, password, name, address,
-                phoneNumber, new BigDecimal(2000.00).setScale(2), random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
-        saveUser(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),userDTO.getAddress(),
-                userDTO.getPhoneNumber(),userDTO.getScore(),userDTO.getSale(),userDTO.getRole());
+        UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber, new BigDecimal(2000.00),
+                random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
+        User user = toUser(userDTO);
+        userAccess.saveUser(user);
+        userDTO.setId(user.getId());
         userDTOs.put(userDTO.getLogin(), userDTO);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
+    }
 
+    private User toUser(UserDTO userDTO){
+        if(userAccess.get(userDTO.getId()) != null) {
+            return get(userDTO.getId());
+        }
+        return new User(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),
+                userDTO.getAddress(),userDTO.getPhoneNumber(),userDTO.getScore(),
+                userDTO.getSale(),userDTO.getRole());
+    }
+
+    private UserDTO toUserDTO(User user){
+        if(userDTOs.get(user.getLogin()) != null) {
+            return userDTOs.get(user.getLogin());
+        }
+        return new UserDTO(user.getLogin(),user.getPassword(),user.getName(),
+                user.getAddress(),user.getPhoneNumber(),user.getScore(),
+                user.getSale(),user.getRole());
+    }
+
+    public User get(long id) {
+        if (id != 0) {
+            return userAccess.get(id);
+        }
+        return null;
     }
 }

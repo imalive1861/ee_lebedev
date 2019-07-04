@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 @NamedQuery(name = "User.getAll", query = "SELECT c from User c")
 public class User {
 
@@ -91,11 +91,11 @@ public class User {
         this.score = score;
     }
 
-    public String getRoles() {
+    public String getRole() {
         return role;
     }
 
-    public void setRoles(String role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

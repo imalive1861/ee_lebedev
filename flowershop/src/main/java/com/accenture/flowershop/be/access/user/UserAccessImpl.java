@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,10 +19,7 @@ public class UserAccessImpl implements UserAccess {
     public UserAccessImpl() {
     }
 
-    public void saveUser(String login, String password, String name, String address,
-                         String phoneNumber, BigDecimal score, int sale, String role){
-        User user = new User(login, password, name, address,
-                phoneNumber ,score, sale, role);
+    public void saveUser(User user){
         usersEntityManager.getTransaction().begin();
         usersEntityManager.merge(user);
         usersEntityManager.getTransaction().commit();
@@ -45,7 +41,7 @@ public class UserAccessImpl implements UserAccess {
         usersEntityManager.getTransaction().commit();
     }
 
-    public Map<String, User> getAllUsers(){
+    public Map<String, User> getAll(){
         TypedQuery<User> namedQuery = usersEntityManager.createNamedQuery("User.getAll", User.class);
         for (User list: namedQuery.getResultList()){
             users.put(list.getLogin(),list);
