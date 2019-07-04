@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.business.order;
+package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
 import com.accenture.flowershop.be.entity.order.Order;

@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.business.user.UserBusinessService;
+import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;

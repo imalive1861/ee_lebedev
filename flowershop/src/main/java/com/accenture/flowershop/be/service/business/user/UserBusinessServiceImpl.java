@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.business.user;
+package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.user.User;

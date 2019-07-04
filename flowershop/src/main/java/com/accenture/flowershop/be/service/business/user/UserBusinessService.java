@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.business.user;
+package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.stereotype.Service;

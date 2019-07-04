@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.business.flower;
+package com.accenture.flowershop.be.service.business.flower;
 
 import com.accenture.flowershop.be.entity.flower.Flower;
 
