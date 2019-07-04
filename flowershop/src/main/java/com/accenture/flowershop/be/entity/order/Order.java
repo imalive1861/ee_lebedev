@@ -1,60 +1,73 @@
 package com.accenture.flowershop.be.entity.order;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
+
+@Entity
+@Table(name = "ORDERS")
+@NamedQuery(name = "Order.getAll", query = "SELECT c from Order c")
 public class Order {
-    private int id;
-    private double sumPrice;
-    private Date dateCreate;
-    private Date dateClose;
-    private boolean status;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(name = "sumPrice")
+    private BigDecimal sumPrice;
+
+    @Column(name = "dateCreate")
+    private LocalDate dateCreate;
+
+    @Column(name = "dateClose")
+    private LocalDate dateClose;
+
+    @Column(name = "status")
+    private String status;
 
     public Order(){}
 
-    public Order(int id, double sumPrice, Date dateCreate, boolean status) {
-        this.id = id;
+    public Order(BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
+        this.dateClose = dateClose;
         this.status = status;
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getDateClose() {
+    public LocalDate getDateClose() {
         return dateClose;
     }
 
-    public Date getDateCreate() {
+    public LocalDate getDateCreate() {
         return dateCreate;
     }
 
-    public double getSumPrice() {
+    public BigDecimal getSumPrice() {
         return sumPrice;
     }
 
-    public boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setDateClose(Date dateClose) {
+    public void setDateClose(LocalDate dateClose) {
         this.dateClose = dateClose;
     }
 
-    public void setDateCreate(Date dateCreate) {
+    public void setDateCreate(LocalDate dateCreate) {
         this.dateCreate = dateCreate;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setSumPrice(double sumPrice) {
+    public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
     }
 }

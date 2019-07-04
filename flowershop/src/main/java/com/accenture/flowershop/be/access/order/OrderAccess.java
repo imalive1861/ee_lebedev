@@ -7,11 +7,13 @@ import java.util.List;
 
 @Repository
 public interface OrderAccess {
-    void saveOrder(double sumPrice);
+    void saveOrder(Order order);
 
-    void closeOrder(int id);
+    void delete(long id);
+
+    Order get(long id);
+
+    void update(Order order);
 
     List<Order> getAll();
-
-    Order getById(Integer id);
 }

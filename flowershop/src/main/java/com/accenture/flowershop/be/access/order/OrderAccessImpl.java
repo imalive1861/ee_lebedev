@@ -3,8 +3,10 @@ package com.accenture.flowershop.be.access.order;
 import com.accenture.flowershop.be.entity.order.Order;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -12,32 +14,33 @@ public class OrderAccessImpl implements OrderAccess {
 
     private List<Order> orders = new ArrayList<>();
 
-    public void saveOrder(double sumPrice) {
-        orders.add(new Order(setNextId(), sumPrice, new Date(), false));
+    public EntityManager orderEntityManager = Persistence.createEntityManagerFactory("FLOWERSHOP").createEntityManager();
+
+    public void saveOrder(Order order) {
+        orderEntityManager.getTransaction().begin();
+        orderEntityManager.merge(order);
+        orderEntityManager.getTransaction().commit();
     }
 
-    public void closeOrder(int id){
-        Order order = orders.get(id);
-        order.setDateClose(new Date());
-        order.setStatus(true);
-
+    public void delete(long id){
+        orderEntityManager.getTransaction().begin();
+        orderEntityManager.remove(get(id));
+        orderEntityManager.getTransaction().commit();
     }
 
-    private int setNextId(){
-        int i = 0;
-        for (Order user: orders){
-            if (user.getId() > i){
-                i = user.getId();
-            }
-        }
-        return i;
+    public Order get(long id){
+        return orderEntityManager.find(Order.class, id);
+    }
+
+    public void update(Order order){
+        orderEntityManager.getTransaction().begin();
+        orderEntityManager.merge(order);
+        orderEntityManager.getTransaction().commit();
     }
 
     public List<Order> getAll() {
+        TypedQuery<Order> namedQuery = orderEntityManager.createNamedQuery("Order.getAll", Order.class);
+        orders.addAll(namedQuery.getResultList());
         return orders;
-    }
-
-    public Order getById(Integer id) {
-        return orders.get(id);
     }
 }
