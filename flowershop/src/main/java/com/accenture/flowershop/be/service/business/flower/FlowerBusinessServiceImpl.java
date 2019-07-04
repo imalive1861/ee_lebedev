@@ -24,7 +24,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     public void delete(Flower flower) {
         if(flower!=null) {
-            flowerAccess.delete(flower);
+            //flowerAccess.delete(flower);
         }
     }
 
@@ -34,7 +34,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     public Flower getById(Integer id) {
         if(id!=null) {
-            return flowerAccess.getById(id);
+            //return flowerAccess.getById(id);
         }
         return null;
     }

@@ -1,21 +1,35 @@
 package com.accenture.flowershop.be.entity.flower;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "FLOWERS")
+@NamedQuery(name = "Flower.getAll", query = "SELECT c from Flower c")
 public class Flower {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(name = "name")
     private String name;
-    private double price;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "number")
     private int number;
 
     public Flower(){}
 
-    public Flower(int id, String name, double price, int number){
-        this.id = id;
+    public Flower(String name, BigDecimal price, int number){
         this.name = name;
         this.price = price;
         this.number = number;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -23,16 +37,12 @@ public class Flower {
         return name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
     public int getNumber() {
         return number;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -43,7 +53,7 @@ public class Flower {
         this.number = number;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }
