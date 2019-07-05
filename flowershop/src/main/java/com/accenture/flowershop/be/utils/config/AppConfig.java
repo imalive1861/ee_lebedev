@@ -1,7 +1,11 @@
 package com.accenture.flowershop.be.utils.config;
 
+import com.accenture.flowershop.be.access.flower.FlowerAccess;
+import com.accenture.flowershop.be.access.flower.FlowerAccessImpl;
 import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.access.user.UserAccessImpl;
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -16,5 +20,14 @@ public class AppConfig {
     @Bean
     public UserBusinessService userBusinessService(UserAccess userAccess){
         return new UserBusinessServiceImpl(userAccess);
+    }
+
+    @Bean
+    public FlowerAccess flowerAccess(){
+        return new FlowerAccessImpl();
+    }
+    @Bean
+    public FlowerBusinessService flowerBusinessService(FlowerAccess flowerAccess){
+        return new FlowerBusinessServiceImpl(flowerAccess);
     }
 }

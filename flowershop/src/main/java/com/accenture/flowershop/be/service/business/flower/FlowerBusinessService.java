@@ -1,15 +1,18 @@
 package com.accenture.flowershop.be.service.business.flower;
 
 import com.accenture.flowershop.be.entity.flower.Flower;
+import com.accenture.flowershop.fe.dto.FlowerDTO;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
+@Service
 public interface FlowerBusinessService {
-    void saveNewFlower(Flower flower);
+    void saveFlower(FlowerDTO flowerDTO);
 
     void delete(Flower flower);
 
-    List<Flower> getAll();
+    Map<Long, FlowerDTO> getAll();
 
-    Flower getById(Integer id);
+    FlowerDTO get(long id);
 }

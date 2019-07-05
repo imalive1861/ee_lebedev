@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,7 @@ public class FlowerAccessImpl implements FlowerAccess {
 
     private EntityManager flowersEntityManager = Persistence.createEntityManagerFactory("FLOWERSHOP").createEntityManager();
 
-    public void saveFlower(String name, BigDecimal price, int number) {
-        Flower flower = new Flower(name, price, number);
+    public void saveFlower(Flower flower) {
         flowersEntityManager.getTransaction().begin();
         flowersEntityManager.merge(flower);
         flowersEntityManager.getTransaction().commit();

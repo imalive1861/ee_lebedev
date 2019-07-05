@@ -5,7 +5,7 @@
 
     <a href="${pageContext.request.contextPath}/">Home</a>
     |
-    <a href="${pageContext.request.contextPath}/order">Product List</a>
+    <a href="${pageContext.request.contextPath}/order">Card</a>
     |
     <a href="${pageContext.request.contextPath}/userInfo">My Account Info</a>
 
