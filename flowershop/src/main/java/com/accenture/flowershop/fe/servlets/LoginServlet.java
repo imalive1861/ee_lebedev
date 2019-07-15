@@ -96,8 +96,11 @@ public class LoginServlet extends HttpServlet {
                 MyUtils.deleteUserCookie(response);
             }
 
-            // Redirect (Перенаправить) на страницу /userInfo.
-            response.sendRedirect(request.getContextPath() + "/userInfo");
+            // Redirect (Перенаправить) на страницу /admin или /customer
+            if (user.getRole().equals("ADMIN")){
+                response.sendRedirect(request.getContextPath() + "/admin");
+            }
+            response.sendRedirect(request.getContextPath() + "/customer");
         }
     }
 

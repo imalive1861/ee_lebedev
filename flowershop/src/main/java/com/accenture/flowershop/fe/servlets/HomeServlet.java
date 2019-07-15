@@ -36,22 +36,6 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String errorString = null;
-        Map<Long, FlowerDTO> flowers;
-
-        try {
-            flowers = flowerBusinessService.getAll();
-            request.setAttribute("flowerList", flowers.values());
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            errorString = e.getMessage();
-        }
-
-        request.setAttribute("errorString", errorString);
-
-
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/index.jsp");
         dispatcher.forward(request, response);
     }

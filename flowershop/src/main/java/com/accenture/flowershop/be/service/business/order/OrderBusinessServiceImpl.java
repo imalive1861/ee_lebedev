@@ -1,7 +1,7 @@
 package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
-import com.accenture.flowershop.be.entity.order.Order;
+import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

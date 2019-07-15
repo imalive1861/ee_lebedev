@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.access.user;
 
-import com.accenture.flowershop.be.entity.user.User;
+import com.accenture.flowershop.be.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;

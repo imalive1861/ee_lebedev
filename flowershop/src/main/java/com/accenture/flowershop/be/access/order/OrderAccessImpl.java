@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.access.order;
 
-import com.accenture.flowershop.be.entity.order.Order;
+import com.accenture.flowershop.be.entity.Order;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

@@ -1,7 +1,7 @@
 package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.access.user.UserAccess;
-import com.accenture.flowershop.be.entity.user.User;
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.slf4j.Logger;

@@ -1,11 +1,13 @@
 package com.accenture.flowershop.be.utils;
 
+import com.accenture.flowershop.fe.dto.CardDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class MyUtils {
 
@@ -41,6 +43,10 @@ public class MyUtils {
             }
         }
         return null;
+    }
+
+    public static void storeUserCard(HttpSession session, List<CardDTO> cardDTOs){
+        session.setAttribute("userCard", cardDTOs);
     }
 
     // Удалить Cookie пользователя

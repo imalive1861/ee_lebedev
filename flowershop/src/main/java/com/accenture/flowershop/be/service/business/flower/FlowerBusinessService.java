@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.flower;
 
-import com.accenture.flowershop.be.entity.flower.Flower;
+import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
