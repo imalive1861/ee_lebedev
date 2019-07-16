@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Welcome!</title>
+    <title>Flowers</title>
 </head>
 <body>
     <jsp:include page="_header.jsp"/>
@@ -27,7 +27,7 @@
              <td>${flower.price}</td>
              <td>${flower.number}</td>
              <form method="GET" action="${pageContext.request.contextPath}/customer">
-                 <td><input type="text" name="numberToCard"/></td>
+                 <td><input type="number" min="0" name="numberToCard" value="0"/></td>
                  <td>
                     <input type="hidden" name="flowerId" value="${flower.id}"/>
                     <input type="submit" value= "Add to card" />

@@ -1,7 +1,6 @@
 package com.accenture.flowershop.be.service.business.card;
 
 import com.accenture.flowershop.fe.dto.CardDTO;
-import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,10 +15,26 @@ class CardBusinessServiceImpl implements CardBusinessService {
     public CardBusinessServiceImpl(){
     }
 
-    public void addFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice){
+    public CardDTO getCardById(long flowerId){
+        for (CardDTO i: card) {
+            if (i.getFlowerId() == flowerId) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public void addNewFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice){
         CardDTO cardDTO = new CardDTO(flowerId, flowerName, number, sumPrice);
         this.card.add(cardDTO);
+    }
 
+    public void editCard(long flowerId, int number, BigDecimal sumPrice){
+        CardDTO i = getCardById(flowerId);
+        if (i != null) {
+            i.setNumber(i.getNumber() + number);
+            i.setSumPrice(i.getSumPrice().add(sumPrice));
+        }
     }
 
     public void clear(){
@@ -28,5 +43,15 @@ class CardBusinessServiceImpl implements CardBusinessService {
 
     public List<CardDTO> getCard() {
         return card;
+    }
+
+    public BigDecimal getAllSumPrice(){
+        BigDecimal sum = new BigDecimal(0.00);
+        if (!card.isEmpty()) {
+            for (CardDTO c : card) {
+                sum = sum.add(c.getSumPrice());
+            }
+        }
+        return sum;
     }
 }

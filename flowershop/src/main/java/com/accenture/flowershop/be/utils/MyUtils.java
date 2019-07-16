@@ -3,15 +3,10 @@ package com.accenture.flowershop.be.utils;
 import com.accenture.flowershop.fe.dto.CardDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class MyUtils {
-
-    private static final String ATT_NAME_USER_NAME = "ATTRIBUTE_FOR_STORE_USER_NAME_IN_COOKIE";
 
     // Сохранить информацию пользователя, который вошел в систему (login) в Session.
     public static void storeLoginedUser(HttpSession session, UserDTO loginedUser) {
@@ -24,36 +19,8 @@ public class MyUtils {
         return (UserDTO) session.getAttribute("loginedUser");
     }
 
-    // Сохранить информацию пользователя в Cookie.
-    public static void storeUserCookie(HttpServletResponse response, UserDTO user) {
-        System.out.println("Store user cookie");
-        Cookie cookieUserName = new Cookie(ATT_NAME_USER_NAME, user.getLogin());
-        // 1 день (Конвертированный в секунды)
-        cookieUserName.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookieUserName);
-    }
-
-    public static String getUserNameInCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (ATT_NAME_USER_NAME.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
 
     public static void storeUserCard(HttpSession session, List<CardDTO> cardDTOs){
         session.setAttribute("userCard", cardDTOs);
-    }
-
-    // Удалить Cookie пользователя
-    public static void deleteUserCookie(HttpServletResponse response) {
-        Cookie cookieUserName = new Cookie(ATT_NAME_USER_NAME, null);
-        // 0 секунд. (Данный Cookie будет сразу недействителен)
-        cookieUserName.setMaxAge(0);
-        response.addCookie(cookieUserName);
     }
 }

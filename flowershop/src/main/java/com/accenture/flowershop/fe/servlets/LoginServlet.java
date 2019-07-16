@@ -39,8 +39,6 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String rememberMeStr = request.getParameter("rememberMe");
-        boolean remember = "Y".equals(rememberMeStr);
 
         UserDTO user = null;
         boolean hasError = false;
@@ -86,15 +84,6 @@ public class LoginServlet extends HttpServlet {
         else {
             HttpSession session = request.getSession();
             MyUtils.storeLoginedUser(session, user);
-
-            // Если пользователь выбирает функцию "Remember me".
-            if (remember) {
-                MyUtils.storeUserCookie(response, user);
-            }
-            // Наоборот, удалить Cookie
-            else {
-                MyUtils.deleteUserCookie(response);
-            }
 
             // Redirect (Перенаправить) на страницу /admin или /customer
             if (user.getRole().equals("ADMIN")){

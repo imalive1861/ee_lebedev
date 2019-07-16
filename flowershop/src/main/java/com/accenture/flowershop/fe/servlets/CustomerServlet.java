@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Map;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
 public class CustomerServlet extends HttpServlet {
@@ -46,33 +45,50 @@ public class CustomerServlet extends HttpServlet {
 
         String numberToCard = request.getParameter("numberToCard");
         String flowerId = request.getParameter("flowerId");
-
+        boolean hasError = false;
         String errorString = null;
-        Map<Long, FlowerDTO> flowers;
-        HttpSession session = request.getSession();
 
         if (numberToCard != null && flowerId != null) {
             long flowerIds = Long.parseLong(flowerId);
             int numbersToCard = Integer.parseInt(numberToCard);
             FlowerDTO flowerDTO = flowerBusinessService.get(flowerIds);
-            if (numbersToCard < flowerDTO.getNumber()) {
-                cardBusinessService.addFlowerToCard(flowerDTO.getId(), flowerDTO.getName(),
-                        numbersToCard, (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
-                MyUtils.storeUserCard(session, cardBusinessService.getCard());
+            if (numbersToCard > flowerDTO.getNumber()) {
+                hasError = true;
+                errorString = "There are not enough flowers available";
+            } else {
+                if (numbersToCard < 0) {
+                    hasError = true;
+                    errorString = "Incorrect number";
+                } else {
+                    if (cardBusinessService.getCardById(flowerIds) != null) {
+                        if (numbersToCard <= (flowerDTO.getNumber() -
+                                cardBusinessService.getCardById(flowerIds).getNumber())){
+                            cardBusinessService.editCard(flowerIds, numbersToCard,
+                                    (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
+                        } else {
+                            hasError = true;
+                            errorString = "There are not enough flowers available";
+                        }
+                    } else {
+                        cardBusinessService.addNewFlowerToCard(flowerDTO.getId(), flowerDTO.getName(),
+                                numbersToCard, (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
+                    }
+                }
             }
         }
 
-        try {
-            flowers = flowerBusinessService.getAll();
-            request.setAttribute("flowerList", flowers.values());
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            errorString = e.getMessage();
+        if (hasError) {
+            request.setAttribute("errorString", errorString);
         }
 
-        request.setAttribute("errorString", errorString);
+        HttpSession session = request.getSession();
+        MyUtils.storeUserCard(session, cardBusinessService.getCard());
 
+        try {
+            request.setAttribute("flowerList", flowerBusinessService.getAll().values());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/customer.jsp");
         dispatcher.forward(request, response);

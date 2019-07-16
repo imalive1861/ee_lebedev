@@ -6,7 +6,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface CardBusinessService {
-    void addFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice);
+    void addNewFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice);
+    void editCard(long flowerId, int number, BigDecimal sumPrice);
     void clear();
     List<CardDTO> getCard();
+    CardDTO getCardById(long flowerId);
+    BigDecimal getAllSumPrice();
+
 }
