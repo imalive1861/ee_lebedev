@@ -12,8 +12,8 @@ role VARCHAR(255));
 CREATE TABLE ORDERS (
 ID BIGINT PRIMARY KEY auto_increment,
 sumPrice DECIMAL(20,2),
-dateCreate DATE,
-dateClose DATE,
+dateCreate VARCHAR(255),
+dateClose VARCHAR(255),
 status VARCHAR(255));
 
 CREATE TABLE FLOWERS (

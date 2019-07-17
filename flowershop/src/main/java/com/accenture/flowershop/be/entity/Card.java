@@ -16,7 +16,7 @@ public class Card {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="orderId", nullable = false)
+    @JoinColumn(name="orderId")
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -25,6 +25,8 @@ public class Card {
 
     @Column
     private int number;
+
+    public Card(){}
 
     public Card(User user, Order order, Flower flower, int number){
         this.user = user;

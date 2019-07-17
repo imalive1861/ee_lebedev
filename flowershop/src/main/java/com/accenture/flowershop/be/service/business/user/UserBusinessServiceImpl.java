@@ -81,4 +81,10 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         }
         return null;
     }
+    public User getDAO(String login){
+        if (login != null) {
+            return userAccess.get(login);
+        }
+        return null;
+    }
 }

@@ -15,4 +15,6 @@ public interface FlowerBusinessService {
     Map<Long, FlowerDTO> getAll();
 
     FlowerDTO get(long id);
+
+    Flower getDAO(long id);
 }

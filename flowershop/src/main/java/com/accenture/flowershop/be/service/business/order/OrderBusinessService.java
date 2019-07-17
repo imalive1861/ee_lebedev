@@ -4,15 +4,20 @@ import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Map;
 
 @Service
 public interface OrderBusinessService {
     void saveOrder(OrderDTO orderDTO);
 
+    OrderDTO createNewOrder(BigDecimal sumPrice);
+
     void closeOrder(OrderDTO orderDTO);
 
-    List<Order> getAll();
+    Map<Long, OrderDTO> getAll();
 
-    Order get(long id);
+    OrderDTO get(long id);
+
+    Order getDAO(long id);
 }

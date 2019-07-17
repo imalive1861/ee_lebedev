@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -29,7 +29,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     public OrderBusinessServiceImpl(OrderAccess orderAccess){
         this.orderAccess = orderAccess;
         orderDTOs = new TreeMap<>();
-        for (Order u: getAll()){
+        for (Order u: orderAccess.getAll()){
             OrderDTO orderDTO = toOrderDTO(u);
             orderDTOs.put(orderDTO.getId(), orderDTO);
         }
@@ -41,6 +41,15 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
             LOG.debug("Order with total price = {} date of creation = {} was created",
                     orderDTO.getSumPrice(), orderDTO.getDateCreate());
         }
+    }
+
+    public OrderDTO createNewOrder(BigDecimal sumPrice){
+        OrderDTO orderDTO = new OrderDTO(sumPrice,LocalDate.now(),null,ORDER_OPENED);
+        saveOrder(orderDTO);
+        orderDTOs.put(orderDTO.getId(), orderDTO);
+        LOG.debug("Order with total price = {} was create = {}",
+                orderDTO.getSumPrice(), orderDTO.getDateCreate());
+        return orderDTO;
     }
 
     public void closeOrder(OrderDTO orderDTO){
@@ -56,7 +65,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     private Order toOrder(OrderDTO orderDTO){
         if(orderAccess.get(orderDTO.getId()) != null) {
-            return get(orderDTO.getId());
+            return orderAccess.get(orderDTO.getId());
         }
         return new Order(orderDTO.getSumPrice(),orderDTO.getDateCreate(),
                 orderDTO.getDateClose(),orderDTO.getStatus());
@@ -66,18 +75,22 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         if(orderDTOs.get(order.getId()) != null) {
             return orderDTOs.get(order.getId());
         }
-        return new OrderDTO(order.getId(), order.getSumPrice(),order.getDateCreate(),
+        return new OrderDTO(order.getSumPrice(),order.getDateCreate(),
                 order.getDateClose(),order.getStatus());
     }
 
-    public List<Order> getAll() {
-        return orderAccess.getAll();
+    public Map<Long, OrderDTO> getAll() {
+        return orderDTOs;
     }
 
-    public Order get(long id) {
+    public OrderDTO get(long id) {
         if(id != 0) {
-            return orderAccess.get(id);
+            return orderDTOs.get(id);
         }
         return null;
+    }
+
+    public Order getDAO(long id){
+        return orderAccess.get(id);
     }
 }

@@ -4,14 +4,12 @@ import java.math.BigDecimal;
 
 public class CustomerCardDTO {
 
-    private long flowerId;
-    private String flowerName;
+    private FlowerDTO flowerDTO;
     private int number;
     private BigDecimal sumPrice;
 
-    public CustomerCardDTO(long flowerId, String flowerName, int number, BigDecimal sumPrice){
-        this.flowerId = flowerId;
-        this.flowerName = flowerName;
+    public CustomerCardDTO(FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
+        this.flowerDTO = flowerDTO;
         this.number = number;
         this.sumPrice = sumPrice;
     }
@@ -23,18 +21,11 @@ public class CustomerCardDTO {
         this.sumPrice = sumPrice;
     }
 
-    public long getFlowerId() {
-        return flowerId;
+    public FlowerDTO getFlowerDTO() {
+        return flowerDTO;
     }
-    public void setFlowerId(long flowerId) {
-        this.flowerId = flowerId;
-    }
-
-    public String getFlowerName() {
-        return flowerName;
-    }
-    public void setFlowerName(String flowerName) {
-        this.flowerName = flowerName;
+    public void setFlowerDTO(FlowerDTO flowerDTO) {
+        this.flowerDTO = flowerDTO;
     }
 
     public int getNumber() {

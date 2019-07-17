@@ -1,5 +1,5 @@
 CREATE TABLE CARD (ID BIGINT PRIMARY KEY auto_increment,
-userId BIGINT NOT NULL,
-orderId BIGINT NOT NULL,
-flowerId BIGINT NOT NULL,
+userId VARCHAR(255),
+orderId BIGINT,
+flowerId BIGINT,
 number INT);

@@ -1,6 +1,7 @@
 package com.accenture.flowershop.be.service.business.card;
 
 import com.accenture.flowershop.fe.dto.CustomerCardDTO;
+import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,15 +18,15 @@ class CardServiceImpl implements CardService {
 
     public CustomerCardDTO getCardById(long flowerId){
         for (CustomerCardDTO i: card) {
-            if (i.getFlowerId() == flowerId) {
+            if (i.getFlowerDTO().getId() == flowerId) {
                 return i;
             }
         }
         return null;
     }
 
-    public void addNewFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice){
-        CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerId, flowerName, number, sumPrice);
+    public void addNewFlowerToCard(FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
+        CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerDTO, number, sumPrice);
         this.card.add(customerCardDTO);
     }
 

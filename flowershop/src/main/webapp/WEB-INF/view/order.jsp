@@ -17,8 +17,8 @@
             </tr>
             <c:forEach items="${userCard}" var="card" >
                 <tr>
-                    <td>${card.flowerId}</td>
-                    <td>${card.flowerName}</td>
+                    <td>${card.flowerDTO.id}</td>
+                    <td>${card.flowerDTO.name}</td>
                     <td>${card.number}</td>
                     <td>${card.sumPrice}</td>
                 </tr>

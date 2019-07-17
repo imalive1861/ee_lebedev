@@ -71,8 +71,8 @@ public class CustomerServlet extends HttpServlet {
                             errorString = "There are not enough flowers available";
                         }
                     } else {
-                        cardService.addNewFlowerToCard(flowerDTO.getId(), flowerDTO.getName(),
-                                numbersToCard, (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
+                        cardService.addNewFlowerToCard(flowerDTO, numbersToCard,
+                                (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
                     }
                 }
             }
@@ -83,7 +83,7 @@ public class CustomerServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        SessionUtils.storeUserCard(session, cardService.getCard());
+        SessionUtils.storeUserCard(session, cardService);
 
         try {
             request.setAttribute("flowerList", flowerBusinessService.getAll().values());

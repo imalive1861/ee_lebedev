@@ -67,4 +67,8 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
         }
         return null;
     }
+
+    public Flower getDAO(long id){
+        return flowerAccess.get(id);
+    }
 }
