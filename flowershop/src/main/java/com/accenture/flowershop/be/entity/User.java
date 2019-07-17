@@ -9,35 +9,30 @@ import java.math.BigDecimal;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @Column(name = "login")
     private String login;
 
-    @Column(name = "password")
+    @Column
     private String password;
 
-    @Column(name = "name")
+    @Column
     private String name;
 
-    @Column(name = "address")
+    @Column
     private String address;
 
-    @Column(name = "phoneNumber")
+    @Column
     private String phoneNumber;
 
-    @Column(name = "score")
+    @Column
     private BigDecimal score;
 
-    @Column(name = "sale")
+    @Column
     private int sale;
 
-    @Column(name = "role")
+    @Column
     private String role;
 
-    public User(){
-    }
+    public User(){}
 
     public User(String login, String password, String name,
                 String address, String phoneNumber, BigDecimal score, int sale, String role){
@@ -51,71 +46,60 @@ public class User {
         this.role = role;
     }
 
-    public BigDecimal getScore() {
-        return score;
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+    public String getLogin() {
+        return login;
     }
 
-    public int getSale() {
-        return sale;
+    public void setPassword(String password) {
+        this.password = password;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public String getPassword() {
+        return password;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+    public String getName() {
+        return name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getAddress() {
+        return address;
+    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    public void setSale(int sale) {
-        this.sale = sale;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setScore(BigDecimal score) {
         this.score = score;
     }
+    public BigDecimal getScore() {
+        return score;
+    }
 
-    public String getRole() {
-        return role;
+    public void setSale(int sale) {
+        this.sale = sale;
+    }
+    public int getSale() {
+        return sale;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public String getRole() {
+        return role;
     }
 }

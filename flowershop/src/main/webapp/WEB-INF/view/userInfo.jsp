@@ -14,7 +14,11 @@
 
 <h3>Hello: ${loginedUser.login}</h3>
 
-User Name: <b>${loginedUser.login}</b>
-<br/>
+User Name: <b>${loginedUser.name}</b><br/>
+Address: <b>${loginedUser.address}</b><br/>
+Phone Number: <b>${loginedUser.phoneNumber}</b><br/>
+Score: <b>${loginedUser.score}</b><br/>
+Sale: <b>${loginedUser.sale}</b><br/>
+
 </body>
 </html>

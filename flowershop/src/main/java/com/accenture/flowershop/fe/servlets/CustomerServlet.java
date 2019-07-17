@@ -1,8 +1,8 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardBusinessService;
+import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
-import com.accenture.flowershop.be.utils.MyUtils;
+import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -20,11 +20,12 @@ import java.math.BigDecimal;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
 public class CustomerServlet extends HttpServlet {
+
     @Autowired
     private FlowerBusinessService flowerBusinessService;
 
     @Autowired
-    private CardBusinessService cardBusinessService;
+    private CardService cardService;
 
     public CustomerServlet() {
         super();
@@ -60,17 +61,17 @@ public class CustomerServlet extends HttpServlet {
                     hasError = true;
                     errorString = "Incorrect number";
                 } else {
-                    if (cardBusinessService.getCardById(flowerIds) != null) {
+                    if (cardService.getCardById(flowerIds) != null) {
                         if (numbersToCard <= (flowerDTO.getNumber() -
-                                cardBusinessService.getCardById(flowerIds).getNumber())){
-                            cardBusinessService.editCard(flowerIds, numbersToCard,
+                                cardService.getCardById(flowerIds).getNumber())){
+                            cardService.editCard(flowerIds, numbersToCard,
                                     (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
                         } else {
                             hasError = true;
                             errorString = "There are not enough flowers available";
                         }
                     } else {
-                        cardBusinessService.addNewFlowerToCard(flowerDTO.getId(), flowerDTO.getName(),
+                        cardService.addNewFlowerToCard(flowerDTO.getId(), flowerDTO.getName(),
                                 numbersToCard, (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
                     }
                 }
@@ -82,7 +83,7 @@ public class CustomerServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        MyUtils.storeUserCard(session, cardBusinessService.getCard());
+        SessionUtils.storeUserCard(session, cardService.getCard());
 
         try {
             request.setAttribute("flowerList", flowerBusinessService.getAll().values());

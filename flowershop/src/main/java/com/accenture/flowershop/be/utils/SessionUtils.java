@@ -1,12 +1,12 @@
 package com.accenture.flowershop.be.utils;
 
-import com.accenture.flowershop.fe.dto.CardDTO;
+import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-public class MyUtils {
+public class SessionUtils {
 
     // Сохранить информацию пользователя, который вошел в систему (login) в Session.
     public static void storeLoginedUser(HttpSession session, UserDTO loginedUser) {
@@ -20,7 +20,7 @@ public class MyUtils {
     }
 
 
-    public static void storeUserCard(HttpSession session, List<CardDTO> cardDTOs){
-        session.setAttribute("userCard", cardDTOs);
+    public static void storeUserCard(HttpSession session, List<CustomerCardDTO> customerCardDTOS){
+        session.setAttribute("userCard", customerCardDTOS);
     }
 }

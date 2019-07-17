@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.card;
 
-import com.accenture.flowershop.fe.dto.CardDTO;
+import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-class CardBusinessServiceImpl implements CardBusinessService {
+class CardServiceImpl implements CardService {
 
-    private List<CardDTO> card = new ArrayList<>();
+    private List<CustomerCardDTO> card = new ArrayList<>();
 
-    public CardBusinessServiceImpl(){
+    public CardServiceImpl(){
     }
 
-    public CardDTO getCardById(long flowerId){
-        for (CardDTO i: card) {
+    public CustomerCardDTO getCardById(long flowerId){
+        for (CustomerCardDTO i: card) {
             if (i.getFlowerId() == flowerId) {
                 return i;
             }
@@ -25,12 +25,12 @@ class CardBusinessServiceImpl implements CardBusinessService {
     }
 
     public void addNewFlowerToCard(long flowerId, String flowerName, int number, BigDecimal sumPrice){
-        CardDTO cardDTO = new CardDTO(flowerId, flowerName, number, sumPrice);
-        this.card.add(cardDTO);
+        CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerId, flowerName, number, sumPrice);
+        this.card.add(customerCardDTO);
     }
 
     public void editCard(long flowerId, int number, BigDecimal sumPrice){
-        CardDTO i = getCardById(flowerId);
+        CustomerCardDTO i = getCardById(flowerId);
         if (i != null) {
             i.setNumber(i.getNumber() + number);
             i.setSumPrice(i.getSumPrice().add(sumPrice));
@@ -41,14 +41,14 @@ class CardBusinessServiceImpl implements CardBusinessService {
         this.card.clear();
     }
 
-    public List<CardDTO> getCard() {
+    public List<CustomerCardDTO> getCard() {
         return card;
     }
 
     public BigDecimal getAllSumPrice(){
         BigDecimal sum = new BigDecimal(0.00);
         if (!card.isEmpty()) {
-            for (CardDTO c : card) {
+            for (CustomerCardDTO c : card) {
                 sum = sum.add(c.getSumPrice());
             }
         }

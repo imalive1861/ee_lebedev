@@ -23,8 +23,15 @@ public class Card {
     @JoinColumn(name="flowerId", nullable = false)
     private Flower flower;
 
-    @Column(name = "number")
+    @Column
     private int number;
+
+    public Card(User user, Order order, Flower flower, int number){
+        this.user = user;
+        this.order = order;
+        this.flower = flower;
+        this.number = number;
+    }
 
     public long getId() {
         return id;

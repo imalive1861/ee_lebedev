@@ -25,14 +25,14 @@ public class UserAccessImpl implements UserAccess {
         usersEntityManager.getTransaction().commit();
     }
 
-    public void delete(long id){
+    public void delete(String login){
         usersEntityManager.getTransaction().begin();
-        usersEntityManager.remove(get(id));
+        usersEntityManager.remove(get(login));
         usersEntityManager.getTransaction().commit();
     }
 
-    public User get(long id){
-        return usersEntityManager.find(User.class, id);
+    public User get(String login){
+        return usersEntityManager.find(User.class, login);
     }
 
     public void update(User user){

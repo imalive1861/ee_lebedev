@@ -18,35 +18,31 @@ public class FlowerDTO {
         this.number = number;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public int getNumber() {
-        return number;
+    public long getId() {
+        return id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setNumber(int number) {
-        this.number = number;
+    public String getName() {
+        return name;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+    public int getNumber() {
+        return number;
     }
 }

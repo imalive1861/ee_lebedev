@@ -12,13 +12,13 @@ public class Flower {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "name")
+    @Column
     private String name;
 
-    @Column(name = "price")
+    @Column
     private BigDecimal price;
 
-    @Column(name = "number")
+    @Column
     private int number;
 
     public Flower(){}
@@ -33,27 +33,24 @@ public class Flower {
         return id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getName() {
         return name;
     }
 
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setNumber(int number) {
         this.number = number;
     }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public int getNumber() {
+        return number;
     }
 }

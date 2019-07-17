@@ -13,8 +13,7 @@ public class OrderDTO {
 
     public OrderDTO(){}
 
-    public OrderDTO(long id, BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
-        this.id = id;
+    public OrderDTO(BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
         this.dateClose = dateClose;
@@ -25,35 +24,31 @@ public class OrderDTO {
         return id;
     }
 
-    public LocalDate getDateClose() {
-        return dateClose;
+    public void setSumPrice(BigDecimal sumPrice) {
+        this.sumPrice = sumPrice;
     }
-
-    public LocalDate getDateCreate() {
-        return dateCreate;
-    }
-
     public BigDecimal getSumPrice() {
         return sumPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setDateClose(LocalDate dateClose) {
-        this.dateClose = dateClose;
     }
 
     public void setDateCreate(LocalDate dateCreate) {
         this.dateCreate = dateCreate;
     }
+    public LocalDate getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateClose(LocalDate dateClose) {
+        this.dateClose = dateClose;
+    }
+    public LocalDate getDateClose() {
+        return dateClose;
+    }
 
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public String getStatus() {
+        return status;
     }
 }

@@ -10,18 +10,17 @@
 <body>
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
-    <h3>Hello,
-        <c:choose>
-            <c:when test="${loginedUser.login != null}">
-                ${loginedUser.login}!
-            </c:when>
-            <c:otherwise>
-                visitor. To use this site you need
-                <a href="${pageContext.request.contextPath}/login">Log in</a> or
-                <a href="${pageContext.request.contextPath}/registration">Reg</a>
-            </c:otherwise>
-        </c:choose>
-    </h3>
-    <br />
+    <h3>Hello, ${loginedUser.login}!</h3>
+    <c:choose>
+        <c:when test="${!(loginedUser.login eq 'admin')}">
+            Flower catalog is <a href="${pageContext.request.contextPath}/customer">here</a>.<br/>
+            See the card <a href="${pageContext.request.contextPath}/order">here</a>.<br/>
+            See account information <a href="${pageContext.request.contextPath}/userInfo">here</a>.<br/>
+        </c:when>
+        <c:otherwise>
+            Click <a href="${pageContext.request.contextPath}/admin">here</a> to open admin panel.<br/>
+        </c:otherwise>
+    </c:choose>
+    Have a nice day! :)
 </body>
 </html>

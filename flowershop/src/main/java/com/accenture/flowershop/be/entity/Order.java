@@ -14,16 +14,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "sumPrice")
+    @Column
     private BigDecimal sumPrice;
 
-    @Column(name = "dateCreate")
+    @Column
     private LocalDate dateCreate;
 
-    @Column(name = "dateClose")
+    @Column
     private LocalDate dateClose;
 
-    @Column(name = "status")
+    @Column
     private String status;
 
     public Order(){}
@@ -39,35 +39,31 @@ public class Order {
         return id;
     }
 
-    public LocalDate getDateClose() {
-        return dateClose;
+    public void setSumPrice(BigDecimal sumPrice) {
+        this.sumPrice = sumPrice;
     }
-
-    public LocalDate getDateCreate() {
-        return dateCreate;
-    }
-
     public BigDecimal getSumPrice() {
         return sumPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setDateClose(LocalDate dateClose) {
-        this.dateClose = dateClose;
     }
 
     public void setDateCreate(LocalDate dateCreate) {
         this.dateCreate = dateCreate;
     }
+    public LocalDate getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateClose(LocalDate dateClose) {
+        this.dateClose = dateClose;
+    }
+    public LocalDate getDateClose() {
+        return dateClose;
+    }
 
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public String getStatus() {
+        return status;
     }
 }

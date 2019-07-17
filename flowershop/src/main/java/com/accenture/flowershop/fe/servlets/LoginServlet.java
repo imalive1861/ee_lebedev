@@ -2,7 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.be.utils.MyUtils;
+import com.accenture.flowershop.be.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -83,13 +83,14 @@ public class LoginServlet extends HttpServlet {
         // И перенаправить к странице userInfo.
         else {
             HttpSession session = request.getSession();
-            MyUtils.storeLoginedUser(session, user);
+            SessionUtils.storeLoginedUser(session, user);
 
             // Redirect (Перенаправить) на страницу /admin или /customer
             if (user.getRole().equals("ADMIN")){
                 response.sendRedirect(request.getContextPath() + "/admin");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/customer");
             }
-            response.sendRedirect(request.getContextPath() + "/customer");
         }
     }
 

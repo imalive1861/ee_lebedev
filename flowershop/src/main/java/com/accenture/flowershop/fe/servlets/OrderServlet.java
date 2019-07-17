@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardBusinessService;
+import com.accenture.flowershop.be.service.business.card.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class OrderServlet extends HttpServlet {
 
     @Autowired
-    private CardBusinessService cardBusinessService;
+    private CardService cardService;
 
     public OrderServlet(){
         super();
@@ -44,7 +44,7 @@ public class OrderServlet extends HttpServlet {
         if (createOrder != null) {System.out.println("Knopochka najata");}
 
         try {
-            request.setAttribute("allSum", cardBusinessService.getAllSumPrice());
+            request.setAttribute("allSum", cardService.getAllSumPrice());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

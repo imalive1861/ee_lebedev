@@ -8,8 +8,8 @@ import java.util.Map;
 @Repository
 public interface UserAccess {
     void saveUser(User user);
-    void delete(long id);
-    User get(long id);
+    void delete(String login);
+    User get(String login);
     void update(User user);
     Map<String, User> getAll();
 }

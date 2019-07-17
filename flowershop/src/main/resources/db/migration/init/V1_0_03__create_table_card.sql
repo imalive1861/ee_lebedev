@@ -2,4 +2,4 @@ CREATE TABLE CARD (ID BIGINT PRIMARY KEY auto_increment,
 userId BIGINT NOT NULL,
 orderId BIGINT NOT NULL,
 flowerId BIGINT NOT NULL,
-sale INT);
+number INT);

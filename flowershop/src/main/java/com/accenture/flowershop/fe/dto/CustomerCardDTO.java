@@ -2,14 +2,14 @@ package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
 
-public class CardDTO {
+public class CustomerCardDTO {
 
     private long flowerId;
     private String flowerName;
     private int number;
     private BigDecimal sumPrice;
 
-    public CardDTO(long flowerId, String flowerName, int number, BigDecimal sumPrice){
+    public CustomerCardDTO(long flowerId, String flowerName, int number, BigDecimal sumPrice){
         this.flowerId = flowerId;
         this.flowerName = flowerName;
         this.number = number;

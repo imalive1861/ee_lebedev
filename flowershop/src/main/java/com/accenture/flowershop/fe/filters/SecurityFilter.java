@@ -3,7 +3,7 @@ package com.accenture.flowershop.fe.filters;
 import com.accenture.flowershop.be.utils.SecurityUtils;
 import com.accenture.flowershop.be.utils.UserRoleRequestWrapper;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.be.utils.MyUtils;
+import com.accenture.flowershop.be.utils.SessionUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -28,7 +28,7 @@ public class SecurityFilter implements Filter {
 
         // Информация пользователя сохранена в Session
         // (После успешного входа в систему).
-        UserDTO loginedUser = MyUtils.getLoginedUser(request.getSession());
+        UserDTO loginedUser = SessionUtils.getLoginedUser(request.getSession());
 
         if (servletPath.equals("/login") || servletPath.equals("/registration")) {
             chain.doFilter(request, response);

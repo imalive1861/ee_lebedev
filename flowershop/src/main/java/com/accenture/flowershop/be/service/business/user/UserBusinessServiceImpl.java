@@ -36,6 +36,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     public UserDTO getUserDTO(String login, String password) {
         UserDTO userDTO = userDTOs.get(login);
         if (userDTO != null && userDTO.getPassword().equals(password)){
+            LOG.debug("Customer with login = {} name = {} log in", userDTO.getLogin(), userDTO.getName());
             return userDTO;
         }
         return null;
@@ -52,14 +53,13 @@ public class UserBusinessServiceImpl implements UserBusinessService{
                 random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
         User user = toUser(userDTO);
         userAccess.saveUser(user);
-        userDTO.setId(user.getId());
         userDTOs.put(userDTO.getLogin(), userDTO);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
     }
 
     private User toUser(UserDTO userDTO){
-        if(userAccess.get(userDTO.getId()) != null) {
-            return get(userDTO.getId());
+        if(userAccess.get(userDTO.getLogin()) != null) {
+            return userAccess.get(userDTO.getLogin());
         }
         return new User(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),
                 userDTO.getAddress(),userDTO.getPhoneNumber(),userDTO.getScore(),
@@ -75,9 +75,9 @@ public class UserBusinessServiceImpl implements UserBusinessService{
                 user.getSale(),user.getRole());
     }
 
-    public User get(long id) {
-        if (id != 0) {
-            return userAccess.get(id);
+    public UserDTO get(String login) {
+        if (login != null) {
+            return userDTOs.get(login);
         }
         return null;
     }

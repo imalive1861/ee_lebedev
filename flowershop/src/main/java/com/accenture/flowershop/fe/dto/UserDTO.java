@@ -3,7 +3,6 @@ package com.accenture.flowershop.fe.dto;
 import java.math.BigDecimal;
 
 public class UserDTO {
-    private long id;
     private String login;
     private String password;
     private String name;
@@ -28,76 +27,59 @@ public class UserDTO {
         this.role = role;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public BigDecimal getScore() {
-        return score;
-    }
-
-    public int getSale() {
-        return sale;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
     public void setLogin(String login) {
         this.login = login;
+    }
+    public String getLogin() {
+        return login;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public String getPassword() {
+        return password;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+    public String getName() {
+        return name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getAddress() {
+        return address;
+    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    public void setSale(int sale) {
-        this.sale = sale;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setScore(BigDecimal score) {
         this.score = score;
     }
+    public BigDecimal getScore() {
+        return score;
+    }
 
-    public String getRole() {
-        return role;
+    public void setSale(int sale) {
+        this.sale = sale;
+    }
+    public int getSale() {
+        return sale;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
-
+    public String getRole() {
+        return role;
+    }
 }
