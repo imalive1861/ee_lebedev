@@ -8,6 +8,14 @@ public class CardDTO {
     private FlowerDTO flower;
     private int number;
 
+    public CardDTO(long id, UserDTO user, OrderDTO order, FlowerDTO flower, int number){
+        this.id = id;
+        this.user = user;
+        this.order = order;
+        this.flower = flower;
+        this.number = number;
+    }
+
     public CardDTO(UserDTO user, OrderDTO order, FlowerDTO flower, int number){
         this.user = user;
         this.order = order;

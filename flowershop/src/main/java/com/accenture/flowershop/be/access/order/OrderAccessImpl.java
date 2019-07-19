@@ -32,6 +32,13 @@ public class OrderAccessImpl implements OrderAccess {
         return orderEntityManager.find(Order.class, id);
     }
 
+    public Order getOrderByStatus(String status){
+        TypedQuery<Order> query = orderEntityManager.createQuery(
+                "select o from Order o where o.status = ?1", Order.class);
+        query.setParameter(1, status);
+        return query.getSingleResult();
+    }
+
     public void update(Order order){
         orderEntityManager.getTransaction().begin();
         orderEntityManager.merge(order);
@@ -43,4 +50,6 @@ public class OrderAccessImpl implements OrderAccess {
         orders.addAll(namedQuery.getResultList());
         return orders;
     }
+
+
 }

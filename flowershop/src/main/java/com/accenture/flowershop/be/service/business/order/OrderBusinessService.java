@@ -9,9 +9,9 @@ import java.util.Map;
 
 @Service
 public interface OrderBusinessService {
-    void saveOrder(OrderDTO orderDTO);
+    OrderDTO openOrder();
 
-    OrderDTO createNewOrder(BigDecimal sumPrice);
+    void paidOrder(OrderDTO orderDTO, BigDecimal sumPrice);
 
     void closeOrder(OrderDTO orderDTO);
 

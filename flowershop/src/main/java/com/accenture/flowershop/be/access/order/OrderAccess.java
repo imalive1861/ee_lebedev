@@ -13,6 +13,8 @@ public interface OrderAccess {
 
     Order get(long id);
 
+    Order getOrderByStatus(String status);
+
     void update(Order order);
 
     List<Order> getAll();

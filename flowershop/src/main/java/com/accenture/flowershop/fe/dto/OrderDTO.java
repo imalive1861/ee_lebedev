@@ -13,13 +13,17 @@ public class OrderDTO {
 
     public OrderDTO(){}
 
-    public OrderDTO(BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
+    public OrderDTO(long id, BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
+        this.id = id;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
         this.dateClose = dateClose;
         this.status = status;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
     public long getId() {
         return id;
     }

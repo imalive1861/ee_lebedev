@@ -12,6 +12,7 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,9 +38,14 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         this.flowerBusinessService = flowerBusinessService;
 
         cardDTOs = new TreeMap<>();
+        getAllCardToCardDTO();
+    }
+
+    private void getAllCardToCardDTO(){
+        cardDTOs.clear();
         for (Card u: cardAccess.getAll()){
-            CardDTO orderDTO = toCardDTO(u);
-            cardDTOs.put(orderDTO.getId(), orderDTO);
+            CardDTO cardDTO = toCardDTO(u);
+            cardDTOs.put(cardDTO.getId(), cardDTO);
         }
     }
 
@@ -49,13 +55,13 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         }
     }
 
-    public void saveCardToOrder(List<CustomerCardDTO> customerCardDTOs, OrderDTO orderDTO, UserDTO userDTO){
+    public void saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice, List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO){
+        orderBusinessService.paidOrder(orderDTO, sumPrice);
         for (CustomerCardDTO c: customerCardDTOs) {
             CardDTO cardDTO = new CardDTO(userDTO, orderDTO, c.getFlowerDTO(), c.getNumber());
             saveCard(cardDTO);
-            cardDTOs.put(cardDTO.getId(), cardDTO);
-
         }
+        getAllCardToCardDTO();
     }
 
     private Card toCard(CardDTO cardDTO){
@@ -72,8 +78,9 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         if(cardDTOs.get(card.getId()) != null) {
             return cardDTOs.get(card.getId());
         }
-        return new CardDTO(userBusinessService.get(card.getUser().getLogin()),
-                orderBusinessService.get(card.getId()),
+        return new CardDTO(card.getId(),
+                userBusinessService.get(card.getUser().getLogin()),
+                orderBusinessService.get(card.getOrder().getId()),
                 flowerBusinessService.get(card.getFlower().getId()),
                 card.getNumber());
     }

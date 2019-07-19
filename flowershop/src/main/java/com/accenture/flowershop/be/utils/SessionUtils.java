@@ -10,13 +10,10 @@ import java.util.List;
 
 public class SessionUtils {
 
-    // Сохранить информацию пользователя, который вошел в систему (login) в Session.
     public static void storeLoginedUser(HttpSession session, UserDTO loginedUser) {
-        // В JSP можно получить доступ через ${loginedUser}
         session.setAttribute("loginedUser", loginedUser);
     }
 
-    // Получить информацию пользователя, сохраненная в Session.
     public static UserDTO getLoginedUser(HttpSession session) {
         return (UserDTO) session.getAttribute("loginedUser");
     }

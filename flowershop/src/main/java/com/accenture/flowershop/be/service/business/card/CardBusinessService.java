@@ -6,11 +6,12 @@ import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public interface CardBusinessService {
-    void saveCardToOrder(List<CustomerCardDTO> customerCardDTOs, OrderDTO orderDTO, UserDTO userDTO);
+    void saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice, List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO);
     Map<Long, CardDTO> getAll();
 }

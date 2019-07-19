@@ -10,7 +10,7 @@
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
     <p style="color: red;">${errorString}</p>
-    <table border="1" cellpadding="5" cellspacing="1" >
+    <table border cellpadding="5" cellspacing="1">
         <tr>
             <th>Code</th>
             <th>Sum Price</th>
@@ -32,6 +32,28 @@
                         <input type="submit" value= "Close order"/>
                     </td>
                 </form>
+            </tr>
+            <tr align="right">
+                <td colspan="6">
+                    <table border>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Flower Name</th>
+                            <th>Flower Number</th>
+                        </tr>
+                        <c:forEach items="${cardList}" var="card" >
+                            <c:choose>
+                                <c:when test="${order.id == card.order.id}">
+                                    <tr>
+                                        <td>${card.user.login}</td>
+                                        <td>${card.flower.name}</td>
+                                        <td>${card.number}</td>
+                                    </tr>
+                                </c:when>
+                            </c:choose>
+                        </c:forEach>
+                    </table>
+                </td>
             </tr>
         </c:forEach>
     </table>

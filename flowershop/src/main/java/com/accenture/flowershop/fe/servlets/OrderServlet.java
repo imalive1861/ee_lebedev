@@ -4,6 +4,7 @@ import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -52,16 +53,21 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String createOrder = request.getParameter("createOrder");
         HttpSession session = request.getSession();
+        OrderDTO orderDTO = orderBusinessService.openOrder();
+
+        String createOrder = request.getParameter("createOrder");
 
         if (createOrder != null) {
-            cardBusinessService.saveCardToOrder(SessionUtils.getUserCard(session),
-                    orderBusinessService.createNewOrder(SessionUtils.getAllSum(session)),
+            cardBusinessService.saveCardToOrder(
+                    orderDTO,
+                    SessionUtils.getAllSum(session),
+                    SessionUtils.getUserCard(session),
                     SessionUtils.getLoginedUser(session));
             cardService.clear();
+            response.sendRedirect(request.getContextPath() + "/customer");
+        } else {
+            request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
     }
 }
