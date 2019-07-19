@@ -54,19 +54,38 @@ public class OrderServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        OrderDTO orderDTO = orderBusinessService.openOrder();
-
         String createOrder = request.getParameter("createOrder");
+        String cleanCard = request.getParameter("cleanCard");
+        boolean hasError = false;
+        String errorString = null;
+        SessionUtils.storeAllSumUserCard(session,
+                cardService.getAllSumPrice(SessionUtils.getLoginedUser(session).getSale()));
+
 
         if (createOrder != null) {
-            cardBusinessService.saveCardToOrder(
+            OrderDTO orderDTO = orderBusinessService.openOrder();
+            if (cardBusinessService.saveCardToOrder(
                     orderDTO,
                     SessionUtils.getAllSum(session),
                     SessionUtils.getUserCard(session),
-                    SessionUtils.getLoginedUser(session));
+                    SessionUtils.getLoginedUser(session))) {
+
+                cardService.clear();
+                response.sendRedirect(request.getContextPath() + "/customer");
+            } else {
+                hasError = true;
+                errorString = "Need more gold!";
+            }
+        } else if (cleanCard != null){
             cardService.clear();
-            response.sendRedirect(request.getContextPath() + "/customer");
+            hasError = true;
+            errorString = "Card clean right now!";
         } else {
+            request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
+        }
+
+        if (hasError) {
+            request.setAttribute("errorString", errorString);
             request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
         }
     }

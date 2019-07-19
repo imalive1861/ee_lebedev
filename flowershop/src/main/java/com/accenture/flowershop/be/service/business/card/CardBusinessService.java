@@ -12,6 +12,6 @@ import java.util.Map;
 
 @Service
 public interface CardBusinessService {
-    void saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice, List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO);
+    boolean saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice, List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO);
     Map<Long, CardDTO> getAll();
 }

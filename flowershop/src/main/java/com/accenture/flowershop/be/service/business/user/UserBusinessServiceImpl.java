@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -58,8 +59,10 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     private User toUser(UserDTO userDTO){
-        if(userAccess.get(userDTO.getLogin()) != null) {
-            return userAccess.get(userDTO.getLogin());
+        User user = userAccess.get(userDTO.getLogin());
+        if(user != null) {
+            user.setScore(userDTO.getScore());
+            return user;
         }
         return new User(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),
                 userDTO.getAddress(),userDTO.getPhoneNumber(),userDTO.getScore(),
@@ -84,6 +87,16 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     public User getDAO(String login){
         if (login != null) {
             return userAccess.get(login);
+        }
+        return null;
+    }
+
+    public BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice){
+        BigDecimal score = userDTO.getScore();
+        if (sumPrice.compareTo(score) < 0) {
+            userDTO.setScore(score.subtract(sumPrice));
+            userAccess.update(toUser(userDTO));
+            return sumPrice.setScale(2, RoundingMode.UP);
         }
         return null;
     }

@@ -39,7 +39,7 @@
                         <tr>
                             <th>Customer</th>
                             <th>Flower Name</th>
-                            <th>Flower Number</th>
+                            <th>Number of Flower</th>
                         </tr>
                         <c:forEach items="${cardList}" var="card" >
                             <c:choose>

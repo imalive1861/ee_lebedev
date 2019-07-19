@@ -14,6 +14,6 @@ public interface CardService {
     void clear();
     List<CustomerCardDTO> getCard();
     CustomerCardDTO getCardById(long flowerId);
-    BigDecimal getAllSumPrice();
+    BigDecimal getAllSumPrice(int sale);
 
 }

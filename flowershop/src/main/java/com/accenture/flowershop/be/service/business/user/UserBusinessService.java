@@ -4,6 +4,8 @@ import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public interface UserBusinessService {
 
@@ -17,4 +19,6 @@ public interface UserBusinessService {
     UserDTO get(String login);
 
     User getDAO(String login);
+
+    BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice);
 }

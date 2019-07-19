@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.math.RoundingMode.UP;
+
 @Service
 class CardServiceImpl implements CardService {
 
@@ -46,12 +48,16 @@ class CardServiceImpl implements CardService {
         return card;
     }
 
-    public BigDecimal getAllSumPrice(){
+    public BigDecimal getAllSumPrice(int sale){
         BigDecimal sum = new BigDecimal(0.00);
         if (!card.isEmpty()) {
             for (CustomerCardDTO c : card) {
                 sum = sum.add(c.getSumPrice());
             }
+            BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);
+            newSale = newSale.divide(new BigDecimal(100.00), UP).setScale(2, UP);
+            newSale = newSale.multiply(sum).setScale(2, UP);
+            sum = sum.subtract(newSale).setScale(2, UP);
         }
         return sum;
     }

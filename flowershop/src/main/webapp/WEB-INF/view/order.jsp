@@ -25,11 +25,17 @@
             </c:forEach>
             <tr>
                 <c:choose>
-                    <c:when test="${allSum == 0.00}">
+                    <c:when test="${userCard.isEmpty()}">
                         <td colspan="4">Card is empty</td>
                     </c:when>
                     <c:otherwise>
-                        <td colspan="2">
+                        <td>
+                            <form method="GET" action="${pageContext.request.contextPath}/order">
+                                <input type="hidden" name="cleanCard" value="YESURU"/>
+                                <input type="submit" value= "Clean card" />
+                            </form>
+                        </td>
+                        <td>
                             <form method="GET" action="${pageContext.request.contextPath}/order">
                                 <input type="hidden" name="createOrder" value="1"/>
                                 <input type="submit" value= "Create order" />

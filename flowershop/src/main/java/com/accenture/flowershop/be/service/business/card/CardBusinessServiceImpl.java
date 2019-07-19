@@ -55,13 +55,19 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         }
     }
 
-    public void saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice, List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO){
-        orderBusinessService.paidOrder(orderDTO, sumPrice);
-        for (CustomerCardDTO c: customerCardDTOs) {
-            CardDTO cardDTO = new CardDTO(userDTO, orderDTO, c.getFlowerDTO(), c.getNumber());
-            saveCard(cardDTO);
+    public boolean saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice,
+                                   List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO){
+        sumPrice = userBusinessService.checkScore(userDTO, sumPrice);
+        if (sumPrice != null) {
+            orderBusinessService.paidOrder(orderDTO, sumPrice);
+            for (CustomerCardDTO c : customerCardDTOs) {
+                CardDTO cardDTO = new CardDTO(userDTO, orderDTO, c.getFlowerDTO(), c.getNumber());
+                saveCard(cardDTO);
+            }
+            getAllCardToCardDTO();
+            return true;
         }
-        getAllCardToCardDTO();
+        return false;
     }
 
     private Card toCard(CardDTO cardDTO){
