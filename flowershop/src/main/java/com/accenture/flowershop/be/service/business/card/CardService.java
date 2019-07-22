@@ -9,11 +9,12 @@ import java.util.List;
 
 @Service
 public interface CardService {
-    void addNewFlowerToCard(FlowerDTO flowerDTO, int number, BigDecimal sumPrice);
-    void editCard(long flowerId, int number, BigDecimal sumPrice);
-    void clear();
-    List<CustomerCardDTO> getCard();
-    CustomerCardDTO getCardById(long flowerId);
-    BigDecimal getAllSumPrice(int sale);
+    void addNewFlowerToCard(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice);
+    void editCard(String login, long flowerId, int number, BigDecimal sumPrice);
+    void clear(String login);
+    List<CustomerCardDTO> setCardFromSession(String login);
+    CustomerCardDTO getCardById(String login, long flowerId);
+    List<CustomerCardDTO> getCard(String login);
+    BigDecimal getAllSumPrice(int sale, String login);
 
 }

@@ -16,6 +16,7 @@ import java.io.IOException;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
+
     @Autowired
     private UserBusinessService userBusinessService;
 
@@ -31,9 +32,11 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
@@ -71,8 +74,8 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("errorString", errorString);
             request.setAttribute("user", user);
 
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/registration.jsp");
-
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
+                    "/WEB-INF/view/registration.jsp");
             dispatcher.forward(request, response);
         } else {
             userBusinessService.saveNewUser(login,password,name,address,phoneNumber);
@@ -80,8 +83,8 @@ public class RegistrationServlet extends HttpServlet {
 
             request.setAttribute("okString", okString);
 
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/registration.jsp");
-
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
+                    "/WEB-INF/view/login.jsp");
             dispatcher.forward(request, response);
         }
     }

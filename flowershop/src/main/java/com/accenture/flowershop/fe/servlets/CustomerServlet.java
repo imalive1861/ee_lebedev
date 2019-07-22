@@ -3,6 +3,7 @@ package com.accenture.flowershop.fe.servlets;
 import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -61,17 +62,20 @@ public class CustomerServlet extends HttpServlet {
                     hasError = true;
                     errorString = "Incorrect number";
                 } else {
-                    if (cardService.getCardById(flowerIds) != null) {
+                    HttpSession session = request.getSession();
+                    String login = SessionUtils.getLoginedUser(session).getLogin();
+                    CustomerCardDTO flower = cardService.getCardById(login, flowerIds);
+                    if (flower != null) {
                         if (numbersToCard <= (flowerDTO.getNumber() -
-                                cardService.getCardById(flowerIds).getNumber())){
-                            cardService.editCard(flowerIds, numbersToCard,
+                                flower.getNumber())){
+                            cardService.editCard(login, flowerIds, numbersToCard,
                                     (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
                         } else {
                             hasError = true;
                             errorString = "There are not enough flowers available";
                         }
                     } else {
-                        cardService.addNewFlowerToCard(flowerDTO, numbersToCard,
+                        cardService.addNewFlowerToCard(login, flowerDTO, numbersToCard,
                                 (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
                     }
                 }
@@ -81,9 +85,6 @@ public class CustomerServlet extends HttpServlet {
         if (hasError) {
             request.setAttribute("errorString", errorString);
         }
-
-        HttpSession session = request.getSession();
-        SessionUtils.storeUserCard(session, cardService);
 
         try {
             request.setAttribute("flowerList", flowerBusinessService.getAll().values());

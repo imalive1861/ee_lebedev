@@ -13,6 +13,7 @@
 
 <h3>Login Page</h3>
 <p style="color: red;">${errorString}</p>
+<p style="color: green;">${okString}</p>
 
 
 <form method="POST" action="${pageContext.request.contextPath}/login">

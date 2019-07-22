@@ -1,5 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
@@ -20,6 +21,9 @@ public class LoginServlet extends HttpServlet {
 
     @Autowired
     private UserBusinessService userBusinessService;
+
+    @Autowired
+    private CardService cardService;
 
     public LoginServlet(){
         super();
@@ -48,7 +52,7 @@ public class LoginServlet extends HttpServlet {
             hasError = true;
             errorString = "Required username and password!";
         } else {
-            // Найти user.
+
             try{
                 user = userBusinessService.getUserDTO(login, password);
 
@@ -62,30 +66,23 @@ public class LoginServlet extends HttpServlet {
                 errorString = e.getMessage();
             }
         }
-        // В случае, если есть ошибка,
-        // forward (перенаправить) к /WEB-INF/view/login.jsp
+
         if (hasError) {
             user = new UserDTO();
             user.setLogin(login);
             user.setPassword(password);
 
-            // Сохранить информацию в request attribute перед forward.
             request.setAttribute("errorString", errorString);
             request.setAttribute("user", user);
 
-            // Forward (перенаправить) к странице /WEB-INF/view/login.jsp
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp");
 
             dispatcher.forward(request, response);
-        }
-        // В случае, если нет ошибки.
-        // Сохранить информацию пользователя в Session.
-        // И перенаправить к странице userInfo.
-        else {
+        } else {
             HttpSession session = request.getSession();
             SessionUtils.storeLoginedUser(session, user);
+            SessionUtils.storeUserCard(session, cardService.setCardFromSession(login));
 
-            // Redirect (Перенаправить) на страницу /admin или /customer
             if (user.getRole().equals("ADMIN")){
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else {

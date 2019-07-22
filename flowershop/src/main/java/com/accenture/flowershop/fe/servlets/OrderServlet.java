@@ -5,6 +5,7 @@ import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
+import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -58,8 +59,9 @@ public class OrderServlet extends HttpServlet {
         String cleanCard = request.getParameter("cleanCard");
         boolean hasError = false;
         String errorString = null;
+        UserDTO user = SessionUtils.getLoginedUser(session);
         SessionUtils.storeAllSumUserCard(session,
-                cardService.getAllSumPrice(SessionUtils.getLoginedUser(session).getSale()));
+                cardService.getAllSumPrice(user.getSale(), user.getLogin()));
 
 
         if (createOrder != null) {
@@ -70,14 +72,14 @@ public class OrderServlet extends HttpServlet {
                     SessionUtils.getUserCard(session),
                     SessionUtils.getLoginedUser(session))) {
 
-                cardService.clear();
+                cardService.clear(user.getLogin());
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {
                 hasError = true;
                 errorString = "Need more gold!";
             }
         } else if (cleanCard != null){
-            cardService.clear();
+            cardService.clear(user.getLogin());
             hasError = true;
             errorString = "Card clean right now!";
         } else {

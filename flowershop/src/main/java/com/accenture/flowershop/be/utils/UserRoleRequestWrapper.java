@@ -6,7 +6,7 @@ import java.security.Principal;
 
 public class UserRoleRequestWrapper extends HttpServletRequestWrapper {
     private String user;
-    private String roles = null;
+    private String roles;
     private HttpServletRequest realRequest;
 
     public UserRoleRequestWrapper(String user, String roles, HttpServletRequest request) {
@@ -30,12 +30,6 @@ public class UserRoleRequestWrapper extends HttpServletRequestWrapper {
             return realRequest.getUserPrincipal();
         }
 
-        // Make an anonymous implementation to just return our user
-        return new Principal() {
-            @Override
-            public String getName() {
-                return user;
-            }
-        };
+        return () -> user;
     }
 }
