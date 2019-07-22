@@ -1,10 +1,11 @@
 package com.accenture.flowershop.be.access.flower;
 
 import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.be.utils.EntityManagerUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,32 +15,33 @@ public class FlowerAccessImpl implements FlowerAccess {
 
     private List<Flower> flowers = new ArrayList<>();
 
-    private EntityManager flowersEntityManager = Persistence.createEntityManagerFactory("FLOWERSHOP").createEntityManager();
+    @PersistenceContext
+    private EntityManager entityManager = EntityManagerUtils.getEntityManager();
 
     public void saveFlower(Flower flower) {
-        flowersEntityManager.getTransaction().begin();
-        flowersEntityManager.merge(flower);
-        flowersEntityManager.getTransaction().commit();
+        entityManager.getTransaction().begin();
+        entityManager.merge(flower);
+        entityManager.getTransaction().commit();
     }
 
     public void delete(long id){
-        flowersEntityManager.getTransaction().begin();
-        flowersEntityManager.remove(get(id));
-        flowersEntityManager.getTransaction().commit();
+        entityManager.getTransaction().begin();
+        entityManager.remove(get(id));
+        entityManager.getTransaction().commit();
     }
 
     public void update(Flower flower){
-        flowersEntityManager.getTransaction().begin();
-        flowersEntityManager.merge(flower);
-        flowersEntityManager.getTransaction().commit();
+        entityManager.getTransaction().begin();
+        entityManager.merge(flower);
+        entityManager.getTransaction().commit();
     }
 
     public Flower get(long id){
-        return flowersEntityManager.find(Flower.class, id);
+        return entityManager.find(Flower.class, id);
     }
 
     public List<Flower> getAll(){
-        TypedQuery<Flower> namedQuery = flowersEntityManager.createNamedQuery("Flower.getAll", Flower.class);
+        TypedQuery<Flower> namedQuery = entityManager.createNamedQuery("Flower.getAll", Flower.class);
         flowers.addAll(namedQuery.getResultList());
         return flowers;
     }

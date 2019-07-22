@@ -5,13 +5,18 @@
                                  http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
              version="1.0">
 
-    <persistence-unit name="FLOWERSHOP" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="com.accenture.flowershop" transaction-type="RESOURCE_LOCAL">
+        <class>com.accenture.flowershop.be.entity.Card</class>
+        <class>com.accenture.flowershop.be.entity.Flower</class>
+        <class>com.accenture.flowershop.be.entity.Order</class>
+        <class>com.accenture.flowershop.be.entity.User</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:h2:~/user"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="show_sql" value="true"/>
         </properties>
     </persistence-unit>
