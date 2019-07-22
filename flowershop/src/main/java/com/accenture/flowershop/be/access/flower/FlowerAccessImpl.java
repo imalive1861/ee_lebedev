@@ -5,7 +5,6 @@ import com.accenture.flowershop.be.utils.EntityManagerUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ public class FlowerAccessImpl implements FlowerAccess {
 
     private List<Flower> flowers = new ArrayList<>();
 
-    @PersistenceContext
     private EntityManager entityManager = EntityManagerUtils.getEntityManager();
 
     public void saveFlower(Flower flower) {

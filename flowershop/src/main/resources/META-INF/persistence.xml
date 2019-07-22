@@ -9,7 +9,7 @@
         <class>com.accenture.flowershop.be.entity.Card</class>
         <class>com.accenture.flowershop.be.entity.Flower</class>
         <class>com.accenture.flowershop.be.entity.Order</class>
-        <class>com.accenture.flowershop.be.entity.User</class>
+        <class>com.accenture.flowershop.be.entity.</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:h2:~/user"/>

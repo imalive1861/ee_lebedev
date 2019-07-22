@@ -2,9 +2,9 @@ package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
 import com.accenture.flowershop.be.entity.Order;
+import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     private static final String ORDER_PAID = "PAID";
     private static final String ORDER_CLOSED = "CLOSED";
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrderBusinessServiceImpl.class);
+    private Logger LOG = LoggerUtils.getLOG();
 
     private OrderAccess orderAccess;
 
@@ -60,6 +60,8 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         orderDTO.setStatus(ORDER_PAID);
         orderAccess.update(toOrder(orderDTO));
         getAllOrderToOrderDTO();
+        LOG.debug("Order with total price = {} date of creation = {} was paid",
+                orderDTO.getSumPrice(), orderDTO.getDateCreate());
     }
 
     private void getAllOrderToOrderDTO(){

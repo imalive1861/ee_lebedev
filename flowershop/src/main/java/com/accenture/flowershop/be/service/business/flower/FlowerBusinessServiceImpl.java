@@ -2,9 +2,9 @@ package com.accenture.flowershop.be.service.business.flower;
 
 import com.accenture.flowershop.be.access.flower.FlowerAccess;
 import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.TreeMap;
 @Service
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
-    private static final Logger LOG = LoggerFactory.getLogger(FlowerBusinessServiceImpl.class);
+    private Logger LOG = LoggerUtils.getLOG();
 
     private FlowerAccess flowerAccess;
 
@@ -29,7 +29,6 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     public void saveFlower(FlowerDTO flowerDTO) {
         flowerAccess.saveFlower(toFlower(flowerDTO));
-        LOG.debug("Order with name = {} price = {} was created", flowerDTO.getName(), flowerDTO.getPrice());
     }
 
     public void updateFlower(FlowerDTO flowerDTO){

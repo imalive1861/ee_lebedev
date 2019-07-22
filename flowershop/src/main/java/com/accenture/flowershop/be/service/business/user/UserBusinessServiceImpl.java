@@ -2,10 +2,10 @@ package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.TreeMap;
 @Service
 public class UserBusinessServiceImpl implements UserBusinessService{
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserBusinessServiceImpl.class);
+    private Logger LOG = LoggerUtils.getLOG();
 
     private UserAccess userAccess;
 
