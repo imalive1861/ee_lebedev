@@ -11,6 +11,7 @@ import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,7 +55,7 @@ public class CardBusinessServiceImpl implements CardBusinessService{
             cardAccess.saveCard(toCard(cardDTO));
         }
     }
-
+    @Transactional
     public boolean saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice,
                                    List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO){
         sumPrice = userBusinessService.checkScore(userDTO, sumPrice);

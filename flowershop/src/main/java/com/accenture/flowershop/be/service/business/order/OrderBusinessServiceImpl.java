@@ -7,6 +7,7 @@ import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         getAllOrderToOrderDTO();
     }
 
+    @Transactional
     public OrderDTO openOrder(){
         Order order = null;
         OrderDTO orderDTO = null;
@@ -55,6 +57,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         return orderDTO;
     }
 
+    @Transactional
     public void paidOrder(OrderDTO orderDTO, BigDecimal sumPrice){
         orderDTO.setSumPrice(sumPrice);
         orderDTO.setStatus(ORDER_PAID);
@@ -72,6 +75,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         }
     }
 
+    @Transactional
     public void closeOrder(OrderDTO orderDTO){
         if (orderDTO.getStatus().equals(ORDER_PAID)) {
             orderDTO.setDateClose(LocalDate.now());
