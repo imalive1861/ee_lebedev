@@ -62,6 +62,7 @@ public class CardBusinessServiceImpl implements CardBusinessService{
             orderBusinessService.paidOrder(orderDTO, sumPrice);
             for (CustomerCardDTO c : customerCardDTOs) {
                 CardDTO cardDTO = new CardDTO(userDTO, orderDTO, c.getFlowerDTO(), c.getNumber());
+                flowerBusinessService.updateFlower(c.getFlowerDTO());
                 saveCard(cardDTO);
             }
             getAllCardToCardDTO();

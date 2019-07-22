@@ -74,8 +74,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         if (orderDTO.getStatus().equals(ORDER_PAID)) {
             orderDTO.setDateClose(LocalDate.now());
             orderDTO.setStatus(ORDER_CLOSED);
-            Order order = toOrder(orderDTO);
-            orderAccess.update(order);
+            orderAccess.update(toOrder(orderDTO));
         }
         LOG.debug("Order with total price = {} date of creation = {} was closed = {}",
                 orderDTO.getSumPrice(), orderDTO.getDateCreate(), orderDTO.getDateClose());

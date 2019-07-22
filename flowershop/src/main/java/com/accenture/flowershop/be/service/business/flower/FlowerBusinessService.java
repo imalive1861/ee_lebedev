@@ -12,6 +12,10 @@ public interface FlowerBusinessService {
 
     void delete(Flower flower);
 
+    void updateFlower(FlowerDTO flowerDTO);
+
+    void getAllFlowerToFlowerDTO();
+
     Map<Long, FlowerDTO> getAll();
 
     FlowerDTO get(long id);

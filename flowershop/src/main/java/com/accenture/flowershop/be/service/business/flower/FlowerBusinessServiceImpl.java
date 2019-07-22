@@ -24,15 +24,16 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     public FlowerBusinessServiceImpl(FlowerAccess flowerAccess){
         this.flowerAccess = flowerAccess;
         flowerDTOs = new TreeMap<>();
-        for (Flower u: flowerAccess.getAll()){
-            FlowerDTO flowerDTO = toFlowerDTO(u);
-            flowerDTOs.put(flowerDTO.getId(), flowerDTO);
-        }
+        getAllFlowerToFlowerDTO();
     }
 
     public void saveFlower(FlowerDTO flowerDTO) {
         flowerAccess.saveFlower(toFlower(flowerDTO));
         LOG.debug("Order with name = {} price = {} was created", flowerDTO.getName(), flowerDTO.getPrice());
+    }
+
+    public void updateFlower(FlowerDTO flowerDTO){
+        flowerAccess.update(toFlower(flowerDTO));
     }
 
     public void delete(Flower flower) {
@@ -42,7 +43,9 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     }
 
     private Flower toFlower(FlowerDTO flowerDTO){
-        if(flowerAccess.get(flowerDTO.getId()) != null) {
+        Flower flower = flowerAccess.get(flowerDTO.getId());
+        if(flower != null) {
+            flower.setNumber(flowerDTO.getNumber());
             return flowerAccess.get(flowerDTO.getId());
         }
         return new Flower(flowerDTO.getName(),flowerDTO.getPrice(),
@@ -55,6 +58,14 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
         }
         return new FlowerDTO(flower.getId(), flower.getName(),flower.getPrice(),
                 flower.getNumber());
+    }
+
+    public void getAllFlowerToFlowerDTO(){
+        flowerDTOs.clear();
+        for (Flower f: flowerAccess.getAll()) {
+            FlowerDTO flowerDTO = toFlowerDTO(f);
+            flowerDTOs.put(flowerDTO.getId(), flowerDTO);
+        }
     }
 
     public Map<Long, FlowerDTO> getAll() {

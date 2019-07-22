@@ -1,7 +1,9 @@
 package com.accenture.flowershop.be.service.business.card;
 
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,6 +16,9 @@ import static java.math.RoundingMode.UP;
 
 @Service
 class CardServiceImpl implements CardService {
+
+    @Autowired
+    private FlowerBusinessService flowerBusinessService;
 
     private Map<String, List<CustomerCardDTO>> card = new TreeMap<>();
 
@@ -37,8 +42,9 @@ class CardServiceImpl implements CardService {
     }
 
     public void addNewFlowerToCard(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
-        CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerDTO, number, sumPrice);
         if (card.containsKey(login)) {
+            CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerDTO, number, sumPrice);
+            flowerDTO.setNumber(flowerDTO.getNumber() - number);
             this.card.get(login).add(customerCardDTO);
         }
     }
@@ -47,12 +53,14 @@ class CardServiceImpl implements CardService {
         CustomerCardDTO i = getCardById(login, flowerId);
         if (i != null) {
             i.setNumber(i.getNumber() + number);
+            i.getFlowerDTO().setNumber(i.getFlowerDTO().getNumber() - number);
             i.setSumPrice(i.getSumPrice().add(sumPrice));
         }
     }
 
     public void clear(String login){
         this.card.get(login).clear();
+        flowerBusinessService.getAllFlowerToFlowerDTO();
     }
 
     public List<CustomerCardDTO> getCard(String login) {

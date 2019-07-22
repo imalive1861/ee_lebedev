@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userDTOs.containsKey(login);
     }
 
+    @Transactional
     public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
         Random random = new Random();
