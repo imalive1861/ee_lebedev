@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public class OrderDTO {
 
     private long id;
+    private UserDTO userId;
     private BigDecimal sumPrice;
     private LocalDate dateCreate;
     private LocalDate dateClose;
@@ -13,8 +14,10 @@ public class OrderDTO {
 
     public OrderDTO(){}
 
-    public OrderDTO(long id, BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
+    public OrderDTO(long id, UserDTO userId, BigDecimal sumPrice,
+                    LocalDate dateCreate, LocalDate dateClose, String status) {
         this.id = id;
+        this.userId = userId;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
         this.dateClose = dateClose;
@@ -26,6 +29,13 @@ public class OrderDTO {
     }
     public long getId() {
         return id;
+    }
+
+    public UserDTO getUserId() {
+        return userId;
+    }
+    public void setUserId(UserDTO user) {
+        this.userId = user;
     }
 
     public void setSumPrice(BigDecimal sumPrice) {

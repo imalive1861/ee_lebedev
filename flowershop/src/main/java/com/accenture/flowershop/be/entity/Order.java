@@ -14,6 +14,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "userId", nullable = false)
+    private User userId;
+
     @Column
     private BigDecimal sumPrice;
 
@@ -28,7 +32,8 @@ public class Order {
 
     public Order(){}
 
-    public Order(BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
+    public Order(User userId, BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
+        this.userId = userId;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
         this.dateClose = dateClose;
@@ -37,6 +42,13 @@ public class Order {
 
     public long getId() {
         return id;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+    public void setUserId(User user) {
+        this.userId = user;
     }
 
     public void setSumPrice(BigDecimal sumPrice) {

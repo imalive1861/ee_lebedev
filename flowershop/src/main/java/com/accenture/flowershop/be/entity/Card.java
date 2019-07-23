@@ -12,10 +12,6 @@ public class Card {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="orderId", nullable = false)
     private Order order;
 
@@ -28,8 +24,7 @@ public class Card {
 
     public Card(){}
 
-    public Card(User user, Order order, Flower flower, int number){
-        this.user = user;
+    public Card(Order order, Flower flower, int number){
         this.order = order;
         this.flower = flower;
         this.number = number;
@@ -51,13 +46,6 @@ public class Card {
     }
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public int getNumber() {
