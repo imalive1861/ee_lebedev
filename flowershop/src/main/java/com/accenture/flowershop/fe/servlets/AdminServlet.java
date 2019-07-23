@@ -2,6 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
+import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -35,20 +36,28 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         request.setAttribute("orderList", orderBusinessService.getAll().values());
         request.setAttribute("cardList", cardBusinessService.getAll().values());
+        String orderId = request.getParameter("orderId");
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/admin.jsp");
-        dispatcher.forward(request, response);
+        if (orderId != null) {
+            orderBusinessService.closeOrder(orderBusinessService.get(Long.parseLong(orderId)));
+        }
+
+        request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request,response);
     }
 }

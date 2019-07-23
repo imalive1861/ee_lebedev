@@ -1,6 +1,7 @@
 package com.accenture.flowershop.be.access.order;
 
 import com.accenture.flowershop.be.entity.Order;
+import com.accenture.flowershop.be.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface OrderAccess {
 
     Order get(long id);
 
-    Order getOrderByStatus(String status);
+    List<Order> getOrderByStatusAndUser(String status, User user);
 
     void update(Order order);
 

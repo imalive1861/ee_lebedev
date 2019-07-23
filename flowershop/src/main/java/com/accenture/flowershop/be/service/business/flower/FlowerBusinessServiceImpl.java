@@ -7,6 +7,7 @@ import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -31,6 +32,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
         flowerAccess.saveFlower(toFlower(flowerDTO));
     }
 
+    @Transactional
     public void updateFlower(FlowerDTO flowerDTO){
         flowerAccess.update(toFlower(flowerDTO));
     }
@@ -59,6 +61,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
                 flower.getNumber());
     }
 
+    @Transactional
     public void getAllFlowerToFlowerDTO(){
         flowerDTOs.clear();
         for (Flower f: flowerAccess.getAll()) {

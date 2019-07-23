@@ -2,16 +2,19 @@ package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
 import com.accenture.flowershop.be.entity.Order;
+import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
+import com.accenture.flowershop.fe.dto.UserDTO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -25,46 +28,57 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     private Logger LOG = LoggerUtils.getLOG();
 
     private OrderAccess orderAccess;
-
+    private UserBusinessService userBusinessService;
     private Map<Long, OrderDTO> orderDTOs;
 
     @Autowired
-    public OrderBusinessServiceImpl(OrderAccess orderAccess){
+    public OrderBusinessServiceImpl(OrderAccess orderAccess,
+                                    UserBusinessService userBusinessService){
+        this.userBusinessService = userBusinessService;
         this.orderAccess = orderAccess;
         orderDTOs = new TreeMap<>();
         getAllOrderToOrderDTO();
     }
 
     @Transactional
-    public OrderDTO openOrder(){
-        Order order = null;
+    public OrderDTO openOrder(UserDTO userDTO){
+        List<Order> order = new ArrayList<>();
         OrderDTO orderDTO = null;
-        while (order == null) {
-            try{
-                order = orderAccess.getOrderByStatus("OPENED");
-                if (order != null) {
-                    orderDTO = toOrderDTO(order);
-                }
-            } catch (NoResultException e) {
-                e.printStackTrace();
-                if (order == null) {
-                    orderDTO = new OrderDTO(0, new BigDecimal(0.00),
-                            LocalDate.now(), null, ORDER_OPENED);
-                    orderAccess.saveOrder(toOrder(orderDTO));
-                }
+        while (order.isEmpty()) {
+            order.addAll(orderAccess.getOrderByStatusAndUser(ORDER_OPENED,
+                    userBusinessService.getDAO(userDTO.getLogin())));
+            if (!order.isEmpty()) {
+                for (Order o: order)
+                    if (o.getId() != 0 && userBusinessService.get(o.getUserId().getLogin()) == userDTO &&
+                            o.getStatus().equals("OPENED")) {
+                        orderDTO = toOrderDTO(o);
+                        LOG.debug("OrderDTO = {} was upload", orderDTO);
+                    }
+            } else {
+                orderDTO = new OrderDTO(0, userDTO, new BigDecimal(0.00),
+                        LocalDate.now(), null, ORDER_OPENED);
+                LOG.debug("New OrderDTO = {} was created", orderDTO);
+                orderAccess.saveOrder(toOrder(orderDTO));
             }
         }
+        LOG.debug("Order with id = {}, date of creation = {} was opened",
+                orderDTO.getId(), orderDTO.getDateCreate());
         return orderDTO;
     }
 
     @Transactional
-    public void paidOrder(OrderDTO orderDTO, BigDecimal sumPrice){
-        orderDTO.setSumPrice(sumPrice);
-        orderDTO.setStatus(ORDER_PAID);
-        orderAccess.update(toOrder(orderDTO));
-        getAllOrderToOrderDTO();
-        LOG.debug("Order with total price = {} date of creation = {} was paid",
-                orderDTO.getSumPrice(), orderDTO.getDateCreate());
+    public boolean paidOrder(OrderDTO orderDTO, BigDecimal sumPrice){
+        sumPrice = userBusinessService.checkScore(orderDTO.getUserId(), sumPrice);
+        if (sumPrice != null) {
+            orderDTO.setSumPrice(sumPrice);
+            orderDTO.setStatus(ORDER_PAID);
+            orderAccess.update(toOrder(orderDTO));
+            getAllOrderToOrderDTO();
+            LOG.debug("Order with total price = {} date of creation = {} was paid",
+                    orderDTO.getSumPrice(), orderDTO.getDateCreate());
+            return true;
+        }
+        return false;
     }
 
     private void getAllOrderToOrderDTO(){
@@ -95,7 +109,8 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
             order.setStatus(orderDTO.getStatus());
             return order;
         }
-        return new Order(orderDTO.getSumPrice(),orderDTO.getDateCreate(),
+        return new Order(userBusinessService.getDAO(orderDTO.getUserId().getLogin()),
+                orderDTO.getSumPrice(),orderDTO.getDateCreate(),
                 orderDTO.getDateClose(),orderDTO.getStatus());
     }
 
@@ -103,7 +118,9 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         if(orderDTOs.get(order.getId()) != null) {
             return orderDTOs.get(order.getId());
         }
-        return new OrderDTO(order.getId(),order.getSumPrice(),order.getDateCreate(),
+        return new OrderDTO(order.getId(),
+                userBusinessService.get(order.getUserId().getLogin()),
+                order.getSumPrice(),order.getDateCreate(),
                 order.getDateClose(),order.getStatus());
     }
 

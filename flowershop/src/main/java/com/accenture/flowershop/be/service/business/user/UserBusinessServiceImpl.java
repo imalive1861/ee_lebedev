@@ -96,7 +96,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     public BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice){
         BigDecimal score = userDTO.getScore();
         if (sumPrice.compareTo(score) < 0) {
-            userDTO.setScore(score.subtract(sumPrice));
+            userDTO.setScore(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
             userAccess.update(toUser(userDTO));
             return sumPrice.setScale(2, RoundingMode.UP);
         }

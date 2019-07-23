@@ -10,6 +10,7 @@ import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.access.user.UserAccessImpl;
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.card.CardBusinessServiceImpl;
+import com.accenture.flowershop.be.service.business.card.CardService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
@@ -18,10 +19,8 @@ import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement
 public class AppConfig {
     @Bean
     public UserAccess userAccess(){
@@ -46,8 +45,9 @@ public class AppConfig {
         return new OrderAccessImpl();
     }
     @Bean
-    public OrderBusinessService orderBusinessService(OrderAccess orderAccess){
-        return new OrderBusinessServiceImpl(orderAccess);
+    public OrderBusinessService orderBusinessService(OrderAccess orderAccess,
+                                                    UserBusinessService userBusinessService){
+        return new OrderBusinessServiceImpl(orderAccess, userBusinessService);
     }
 
     @Bean
@@ -56,10 +56,10 @@ public class AppConfig {
     }
     @Bean
     public CardBusinessService cardBusinessService(CardAccess cardAccess,
-                                                    UserBusinessService userBusinessService,
-                                                    OrderBusinessService orderBusinessService,
-                                                    FlowerBusinessService flowerBusinessService){
-        return new CardBusinessServiceImpl(cardAccess,
-                userBusinessService, orderBusinessService, flowerBusinessService);
+                                                   CardService cardService,
+                                                   OrderBusinessService orderBusinessService,
+                                                   FlowerBusinessService flowerBusinessService){
+        return new CardBusinessServiceImpl(cardAccess, cardService,
+                orderBusinessService, flowerBusinessService);
     }
 }

@@ -22,7 +22,7 @@ import java.util.TreeMap;
 public class CardBusinessServiceImpl implements CardBusinessService{
 
     private CardAccess cardAccess;
-    private UserBusinessService userBusinessService;
+    private CardService cardService;
     private OrderBusinessService orderBusinessService;
     private FlowerBusinessService flowerBusinessService;
 
@@ -30,11 +30,11 @@ public class CardBusinessServiceImpl implements CardBusinessService{
 
     @Autowired
     public CardBusinessServiceImpl(CardAccess cardAccess,
-                                   UserBusinessService userBusinessService,
+                                   CardService cardService,
                                    OrderBusinessService orderBusinessService,
                                    FlowerBusinessService flowerBusinessService){
         this.cardAccess = cardAccess;
-        this.userBusinessService = userBusinessService;
+        this.cardService = cardService;
         this.orderBusinessService = orderBusinessService;
         this.flowerBusinessService = flowerBusinessService;
 
@@ -56,17 +56,18 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         }
     }
     @Transactional
-    public boolean saveCardToOrder(OrderDTO orderDTO, BigDecimal sumPrice,
-                                   List<CustomerCardDTO> customerCardDTOs, UserDTO userDTO){
-        sumPrice = userBusinessService.checkScore(userDTO, sumPrice);
-        if (sumPrice != null) {
-            orderBusinessService.paidOrder(orderDTO, sumPrice);
+    public boolean saveCardToOrder(BigDecimal sumPrice,
+                                   List<CustomerCardDTO> customerCardDTOs,
+                                   UserDTO userDTO){
+        OrderDTO orderDTO = orderBusinessService.openOrder(userDTO);
+        if (orderBusinessService.paidOrder(orderDTO, sumPrice)) {
             for (CustomerCardDTO c : customerCardDTOs) {
-                CardDTO cardDTO = new CardDTO(userDTO, orderDTO, c.getFlowerDTO(), c.getNumber());
+                CardDTO cardDTO = new CardDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
                 flowerBusinessService.updateFlower(c.getFlowerDTO());
                 saveCard(cardDTO);
             }
             getAllCardToCardDTO();
+            cardService.getCard(userDTO.getLogin()).clear();
             return true;
         }
         return false;
@@ -76,8 +77,7 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         if(cardAccess.get(cardDTO.getId()) != null) {
             return cardAccess.get(cardDTO.getId());
         }
-        return new Card(userBusinessService.getDAO(cardDTO.getUser().getLogin()),
-                orderBusinessService.getDAO(cardDTO.getOrder().getId()),
+        return new Card(orderBusinessService.getDAO(cardDTO.getOrder().getId()),
                 flowerBusinessService.getDAO(cardDTO.getFlower().getId()),
                 cardDTO.getNumber());
     }
@@ -87,7 +87,6 @@ public class CardBusinessServiceImpl implements CardBusinessService{
             return cardDTOs.get(card.getId());
         }
         return new CardDTO(card.getId(),
-                userBusinessService.get(card.getUser().getLogin()),
                 orderBusinessService.get(card.getOrder().getId()),
                 flowerBusinessService.get(card.getFlower().getId()),
                 card.getNumber());

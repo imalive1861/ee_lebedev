@@ -2,9 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.card.CardService;
-import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -17,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
@@ -26,9 +25,6 @@ public class OrderServlet extends HttpServlet {
 
     @Autowired
     private CardBusinessService cardBusinessService;
-
-    @Autowired
-    private OrderBusinessService orderBusinessService;
 
     public OrderServlet(){
         super();
@@ -54,25 +50,20 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
         HttpSession session = request.getSession();
         String createOrder = request.getParameter("createOrder");
         String cleanCard = request.getParameter("cleanCard");
         boolean hasError = false;
         String errorString = null;
         UserDTO user = SessionUtils.getLoginedUser(session);
-        SessionUtils.storeAllSumUserCard(session,
-                cardService.getAllSumPrice(user.getSale(), user.getLogin()));
-
+        BigDecimal allSum = cardService.getAllSumPrice(user.getSale(), user.getLogin());
+        request.setAttribute("allSum", allSum);
 
         if (createOrder != null) {
-            OrderDTO orderDTO = orderBusinessService.openOrder();
-            if (cardBusinessService.saveCardToOrder(
-                    orderDTO,
-                    SessionUtils.getAllSum(session),
+            if (cardBusinessService.saveCardToOrder(allSum,
                     SessionUtils.getUserCard(session),
                     SessionUtils.getLoginedUser(session))) {
-
-                cardService.clear(user.getLogin());
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {
                 hasError = true;

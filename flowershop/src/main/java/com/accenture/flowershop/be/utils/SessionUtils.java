@@ -24,11 +24,4 @@ public class SessionUtils {
     public static List<CustomerCardDTO> getUserCard(HttpSession session){
         return (List<CustomerCardDTO>) session.getAttribute("userCard");
     }
-    public static void storeAllSumUserCard(HttpSession session, BigDecimal allSum){
-        session.setAttribute("allSum", allSum);
-    }
-
-    public static BigDecimal getAllSum(HttpSession session){
-        return (BigDecimal) session.getAttribute("allSum");
-    }
 }

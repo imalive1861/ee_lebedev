@@ -45,6 +45,12 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        try {
+            request.setAttribute("flowerList", flowerBusinessService.getAll().values());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         String numberToCard = request.getParameter("numberToCard");
         String flowerId = request.getParameter("flowerId");
         boolean hasError = false;
@@ -84,12 +90,6 @@ public class CustomerServlet extends HttpServlet {
 
         if (hasError) {
             request.setAttribute("errorString", errorString);
-        }
-
-        try {
-            request.setAttribute("flowerList", flowerBusinessService.getAll().values());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/customer.jsp");
