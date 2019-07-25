@@ -1,9 +1,7 @@
 package com.accenture.flowershop.be.service.business.card;
 
-import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,10 +13,7 @@ import java.util.TreeMap;
 import static java.math.RoundingMode.UP;
 
 @Service
-class CardServiceImpl implements CardService {
-
-    @Autowired
-    private FlowerBusinessService flowerBusinessService;
+public class CardServiceImpl implements CardService {
 
     private Map<String, List<CustomerCardDTO>> card = new TreeMap<>();
 
@@ -60,7 +55,6 @@ class CardServiceImpl implements CardService {
 
     public void clear(String login){
         this.card.get(login).clear();
-        flowerBusinessService.getAllFlowerToFlowerDTO();
     }
 
     public List<CustomerCardDTO> getCard(String login) {

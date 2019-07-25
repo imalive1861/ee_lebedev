@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
         } else {
 
             try{
-                user = userBusinessService.getUserDTO(login, password);
+                user = userBusinessService.logIn(login, password);
 
                 if (user == null) {
                     hasError = true;

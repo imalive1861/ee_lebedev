@@ -24,14 +24,11 @@ public class Card {
 
     public Card(){}
 
-    public Card(Order order, Flower flower, int number){
-        this.order = order;
-        this.flower = flower;
-        this.number = number;
-    }
-
     public long getId() {
         return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Flower getFlower() {

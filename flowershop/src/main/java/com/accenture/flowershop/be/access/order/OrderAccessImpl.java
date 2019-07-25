@@ -3,7 +3,6 @@ package com.accenture.flowershop.be.access.order;
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,15 +19,11 @@ public class OrderAccessImpl implements OrderAccess {
     private EntityManager entityManager;
 
     public void saveOrder(Order order) {
-        //entityManager.getTransaction().begin();
         entityManager.merge(order);
-        //entityManager.getTransaction().commit();
     }
 
     public void delete(long id){
-        //entityManager.getTransaction().begin();
         entityManager.remove(get(id));
-        //entityManager.getTransaction().commit();
     }
 
     public Order get(long id){
@@ -44,9 +39,7 @@ public class OrderAccessImpl implements OrderAccess {
     }
 
     public void update(Order order){
-        //entityManager.getTransaction().begin();
         entityManager.merge(order);
-        //entityManager.getTransaction().commit();
     }
 
     public List<Order> getAll() {

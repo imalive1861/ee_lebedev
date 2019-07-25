@@ -11,12 +11,17 @@ import com.accenture.flowershop.be.access.user.UserAccessImpl;
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.card.CardBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.card.CardServiceImpl;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessServiceImpl;
+import com.accenture.flowershop.fe.dto.mappers.CardMapper;
+import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
+import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
+import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,8 +32,8 @@ public class AppConfig {
         return new UserAccessImpl();
     }
     @Bean
-    public UserBusinessService userBusinessService(UserAccess userAccess){
-        return new UserBusinessServiceImpl(userAccess);
+    public UserBusinessService userBusinessService(UserAccess userAccess, UserMapper userMapper){
+        return new UserBusinessServiceImpl(userAccess, userMapper);
     }
 
     @Bean
@@ -36,8 +41,8 @@ public class AppConfig {
         return new FlowerAccessImpl();
     }
     @Bean
-    public FlowerBusinessService flowerBusinessService(FlowerAccess flowerAccess){
-        return new FlowerBusinessServiceImpl(flowerAccess);
+    public FlowerBusinessService flowerBusinessService(FlowerAccess flowerAccess, FlowerMapper flowerMapper){
+        return new FlowerBusinessServiceImpl(flowerAccess, flowerMapper);
     }
 
     @Bean
@@ -46,20 +51,28 @@ public class AppConfig {
     }
     @Bean
     public OrderBusinessService orderBusinessService(OrderAccess orderAccess,
-                                                    UserBusinessService userBusinessService){
-        return new OrderBusinessServiceImpl(orderAccess, userBusinessService);
+                                                    UserBusinessService userBusinessService,
+                                                     OrderMapper orderMapper){
+        return new OrderBusinessServiceImpl(orderAccess, userBusinessService, orderMapper);
     }
 
     @Bean
     public CardAccess cardAccess(){
         return new CardAccessImpl();
     }
+    @Bean CardService cardService() {
+        return new CardServiceImpl();
+    }
     @Bean
     public CardBusinessService cardBusinessService(CardAccess cardAccess,
                                                    CardService cardService,
+                                                   CardMapper cardMapper,
                                                    OrderBusinessService orderBusinessService,
                                                    FlowerBusinessService flowerBusinessService){
-        return new CardBusinessServiceImpl(cardAccess, cardService,
-                orderBusinessService, flowerBusinessService);
+        return new CardBusinessServiceImpl(cardAccess,
+                cardService,
+                cardMapper,
+                orderBusinessService,
+                flowerBusinessService);
     }
 }

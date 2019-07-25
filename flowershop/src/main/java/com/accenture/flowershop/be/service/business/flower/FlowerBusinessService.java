@@ -4,7 +4,7 @@ import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 @Service
 public interface FlowerBusinessService {
@@ -14,11 +14,7 @@ public interface FlowerBusinessService {
 
     void updateFlower(FlowerDTO flowerDTO);
 
-    void getAllFlowerToFlowerDTO();
-
-    Map<Long, FlowerDTO> getAll();
+    List<FlowerDTO> getAll();
 
     FlowerDTO get(long id);
-
-    Flower getDAO(long id);
 }

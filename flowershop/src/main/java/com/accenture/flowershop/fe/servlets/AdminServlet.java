@@ -2,7 +2,6 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
-import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -43,15 +42,19 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setAttribute("orderList", orderBusinessService.getAll().values());
-        request.setAttribute("cardList", cardBusinessService.getAll().values());
+        request.setAttribute("orderList", orderBusinessService.getAll());
+        request.setAttribute("cardList", cardBusinessService.getAll());
         String orderId = request.getParameter("orderId");
 
         if (orderId != null) {
             orderBusinessService.closeOrder(orderBusinessService.get(Long.parseLong(orderId)));
+            request.setAttribute("orderList", orderBusinessService.getAll());
+            request.setAttribute("cardList", cardBusinessService.getAll());
         }
 
-        request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/admin.jsp");
+
+        dispatcher.forward(request, response);
 
     }
 

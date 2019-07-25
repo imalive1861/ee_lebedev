@@ -7,12 +7,7 @@ public class CardDTO {
     private FlowerDTO flower;
     private int number;
 
-    public CardDTO(long id, OrderDTO order, FlowerDTO flower, int number){
-        this.id = id;
-        this.order = order;
-        this.flower = flower;
-        this.number = number;
-    }
+    public CardDTO(){}
 
     public CardDTO(OrderDTO order, FlowerDTO flower, int number){
         this.order = order;

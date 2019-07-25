@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Service
 public interface UserBusinessService {
 
-    UserDTO getUserDTO(String login, String password);
+    UserDTO logIn(String login, String password);
 
     boolean uniqueLogin(String login);
 
@@ -17,8 +17,7 @@ public interface UserBusinessService {
                      String address, String phoneNumber);
 
     UserDTO get(String login);
-
-    User getDAO(String login);
+    User get(UserDTO userDTO);
 
     BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice);
 }

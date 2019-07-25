@@ -5,6 +5,8 @@ import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
+
+import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,92 +14,63 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Map;
 import java.util.Random;
-import java.util.TreeMap;
 
 @Service
 public class UserBusinessServiceImpl implements UserBusinessService{
 
     private Logger LOG = LoggerUtils.getLOG();
 
+    private UserMapper userMapper;
     private UserAccess userAccess;
 
-    private Map<String, UserDTO> userDTOs;
-
     @Autowired
-    public UserBusinessServiceImpl(UserAccess userAccess){
+    public UserBusinessServiceImpl(UserAccess userAccess, UserMapper userMapper){
         this.userAccess = userAccess;
-        userDTOs = new TreeMap<>();
-        for (User u: userAccess.getAll().values()){
-            UserDTO userDTO = toUserDTO(u);
-            userDTOs.put(userDTO.getLogin(), userDTO);
-        }
+        this.userMapper = userMapper;
     }
 
-    public UserDTO getUserDTO(String login, String password) {
-        UserDTO userDTO = userDTOs.get(login);
+    public UserDTO logIn(String login, String password) {
+        UserDTO userDTO = get(login);
         if (userDTO != null && userDTO.getPassword().equals(password)){
-            LOG.debug("Customer with login = {} name = {} log in", userDTO.getLogin(), userDTO.getName());
+            LOG.debug("Customer with login = {} name = {} log in",
+                    userDTO.getLogin(), userDTO.getName());
             return userDTO;
         }
         return null;
     }
 
     public boolean uniqueLogin(String login){
-        return userDTOs.containsKey(login);
+        return userAccess.get(login) != null;
     }
 
     @Transactional
     public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
         Random random = new Random();
-        UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber, new BigDecimal(2000.00),
-                random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
-        User user = toUser(userDTO);
+        UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
+                new BigDecimal(2000.00),random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
+        User user = userMapper.userDtoToUser(userDTO);
         userAccess.saveUser(user);
-        userDTOs.put(userDTO.getLogin(), userDTO);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
-    }
-
-    private User toUser(UserDTO userDTO){
-        User user = userAccess.get(userDTO.getLogin());
-        if(user != null) {
-            user.setScore(userDTO.getScore());
-            return user;
-        }
-        return new User(userDTO.getLogin(),userDTO.getPassword(),userDTO.getName(),
-                userDTO.getAddress(),userDTO.getPhoneNumber(),userDTO.getScore(),
-                userDTO.getSale(),userDTO.getRole());
-    }
-
-    private UserDTO toUserDTO(User user){
-        if(userDTOs.get(user.getLogin()) != null) {
-            return userDTOs.get(user.getLogin());
-        }
-        return new UserDTO(user.getLogin(),user.getPassword(),user.getName(),
-                user.getAddress(),user.getPhoneNumber(),user.getScore(),
-                user.getSale(),user.getRole());
     }
 
     public UserDTO get(String login) {
         if (login != null) {
-            return userDTOs.get(login);
+            return userMapper.userToUserDto(userAccess.get(login));
         }
         return null;
     }
-    public User getDAO(String login){
-        if (login != null) {
-            return userAccess.get(login);
-        }
-        return null;
+
+    public User get(UserDTO userDTO) {
+        return userAccess.get(userDTO.getLogin());
     }
 
     public BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice){
         BigDecimal score = userDTO.getScore();
         if (sumPrice.compareTo(score) < 0) {
             userDTO.setScore(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
-            userAccess.update(toUser(userDTO));
+            userAccess.update(userMapper.userDtoToUser(userDTO));
             return sumPrice.setScale(2, RoundingMode.UP);
         }
         return null;

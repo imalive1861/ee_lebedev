@@ -6,6 +6,7 @@ import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
+import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,51 +30,31 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     private OrderAccess orderAccess;
     private UserBusinessService userBusinessService;
-    private Map<Long, OrderDTO> orderDTOs;
+    private OrderMapper orderMapper;
 
     @Autowired
     public OrderBusinessServiceImpl(OrderAccess orderAccess,
-                                    UserBusinessService userBusinessService){
+                                    UserBusinessService userBusinessService,
+                                    OrderMapper orderMapper){
         this.userBusinessService = userBusinessService;
         this.orderAccess = orderAccess;
-        orderDTOs = new TreeMap<>();
-        getAllOrderToOrderDTO();
+        this.orderMapper = orderMapper;
     }
 
-    @Transactional
     public OrderDTO openOrder(UserDTO userDTO){
-        List<Order> order = new ArrayList<>();
-        OrderDTO orderDTO = null;
-        while (order.isEmpty()) {
-            order.addAll(orderAccess.getOrderByStatusAndUser(ORDER_OPENED,
-                    userBusinessService.getDAO(userDTO.getLogin())));
-            if (!order.isEmpty()) {
-                for (Order o: order)
-                    if (o.getId() != 0 && userBusinessService.get(o.getUserId().getLogin()) == userDTO &&
-                            o.getStatus().equals("OPENED")) {
-                        orderDTO = toOrderDTO(o);
-                        LOG.debug("OrderDTO = {} was upload", orderDTO);
-                    }
-            } else {
-                orderDTO = new OrderDTO(0, userDTO, new BigDecimal(0.00),
+        OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
                         LocalDate.now(), null, ORDER_OPENED);
-                LOG.debug("New OrderDTO = {} was created", orderDTO);
-                orderAccess.saveOrder(toOrder(orderDTO));
-            }
-        }
-        LOG.debug("Order with id = {}, date of creation = {} was opened",
-                orderDTO.getId(), orderDTO.getDateCreate());
+        orderAccess.saveOrder(orderMapper.orderDtoToOrder(orderDTO));
+        orderDTO = getByOrderByStatusAndLogin(ORDER_OPENED,userDTO.getLogin());
         return orderDTO;
     }
 
-    @Transactional
     public boolean paidOrder(OrderDTO orderDTO, BigDecimal sumPrice){
         sumPrice = userBusinessService.checkScore(orderDTO.getUserId(), sumPrice);
         if (sumPrice != null) {
             orderDTO.setSumPrice(sumPrice);
             orderDTO.setStatus(ORDER_PAID);
-            orderAccess.update(toOrder(orderDTO));
-            getAllOrderToOrderDTO();
+            orderAccess.update(orderMapper.orderDtoToOrder(orderDTO));
             LOG.debug("Order with total price = {} date of creation = {} was paid",
                     orderDTO.getSumPrice(), orderDTO.getDateCreate());
             return true;
@@ -81,61 +62,41 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         return false;
     }
 
-    private void getAllOrderToOrderDTO(){
-        orderDTOs.clear();
-        for (Order u: orderAccess.getAll()){
-            OrderDTO orderDTO = toOrderDTO(u);
-            orderDTOs.put(orderDTO.getId(), orderDTO);
-        }
-    }
-
     @Transactional
     public void closeOrder(OrderDTO orderDTO){
         if (orderDTO.getStatus().equals(ORDER_PAID)) {
             orderDTO.setDateClose(LocalDate.now());
             orderDTO.setStatus(ORDER_CLOSED);
-            orderAccess.update(toOrder(orderDTO));
+            orderAccess.update(orderMapper.orderDtoToOrder(orderDTO));
         }
         LOG.debug("Order with total price = {} date of creation = {} was closed = {}",
                 orderDTO.getSumPrice(), orderDTO.getDateCreate(), orderDTO.getDateClose());
     }
-
-    private Order toOrder(OrderDTO orderDTO){
-        Order order = orderAccess.get(orderDTO.getId());
-        if(order != null) {
-            order.setSumPrice(orderDTO.getSumPrice());
-            order.setDateCreate(orderDTO.getDateCreate());
-            order.setDateClose(orderDTO.getDateClose());
-            order.setStatus(orderDTO.getStatus());
-            return order;
+    @Override
+    public List<OrderDTO> getAll() {
+        Map<Long, OrderDTO> getAll = new TreeMap<>();
+        for (Order f : orderAccess.getAll()) {
+            getAll.put(f.getId(), orderMapper.orderToOrderDto(f));
         }
-        return new Order(userBusinessService.getDAO(orderDTO.getUserId().getLogin()),
-                orderDTO.getSumPrice(),orderDTO.getDateCreate(),
-                orderDTO.getDateClose(),orderDTO.getStatus());
-    }
-
-    private OrderDTO toOrderDTO(Order order){
-        if(orderDTOs.get(order.getId()) != null) {
-            return orderDTOs.get(order.getId());
-        }
-        return new OrderDTO(order.getId(),
-                userBusinessService.get(order.getUserId().getLogin()),
-                order.getSumPrice(),order.getDateCreate(),
-                order.getDateClose(),order.getStatus());
-    }
-
-    public Map<Long, OrderDTO> getAll() {
-        return orderDTOs;
+        return new ArrayList<>(getAll.values());
     }
 
     public OrderDTO get(long id) {
         if(id != 0) {
-            return orderDTOs.get(id);
+            return orderMapper.orderToOrderDto(orderAccess.get(id));
         }
         return null;
     }
 
-    public Order getDAO(long id){
-        return orderAccess.get(id);
+    private OrderDTO getByOrderByStatusAndLogin(String status, String login){
+        if (status != null) {
+            for (OrderDTO o: getAll()){
+                if (o.getStatus().equals(status) &&
+                        o.getUserId().getLogin().equals(login)){
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 }

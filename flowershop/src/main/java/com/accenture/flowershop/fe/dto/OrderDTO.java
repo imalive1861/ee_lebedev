@@ -14,9 +14,8 @@ public class OrderDTO {
 
     public OrderDTO(){}
 
-    public OrderDTO(long id, UserDTO userId, BigDecimal sumPrice,
+    public OrderDTO(UserDTO userId, BigDecimal sumPrice,
                     LocalDate dateCreate, LocalDate dateClose, String status) {
-        this.id = id;
         this.userId = userId;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;

@@ -2,7 +2,6 @@ package com.accenture.flowershop.be.access.flower;
 
 import com.accenture.flowershop.be.entity.Flower;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

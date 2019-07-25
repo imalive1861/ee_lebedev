@@ -2,6 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.card.CardBusinessService;
 import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class OrderServlet extends HttpServlet {
 
     @Autowired
     private CardBusinessService cardBusinessService;
+
+    @Autowired
+    private UserBusinessService userBusinessService;
 
     public OrderServlet(){
         super();
@@ -61,9 +65,9 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("allSum", allSum);
 
         if (createOrder != null) {
-            if (cardBusinessService.saveCardToOrder(allSum,
-                    SessionUtils.getUserCard(session),
-                    SessionUtils.getLoginedUser(session))) {
+            UserDTO userDTO = SessionUtils.getLoginedUser(session);
+            if (cardBusinessService.saveCardToOrder(allSum, SessionUtils.getUserCard(session), userDTO)) {
+                SessionUtils.storeLoginedUser(session, userBusinessService.get(userDTO.getLogin()));
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {
                 hasError = true;

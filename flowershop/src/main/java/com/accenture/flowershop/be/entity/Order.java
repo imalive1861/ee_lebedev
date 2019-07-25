@@ -32,14 +32,9 @@ public class Order {
 
     public Order(){}
 
-    public Order(User userId, BigDecimal sumPrice, LocalDate dateCreate, LocalDate dateClose, String status) {
-        this.userId = userId;
-        this.sumPrice = sumPrice;
-        this.dateCreate = dateCreate;
-        this.dateClose = dateClose;
-        this.status = status;
+    public void setId(long id) {
+        this.id = id;
     }
-
     public long getId() {
         return id;
     }

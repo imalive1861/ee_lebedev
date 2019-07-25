@@ -45,12 +45,7 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        try {
-            request.setAttribute("flowerList", flowerBusinessService.getAll().values());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
+        request.setAttribute("flowerList", flowerBusinessService.getAll());
         String numberToCard = request.getParameter("numberToCard");
         String flowerId = request.getParameter("flowerId");
         boolean hasError = false;

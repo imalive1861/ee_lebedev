@@ -4,7 +4,6 @@ import com.accenture.flowershop.fe.dto.CustomerCardDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.List;
 
 public class SessionUtils {
@@ -14,6 +13,7 @@ public class SessionUtils {
     }
 
     public static UserDTO getLoginedUser(HttpSession session) {
+
         return (UserDTO) session.getAttribute("loginedUser");
     }
 
