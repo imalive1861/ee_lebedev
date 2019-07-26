@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 public class User {
 
     @Id
+    private long id;
+
+    @Column
     private String login;
 
     @Column
@@ -46,6 +49,12 @@ public class User {
         this.role = role;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+    public long getId() {
+        return id;
+    }
 
     public void setLogin(String login) {
         this.login = login;

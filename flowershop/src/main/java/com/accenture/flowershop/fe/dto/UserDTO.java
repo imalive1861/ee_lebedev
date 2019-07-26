@@ -3,6 +3,7 @@ package com.accenture.flowershop.fe.dto;
 import java.math.BigDecimal;
 
 public class UserDTO {
+    private long id;
     private String login;
     private String password;
     private String name;
@@ -25,6 +26,13 @@ public class UserDTO {
         this.score = score;
         this.sale = sale;
         this.role = role;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    public long getId() {
+        return id;
     }
 
     public void setLogin(String login) {

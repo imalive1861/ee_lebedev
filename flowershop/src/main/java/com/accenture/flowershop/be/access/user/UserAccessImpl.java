@@ -2,18 +2,17 @@ package com.accenture.flowershop.be.access.user;
 
 import com.accenture.flowershop.be.entity.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserAccessImpl implements UserAccess {
 
-    private Map<String, User> users = new TreeMap<>();
+    private List<User> users = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,18 +29,19 @@ public class UserAccessImpl implements UserAccess {
     }
 
     public User get(String login){
-        return entityManager.find(User.class, login);
+        TypedQuery<User> query = entityManager.createQuery(
+                "select u from User u where u.login = ?1", User.class);
+        query.setParameter(1, login);
+        return query.getSingleResult();
     }
 
     public void update(User user){
         entityManager.merge(user);
     }
 
-    public Map<String, User> getAll(){
+    public List<User> getAll(){
         TypedQuery<User> namedQuery = entityManager.createNamedQuery("User.getAll", User.class);
-        for (User list: namedQuery.getResultList()){
-            users.put(list.getLogin(),list);
-        }
+        users.addAll(namedQuery.getResultList());
         return users;
     }
 }
