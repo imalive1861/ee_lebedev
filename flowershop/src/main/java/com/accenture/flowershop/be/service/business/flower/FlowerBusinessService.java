@@ -4,6 +4,7 @@ import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -17,6 +18,8 @@ public interface FlowerBusinessService {
     List<FlowerDTO> getAll();
 
     List<FlowerDTO> getFlowerByName(String name);
+
+    List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max);
 
     FlowerDTO get(long id);
 }

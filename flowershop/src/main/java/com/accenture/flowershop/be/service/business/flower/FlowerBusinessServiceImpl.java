@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -53,5 +54,9 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     public List<FlowerDTO> getFlowerByName(String name) {
         return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByName(name));
+    }
+
+    public List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max) {
+        return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByPrice(min,max));
     }
 }

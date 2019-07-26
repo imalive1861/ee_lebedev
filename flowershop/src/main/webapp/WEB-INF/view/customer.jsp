@@ -11,10 +11,17 @@
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
     <p style="color: red;">${errorString}</p>
-    Enter name of flower to search:
+    Search<br/>
     <form method="GET" action="${pageContext.request.contextPath}/customer">
-        <input type="text" name="searchFlowerByName" value=""/>
-        <input type="hidden" name="searchClick" value="submit"/>
+        Enter name of flower: <input type="text" name="searchFlowerByName" value=""/>
+        <input type="hidden" name="searchNameClick" value="submit"/>
+        <input type="submit" value= "Search" />
+    </form>
+    <form method="GET" action="${pageContext.request.contextPath}/customer">
+        <br/>
+        Min price: <input type="number" name="minFlowerPrice" value=""/>
+        Max price: <input type="number" name="maxFlowerPrice" value=""/>
+        <input type="hidden" name="searchPriceClick" value="submit"/>
         <input type="submit" value= "Search" />
     </form>
     <br/>

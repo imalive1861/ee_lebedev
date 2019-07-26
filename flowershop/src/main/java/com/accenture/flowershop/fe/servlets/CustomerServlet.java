@@ -50,21 +50,31 @@ public class CustomerServlet extends HttpServlet {
         String numberToCard = request.getParameter("numberToCard");
         String flowerId = request.getParameter("flowerId");
         String searchFlowerByName = request.getParameter("searchFlowerByName");
-        String searchClick = request.getParameter("searchClick");
+        String searchNameClick = request.getParameter("searchNameClick");
+        String searchPriceClick = request.getParameter("searchPriceClick");
+        String minFlowerPrice = request.getParameter("minFlowerPrice");
+        String maxFlowerPrice = request.getParameter("maxFlowerPrice");
         boolean hasError = false;
         String errorString = null;
-
-        if (searchFlowerByName != null && searchClick != null) {
-            List<FlowerDTO> flowerList = new ArrayList<>(flowerBusinessService.getFlowerByName(searchFlowerByName));
-            if (flowerList.isEmpty()){
-                hasError = true;
-                errorString = "Flower not found!";
-            } else {
-                request.setAttribute("flowerList", flowerList);
+        List<FlowerDTO> flowerList = new ArrayList<>();
+        if (searchNameClick != null) {
+            if (searchFlowerByName != null) {
+                flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
+            }
+        } else if (searchPriceClick != null) {
+            if (minFlowerPrice != null && maxFlowerPrice != null) {
+                BigDecimal min = new BigDecimal(minFlowerPrice);
+                BigDecimal max = new BigDecimal(maxFlowerPrice);
+                flowerList = flowerBusinessService.getFlowerByPrice(min,max);
             }
         } else {
-            request.setAttribute("flowerList", flowerBusinessService.getAll());
+            flowerList = flowerBusinessService.getAll();
         }
+        if (flowerList.isEmpty()) {
+            hasError = true;
+            errorString = "Flower not found!";
+        }
+        request.setAttribute("flowerList",flowerList);
 
         if (numberToCard != null && flowerId != null) {
             long flowerIds = Long.parseLong(flowerId);
