@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
 public class CustomerServlet extends HttpServlet {
@@ -45,11 +47,24 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.setAttribute("flowerList", flowerBusinessService.getAll());
         String numberToCard = request.getParameter("numberToCard");
         String flowerId = request.getParameter("flowerId");
+        String searchFlowerByName = request.getParameter("searchFlowerByName");
+        String searchClick = request.getParameter("searchClick");
         boolean hasError = false;
         String errorString = null;
+
+        if (searchFlowerByName != null && searchClick != null) {
+            List<FlowerDTO> flowerList = new ArrayList<>(flowerBusinessService.getFlowerByName(searchFlowerByName));
+            if (flowerList.isEmpty()){
+                hasError = true;
+                errorString = "Flower not found!";
+            } else {
+                request.setAttribute("flowerList", flowerList);
+            }
+        } else {
+            request.setAttribute("flowerList", flowerBusinessService.getAll());
+        }
 
         if (numberToCard != null && flowerId != null) {
             long flowerIds = Long.parseLong(flowerId);

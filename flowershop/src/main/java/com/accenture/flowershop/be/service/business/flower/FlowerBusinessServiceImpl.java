@@ -48,10 +48,10 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     @Override
     public List<FlowerDTO> getAll() {
-        Map<Long, FlowerDTO> getAll = new TreeMap<>();
-        for (Flower f : flowerAccess.getAll()) {
-            getAll.put(f.getId(), flowerMapper.flowerToFlowerDto(f));
-        }
-        return new ArrayList<>(getAll.values());
+        return flowerMapper.flowerToFlowerDtos(flowerAccess.getAll());
+    }
+
+    public List<FlowerDTO> getFlowerByName(String name) {
+        return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByName(name));
     }
 }

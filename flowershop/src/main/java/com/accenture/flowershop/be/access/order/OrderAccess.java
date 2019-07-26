@@ -14,7 +14,7 @@ public interface OrderAccess {
 
     Order get(long id);
 
-    List<Order> getOrderByStatusAndUser(String status, User user);
+    Order getOrderByStatusAndUser(String status, User user);
 
     void update(Order order);
 

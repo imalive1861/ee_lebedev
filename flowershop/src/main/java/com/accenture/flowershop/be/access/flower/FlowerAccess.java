@@ -16,4 +16,6 @@ public interface FlowerAccess {
     Flower get(long id);
 
     List<Flower> getAll();
+
+    List<Flower> getFlowerByName(String name);
 }

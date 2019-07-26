@@ -6,13 +6,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class FlowerAccessImpl implements FlowerAccess {
-
-    private List<Flower> flowers = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -35,7 +32,13 @@ public class FlowerAccessImpl implements FlowerAccess {
 
     public List<Flower> getAll(){
         TypedQuery<Flower> namedQuery = entityManager.createNamedQuery("Flower.getAll", Flower.class);
-        flowers.addAll(namedQuery.getResultList());
-        return flowers;
+        return namedQuery.getResultList();
+    }
+
+    public List<Flower> getFlowerByName(String name){
+        TypedQuery<Flower> query = entityManager.createQuery(
+                "select f from Flower f where f.name = ?1", Flower.class);
+        query.setParameter(1, name);
+        return query.getResultList();
     }
 }

@@ -6,13 +6,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class UserAccessImpl implements UserAccess {
-
-    private List<User> users = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -41,7 +38,6 @@ public class UserAccessImpl implements UserAccess {
 
     public List<User> getAll(){
         TypedQuery<User> namedQuery = entityManager.createNamedQuery("User.getAll", User.class);
-        users.addAll(namedQuery.getResultList());
-        return users;
+        return namedQuery.getResultList();
     }
 }

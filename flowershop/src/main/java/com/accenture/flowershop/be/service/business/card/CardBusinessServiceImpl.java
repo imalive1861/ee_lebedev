@@ -1,7 +1,6 @@
 package com.accenture.flowershop.be.service.business.card;
 
 import com.accenture.flowershop.be.access.card.CardAccess;
-import com.accenture.flowershop.be.entity.Card;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.CardDTO;
@@ -14,12 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Service
+@Transactional
 public class CardBusinessServiceImpl implements CardBusinessService{
 
     private CardAccess cardAccess;
@@ -41,7 +38,6 @@ public class CardBusinessServiceImpl implements CardBusinessService{
         this.flowerBusinessService = flowerBusinessService;
     }
 
-    @Transactional
     public boolean saveCardToOrder(BigDecimal sumPrice,
                                    List<CustomerCardDTO> customerCardDTOs,
                                    UserDTO userDTO){
@@ -59,10 +55,6 @@ public class CardBusinessServiceImpl implements CardBusinessService{
     }
     @Override
     public List<CardDTO> getAll() {
-        Map<Long, CardDTO> getAll = new TreeMap<>();
-        for (Card f : cardAccess.getAll()) {
-            getAll.put(f.getId(), cardMapper.cardToCardDto(f));
-        }
-        return new ArrayList<>(getAll.values());
+        return cardMapper.cardToCardDtos(cardAccess.getAll());
     }
 }

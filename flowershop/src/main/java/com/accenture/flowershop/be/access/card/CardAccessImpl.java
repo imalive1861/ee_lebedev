@@ -6,13 +6,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class CardAccessImpl implements CardAccess {
-
-    private List<Card> cards = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -35,7 +32,6 @@ public class CardAccessImpl implements CardAccess {
 
     public List<Card> getAll(){
         TypedQuery<Card> namedQuery = entityManager.createNamedQuery("Card.getAll", Card.class);
-        cards.addAll(namedQuery.getResultList());
-        return cards;
+        return namedQuery.getResultList();
     }
 }

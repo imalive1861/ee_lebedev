@@ -17,6 +17,7 @@ import java.math.RoundingMode;
 import java.util.Random;
 
 @Service
+@Transactional
 public class UserBusinessServiceImpl implements UserBusinessService{
 
     private Logger LOG = LoggerUtils.getLOG();
@@ -44,7 +45,6 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userAccess.get(login) != null;
     }
 
-    @Transactional
     public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
         Random random = new Random();

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @Service
+@Transactional
 public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     private static final String ORDER_OPENED = "OPENED";
@@ -45,7 +46,8 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
                         LocalDate.now(), null, ORDER_OPENED);
         orderAccess.saveOrder(orderMapper.orderDtoToOrder(orderDTO));
-        orderDTO = getByOrderByStatusAndLogin(ORDER_OPENED,userDTO.getLogin());
+        orderDTO = orderMapper.orderToOrderDto(orderAccess.getOrderByStatusAndUser(
+                ORDER_OPENED,userBusinessService.get(userDTO)));
         return orderDTO;
     }
 
@@ -62,7 +64,6 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         return false;
     }
 
-    @Transactional
     public void closeOrder(OrderDTO orderDTO){
         if (orderDTO.getStatus().equals(ORDER_PAID)) {
             orderDTO.setDateClose(LocalDate.now());
@@ -74,28 +75,12 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     }
     @Override
     public List<OrderDTO> getAll() {
-        Map<Long, OrderDTO> getAll = new TreeMap<>();
-        for (Order f : orderAccess.getAll()) {
-            getAll.put(f.getId(), orderMapper.orderToOrderDto(f));
-        }
-        return new ArrayList<>(getAll.values());
+        return orderMapper.orderToOrderDtos(orderAccess.getAll());
     }
 
     public OrderDTO get(long id) {
         if(id != 0) {
             return orderMapper.orderToOrderDto(orderAccess.get(id));
-        }
-        return null;
-    }
-
-    private OrderDTO getByOrderByStatusAndLogin(String status, String login){
-        if (status != null) {
-            for (OrderDTO o: getAll()){
-                if (o.getStatus().equals(status) &&
-                        o.getUserId().getLogin().equals(login)){
-                    return o;
-                }
-            }
         }
         return null;
     }

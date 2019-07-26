@@ -16,5 +16,7 @@ public interface FlowerBusinessService {
 
     List<FlowerDTO> getAll();
 
+    List<FlowerDTO> getFlowerByName(String name);
+
     FlowerDTO get(long id);
 }

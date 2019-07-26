@@ -11,6 +11,13 @@
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
     <p style="color: red;">${errorString}</p>
+    Enter name of flower to search:
+    <form method="GET" action="${pageContext.request.contextPath}/customer">
+        <input type="text" name="searchFlowerByName" value=""/>
+        <input type="hidden" name="searchClick" value="submit"/>
+        <input type="submit" value= "Search" />
+    </form>
+    <br/>
     <table border="1" cellpadding="5" cellspacing="1" >
        <tr>
           <th>Code</th>
