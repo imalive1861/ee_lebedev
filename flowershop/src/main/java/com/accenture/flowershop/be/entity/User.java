@@ -1,12 +1,13 @@
 package com.accenture.flowershop.be.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "USERS")
 @NamedQuery(name = "User.getAll", query = "SELECT c from User c")
-public class User {
+public class User implements Serializable {
 
     @Id
     private long id;

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+        "http://castor.org/mapping.dtd">
+<mapping>
+    <description>
+        Spring OXM and Castor
+    </description>
+    <class name="com.accenture.flowershop.fe.dto.UserDTO">
+        <map-to xml="user" />
+        <field name="login" type="string"/>
+        <field name="password" type="string"/>
+        <field name="name" type="string"/>
+        <field name="address" type="string"/>
+        <field name="phoneNumber" type="string"/>
+        <field name="sale" type="int"/>
+        <field name="score"/>
+    </class>
+</mapping>

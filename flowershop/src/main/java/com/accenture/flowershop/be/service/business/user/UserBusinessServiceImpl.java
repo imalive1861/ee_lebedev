@@ -2,6 +2,7 @@ package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
 import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
@@ -24,11 +26,14 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     private UserMapper userMapper;
     private UserAccess userAccess;
+    private UserMarshallingService userMarshallingService;
 
     @Autowired
-    public UserBusinessServiceImpl(UserAccess userAccess, UserMapper userMapper){
+    public UserBusinessServiceImpl(UserAccess userAccess, UserMapper userMapper,
+                                   UserMarshallingService userMarshallingService){
         this.userAccess = userAccess;
         this.userMapper = userMapper;
+        this.userMarshallingService = userMarshallingService;
     }
 
     public UserDTO logIn(String login, String password) {
@@ -51,6 +56,11 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
                 new BigDecimal(2000.00),random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
         User user = userMapper.userDtoToUser(userDTO);
+        try {
+            userMarshallingService.userMarshallingObjectToXML(userDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         userAccess.saveUser(user);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
     }

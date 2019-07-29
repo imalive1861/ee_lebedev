@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "ORDERS")
-@NamedQuery(name = "Order.getAll", query = "SELECT c from Order c")
+@NamedQuery(name = "Order.getAll", query = "SELECT c from Order c ORDER BY c.dateCreate")
 public class Order {
 
     @Id

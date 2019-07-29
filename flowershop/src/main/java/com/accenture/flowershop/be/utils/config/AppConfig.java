@@ -18,22 +18,51 @@ import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessServiceImpl;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessServiceImpl;
+import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
+import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
 import com.accenture.flowershop.fe.dto.mappers.CardMapper;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.oxm.castor.CastorMarshaller;
 
 @Configuration
 public class AppConfig {
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public XMLConverter xmlConverter(){
+        XMLConverter converter = new XMLConverter();
+        converter.setMarshaller(castorMarshaller());
+        converter.setUnmarshaller(castorMarshaller());
+        return converter;
+    }
+
+    @Bean
+    public CastorMarshaller castorMarshaller() {
+        CastorMarshaller castorMarshaller = new CastorMarshaller();
+        Resource resource = new ClassPathResource("mapping.xml");
+        castorMarshaller.setMappingLocation(resource);
+        return castorMarshaller;
+    }
+
     @Bean
     public UserAccess userAccess(){
         return new UserAccessImpl();
     }
     @Bean
-    public UserBusinessService userBusinessService(UserAccess userAccess, UserMapper userMapper){
-        return new UserBusinessServiceImpl(userAccess, userMapper);
+    public UserBusinessService userBusinessService(UserAccess userAccess, UserMapper userMapper,
+                                                   UserMarshallingService userMarshallingService){
+        return new UserBusinessServiceImpl(userAccess, userMapper, userMarshallingService);
     }
 
     @Bean

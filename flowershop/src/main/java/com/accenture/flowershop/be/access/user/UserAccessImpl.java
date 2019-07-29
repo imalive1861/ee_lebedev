@@ -29,6 +29,9 @@ public class UserAccessImpl implements UserAccess {
         TypedQuery<User> query = entityManager.createQuery(
                 "select u from User u where u.login = ?1", User.class);
         query.setParameter(1, login);
+        if (query.getResultList().isEmpty()){
+            return null;
+        }
         return query.getSingleResult();
     }
 
