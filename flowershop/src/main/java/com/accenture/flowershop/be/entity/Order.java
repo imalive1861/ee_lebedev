@@ -14,8 +14,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "userId", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "userId_id", nullable = false)
     private User userId;
 
     @Column

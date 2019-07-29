@@ -22,4 +22,6 @@ public interface FlowerBusinessService {
     List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max);
 
     FlowerDTO get(long id);
+
+    BigDecimal getFlowerMaxPrice();
 }

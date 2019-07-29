@@ -50,4 +50,8 @@ public class FlowerAccessImpl implements FlowerAccess {
         query.setParameter(2, max);
         return query.getResultList();
     }
+
+    public BigDecimal getFlowerMaxPrice(){
+        return entityManager.createQuery("select max(f.price) from Flower f", BigDecimal.class).getSingleResult();
+    }
 }

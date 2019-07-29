@@ -21,4 +21,6 @@ public interface FlowerAccess {
     List<Flower> getFlowerByName(String name);
 
     List<Flower> getFlowerByPrice(BigDecimal min, BigDecimal max);
+
+    BigDecimal getFlowerMaxPrice();
 }

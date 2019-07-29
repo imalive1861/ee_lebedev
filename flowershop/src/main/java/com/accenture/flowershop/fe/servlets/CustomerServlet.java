@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
@@ -56,17 +55,21 @@ public class CustomerServlet extends HttpServlet {
         String maxFlowerPrice = request.getParameter("maxFlowerPrice");
         boolean hasError = false;
         String errorString = null;
-        List<FlowerDTO> flowerList = new ArrayList<>();
-        if (searchNameClick != null) {
-            if (searchFlowerByName != null) {
-                flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
+        List<FlowerDTO> flowerList;
+        if (searchNameClick != null && !searchFlowerByName.equals("")) {
+            flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
+        } else if (searchPriceClick != null && (!minFlowerPrice.equals("") || !maxFlowerPrice.equals(""))) {
+            BigDecimal min = new BigDecimal(0.00);
+            BigDecimal max = flowerBusinessService.getFlowerMaxPrice();
+            if (minFlowerPrice.equals("")){
+                max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
+            } else if (maxFlowerPrice.equals("")){
+                min = new BigDecimal(Double.parseDouble(minFlowerPrice));
+            } else {
+                min = new BigDecimal(Double.parseDouble(minFlowerPrice));
+                max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
             }
-        } else if (searchPriceClick != null) {
-            if (minFlowerPrice != null && maxFlowerPrice != null) {
-                BigDecimal min = new BigDecimal(minFlowerPrice);
-                BigDecimal max = new BigDecimal(maxFlowerPrice);
-                flowerList = flowerBusinessService.getFlowerByPrice(min,max);
-            }
+            flowerList = flowerBusinessService.getFlowerByPrice(min,max);
         } else {
             flowerList = flowerBusinessService.getAll();
         }

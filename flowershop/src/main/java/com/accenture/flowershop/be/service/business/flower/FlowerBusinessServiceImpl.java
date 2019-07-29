@@ -59,4 +59,8 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     public List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max) {
         return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByPrice(min,max));
     }
+
+    public BigDecimal getFlowerMaxPrice(){
+        return flowerAccess.getFlowerMaxPrice();
+    }
 }
