@@ -11,14 +11,8 @@ public class Flower {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @Column
     private String name;
-
-    @Column
     private BigDecimal price;
-
-    @Column
     private int number;
 
     public Flower(){}

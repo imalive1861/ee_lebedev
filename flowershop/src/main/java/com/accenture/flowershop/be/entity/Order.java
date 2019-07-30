@@ -2,7 +2,7 @@ package com.accenture.flowershop.be.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
@@ -13,22 +13,14 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private BigDecimal sumPrice;
+    private Date dateCreate;
+    private Date dateClose;
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "userId_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User userId;
-
-    @Column
-    private BigDecimal sumPrice;
-
-    @Column
-    private LocalDate dateCreate;
-
-    @Column
-    private LocalDate dateClose;
-
-    @Column
-    private String status;
 
     public Order(){}
 
@@ -39,13 +31,6 @@ public class Order {
         return id;
     }
 
-    public User getUserId() {
-        return userId;
-    }
-    public void setUserId(User user) {
-        this.userId = user;
-    }
-
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
     }
@@ -53,17 +38,17 @@ public class Order {
         return sumPrice;
     }
 
-    public void setDateCreate(LocalDate dateCreate) {
+    public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
-    public LocalDate getDateCreate() {
+    public Date getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateClose(LocalDate dateClose) {
+    public void setDateClose(Date dateClose) {
         this.dateClose = dateClose;
     }
-    public LocalDate getDateClose() {
+    public Date getDateClose() {
         return dateClose;
     }
 
@@ -72,5 +57,12 @@ public class Order {
     }
     public String getStatus() {
         return status;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+    public void setUserId(User user) {
+        this.userId = user;
     }
 }

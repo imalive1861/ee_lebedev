@@ -10,30 +10,15 @@ import java.math.BigDecimal;
 public class User implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @Column
     private String login;
-
-    @Column
     private String password;
-
-    @Column
     private String name;
-
-    @Column
     private String address;
-
-    @Column
     private String phoneNumber;
-
-    @Column
     private BigDecimal score;
-
-    @Column
     private int sale;
-
-    @Column
     private String role;
 
     public User(){}

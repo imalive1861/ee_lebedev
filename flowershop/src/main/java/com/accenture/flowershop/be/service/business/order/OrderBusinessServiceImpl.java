@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +37,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     public OrderDTO openOrder(UserDTO userDTO){
         OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
-                        LocalDate.now(), null, OrderStatus.OPENED.getTitle());
+                        new Date(), null, OrderStatus.OPENED.getTitle());
         orderAccess.saveOrder(orderMapper.orderDtoToOrder(orderDTO));
         orderDTO = orderMapper.orderToOrderDto(orderAccess.getOrderByStatusAndUser(
                 OrderStatus.OPENED.getTitle(),userBusinessService.get(userDTO)));
@@ -59,7 +59,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     public void closeOrder(OrderDTO orderDTO){
         if (orderDTO.getStatus().equals(OrderStatus.PAID.getTitle())) {
-            orderDTO.setDateClose(LocalDate.now());
+            orderDTO.setDateClose(new Date());
             orderDTO.setStatus(OrderStatus.CLOSED.getTitle());
             orderAccess.update(orderMapper.orderDtoToOrder(orderDTO));
         }

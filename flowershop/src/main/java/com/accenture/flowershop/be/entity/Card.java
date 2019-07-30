@@ -10,6 +10,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private int number;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="orderId", nullable = false)
@@ -19,9 +20,6 @@ public class Card {
     @JoinColumn(name="flowerId", nullable = false)
     private Flower flower;
 
-    @Column
-    private int number;
-
     public Card(){}
 
     public long getId() {
@@ -29,6 +27,13 @@ public class Card {
     }
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public Flower getFlower() {
@@ -43,12 +48,5 @@ public class Card {
     }
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-    public void setNumber(int number) {
-        this.number = number;
     }
 }

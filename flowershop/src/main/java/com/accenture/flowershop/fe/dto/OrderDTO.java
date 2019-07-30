@@ -1,21 +1,21 @@
 package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class OrderDTO {
 
     private long id;
     private UserDTO userId;
     private BigDecimal sumPrice;
-    private LocalDate dateCreate;
-    private LocalDate dateClose;
+    private Date dateCreate;
+    private Date dateClose;
     private String status;
 
     public OrderDTO(){}
 
     public OrderDTO(UserDTO userId, BigDecimal sumPrice,
-                    LocalDate dateCreate, LocalDate dateClose, String status) {
+                    Date dateCreate, Date dateClose, String status) {
         this.userId = userId;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
@@ -44,17 +44,17 @@ public class OrderDTO {
         return sumPrice;
     }
 
-    public void setDateCreate(LocalDate dateCreate) {
+    public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
-    public LocalDate getDateCreate() {
+    public Date getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateClose(LocalDate dateClose) {
+    public void setDateClose(Date dateClose) {
         this.dateClose = dateClose;
     }
-    public LocalDate getDateClose() {
+    public Date getDateClose() {
         return dateClose;
     }
 

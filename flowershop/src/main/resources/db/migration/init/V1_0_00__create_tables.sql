@@ -7,21 +7,23 @@ address VARCHAR(255),
 phoneNumber VARCHAR(255),
 score DECIMAL(20,2),
 sale INT,
-role VARCHAR(255));
+role VARCHAR(8) CHECK (role IN ('ADMIN', 'CUSTOMER'))
+);
 
 
 CREATE TABLE ORDERS (
 ID BIGINT PRIMARY KEY auto_increment,
-userId VARCHAR(255),
 sumPrice DECIMAL(20,2),
-dateCreate VARCHAR(255),
-dateClose VARCHAR(255),
-status VARCHAR(255),
-FOREIGN KEY(userId) REFERENCES users(login)
+dateCreate DATE,
+dateClose DATE,
+status VARCHAR(6) CHECK (status IN ('OPENED', 'PAID', 'CLOSED')),
+userId BIGINT,
+FOREIGN KEY(userId) REFERENCES users(id)
 );
 
 CREATE TABLE FLOWERS (
 ID BIGINT PRIMARY KEY auto_increment,
 name VARCHAR(255),
 price DECIMAL(20,2),
-number INT);
+number INT
+);
