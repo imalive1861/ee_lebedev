@@ -2,7 +2,6 @@ package com.accenture.flowershop.be.utils.marshalling;
 
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
-import org.springframework.stereotype.Service;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;

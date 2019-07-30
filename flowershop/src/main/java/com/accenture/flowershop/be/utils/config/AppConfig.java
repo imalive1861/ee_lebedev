@@ -19,24 +19,35 @@ import com.accenture.flowershop.be.service.business.order.OrderBusinessServiceIm
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessServiceImpl;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
+import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingServiceImpl;
 import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
 import com.accenture.flowershop.fe.dto.mappers.CardMapper;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.castor.CastorMarshaller;
 
 @Configuration
+@PropertySource("classpath:config/config.properties")
 public class AppConfig {
 
+    @Autowired
+    private Environment env;
+
+    private static final String userXML = "filepath.user";
+
     @Bean
-    public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
+    public UserMarshallingService userMarshallingService() {
+        UserMarshallingService ums = new UserMarshallingServiceImpl(xmlConverter());
+        ums.setUserXML(env.getProperty(userXML));
+        return ums;
     }
 
     @Bean

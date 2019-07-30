@@ -3,7 +3,6 @@ package com.accenture.flowershop.be.service.marshgalling.user;
 import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,13 +10,17 @@ import java.io.IOException;
 @Service
 public class UserMarshallingServiceImpl implements UserMarshallingService {
 
-    @Value("${filepath}")
     private String userXML;
-
-    @Autowired
     private XMLConverter converter;
 
-    public UserMarshallingServiceImpl() {}
+    @Autowired
+    public UserMarshallingServiceImpl(XMLConverter converter) {
+        this.converter = converter;
+    }
+
+    public void setUserXML(String userXML) {
+        this.userXML = userXML;
+    }
 
     public void userMarshallingObjectToXML(UserDTO userDTO)
             throws IOException {
