@@ -4,10 +4,10 @@ import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
 import com.accenture.flowershop.be.utils.LoggerUtils;
-import com.accenture.flowershop.be.utils.config.SecurityConfig;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
+import com.accenture.flowershop.fe.enums.UserRoles;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
                            String address, String phoneNumber){
         Random random = new Random();
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
-                new BigDecimal(2000.00),random.nextInt(10), SecurityConfig.ROLE_CUSTOMER);
+                new BigDecimal(2000.00),random.nextInt(10), UserRoles.CUSTOMER.getTitle());
         User user = userMapper.userDtoToUser(userDTO);
         try {
             userMarshallingService.userMarshallingObjectToXML(userDTO);

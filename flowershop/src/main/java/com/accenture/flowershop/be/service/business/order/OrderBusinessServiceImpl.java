@@ -1,12 +1,12 @@
 package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
-import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
+import com.accenture.flowershop.fe.enums.OrderStatus;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Service
 @Transactional
 public class OrderBusinessServiceImpl implements OrderBusinessService {
-
-    private static final String ORDER_OPENED = "OPENED";
-    private static final String ORDER_PAID = "PAID";
-    private static final String ORDER_CLOSED = "CLOSED";
 
     private Logger LOG = LoggerUtils.getLOG();
 
@@ -44,10 +37,10 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     public OrderDTO openOrder(UserDTO userDTO){
         OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
-                        LocalDate.now(), null, ORDER_OPENED);
+                        LocalDate.now(), null, OrderStatus.OPENED.getTitle());
         orderAccess.saveOrder(orderMapper.orderDtoToOrder(orderDTO));
         orderDTO = orderMapper.orderToOrderDto(orderAccess.getOrderByStatusAndUser(
-                ORDER_OPENED,userBusinessService.get(userDTO)));
+                OrderStatus.OPENED.getTitle(),userBusinessService.get(userDTO)));
         return orderDTO;
     }
 
@@ -55,7 +48,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         sumPrice = userBusinessService.checkScore(orderDTO.getUserId(), sumPrice);
         if (sumPrice != null) {
             orderDTO.setSumPrice(sumPrice);
-            orderDTO.setStatus(ORDER_PAID);
+            orderDTO.setStatus(OrderStatus.PAID.getTitle());
             orderAccess.update(orderMapper.orderDtoToOrder(orderDTO));
             LOG.debug("Order with total price = {} date of creation = {} was paid",
                     orderDTO.getSumPrice(), orderDTO.getDateCreate());
@@ -65,9 +58,9 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     }
 
     public void closeOrder(OrderDTO orderDTO){
-        if (orderDTO.getStatus().equals(ORDER_PAID)) {
+        if (orderDTO.getStatus().equals(OrderStatus.PAID.getTitle())) {
             orderDTO.setDateClose(LocalDate.now());
-            orderDTO.setStatus(ORDER_CLOSED);
+            orderDTO.setStatus(OrderStatus.CLOSED.getTitle());
             orderAccess.update(orderMapper.orderDtoToOrder(orderDTO));
         }
         LOG.debug("Order with total price = {} date of creation = {} was closed = {}",
