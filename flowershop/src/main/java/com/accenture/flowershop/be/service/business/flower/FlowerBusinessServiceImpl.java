@@ -8,6 +8,7 @@ import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -29,7 +30,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     public void saveFlower(FlowerDTO flowerDTO) {
         flowerAccess.saveFlower(flowerMapper.flowerDtoToFlower(flowerDTO));
     }
-
+    @Transactional
     public void updateFlower(FlowerDTO flowerDTO){
         flowerAccess.update(flowerMapper.flowerDtoToFlower(flowerDTO));
     }

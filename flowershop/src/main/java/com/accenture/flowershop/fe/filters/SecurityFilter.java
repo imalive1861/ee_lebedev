@@ -25,12 +25,9 @@ public class SecurityFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         String servletPath = request.getServletPath();
-
-        // Информация пользователя сохранена в Session
-        // (После успешного входа в систему).
         UserDTO loginedUser = SessionUtils.getLoginedUser(request.getSession());
 
-        if (servletPath.equals("/login") || servletPath.equals("/registration")) {
+        if (servletPath.equals("/login") || servletPath.equals("/registration") || servletPath.equals("/ws")) {
             chain.doFilter(request, response);
             return;
         }
@@ -41,27 +38,23 @@ public class SecurityFilter implements Filter {
             return;
         }
 
-        if (loginedUser != null) {
-            String userName = loginedUser.getLogin();
-            String role = loginedUser.getRole();
-            wrapRequest = new UserRoleRequestWrapper(userName, role, request);
+        String userName = loginedUser.getLogin();
+        String role = loginedUser.getRole();
+        wrapRequest = new UserRoleRequestWrapper(userName, role, request);
 
-            if (SecurityUtils.isSecurityPage(request)) {
-                boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
-                if (!hasPermission) {
+        if (SecurityUtils.isSecurityPage(request)) {
+            boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
+            if (!hasPermission) {
 
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/accessDenied.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/accessDenied.jsp");
 
-                    dispatcher.forward(request, response);
-                    return;
-                }
+                dispatcher.forward(request, response);
+                return;
             }
-            chain.doFilter(request, response);
         }
+        chain.doFilter(request, response);
     }
 
     public void init(FilterConfig config) throws ServletException {
-
     }
-
 }
