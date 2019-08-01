@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.utils.config;
+package com.accenture.flowershop.be.utils.config.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

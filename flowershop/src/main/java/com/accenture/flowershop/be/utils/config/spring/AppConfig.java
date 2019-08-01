@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.utils.config;
+package com.accenture.flowershop.be.utils.config.spring;
 
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingServiceImpl;
