@@ -52,7 +52,7 @@ public class AdminServlet extends HttpServlet {
             request.setAttribute("cardList", cardBusinessService.getAll());
         }
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/admin.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/admin.jsp");
 
         dispatcher.forward(request, response);
 

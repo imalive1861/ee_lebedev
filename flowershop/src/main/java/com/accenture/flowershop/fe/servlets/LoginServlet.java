@@ -74,7 +74,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("errorString", errorString);
             request.setAttribute("user", user);
 
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp");
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/login.jsp");
 
             dispatcher.forward(request, response);
         } else {
@@ -91,7 +91,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/login.jsp");
         dispatcher.forward(request, response);
     }
 }

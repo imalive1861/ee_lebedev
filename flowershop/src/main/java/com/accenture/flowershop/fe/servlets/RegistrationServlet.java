@@ -75,7 +75,7 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("user", user);
 
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
-                    "/WEB-INF/view/registration.jsp");
+                    "/view/registration.jsp");
             dispatcher.forward(request, response);
         } else {
             userBusinessService.saveNewUser(login,password,name,address,phoneNumber);
@@ -84,12 +84,12 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("okString", okString);
 
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
-                    "/WEB-INF/view/login.jsp");
+                    "/view/login.jsp");
             dispatcher.forward(request, response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/view/registration.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/registration.jsp").forward(request, response);
     }
 }

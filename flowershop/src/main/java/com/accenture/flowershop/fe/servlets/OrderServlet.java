@@ -78,12 +78,12 @@ public class OrderServlet extends HttpServlet {
             hasError = true;
             errorString = "Card clean right now!";
         } else {
-            request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         }
 
         if (hasError) {
             request.setAttribute("errorString", errorString);
-            request.getRequestDispatcher("/WEB-INF/view/order.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         }
     }
 }

@@ -1,9 +1,11 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
     <title>Registration</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.js"></script>
+    <script type="text/javascript">
+    <%@include file="/resources/js/jqueryscripts.js"%>
+    </script>
 </head>
 <body>
 <jsp:include page="_header.jsp"/>
@@ -18,7 +20,8 @@
         </td>
         <tr>
             <td>Login</td>
-            <td><input type="text" name="login" value= "${user.login}" /> </td>
+            <td><input type="text" id="login" name="login" value= "${user.login}" /> </td>
+            <td><div id="somediv"></div></td>
         </tr>
         <tr>
             <td>Password</td>
@@ -38,7 +41,7 @@
         </tr>
         <tr>
             <td colspan ="2">
-                <input type="submit" value= "Registration" />
+                <input type="submit" id="reg" value="Registration" disabled/>
                 <a href="${pageContext.request.contextPath}/">Cancel</a>
             </td>
         </tr>

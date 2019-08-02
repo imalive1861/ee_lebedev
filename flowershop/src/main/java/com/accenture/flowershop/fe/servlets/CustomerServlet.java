@@ -115,7 +115,7 @@ public class CustomerServlet extends HttpServlet {
             request.setAttribute("errorString", errorString);
         }
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/view/customer.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/customer.jsp");
         dispatcher.forward(request, response);
     }
 
