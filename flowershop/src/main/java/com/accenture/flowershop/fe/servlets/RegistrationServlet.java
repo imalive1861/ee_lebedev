@@ -54,7 +54,7 @@ public class RegistrationServlet extends HttpServlet {
             hasError = true;
             errorString = "Fill empty sells!";
         } else {
-            if (userBusinessService.uniqueLogin(login)) {
+            if (false/*userBusinessService.uniqueLogin(login)*/) {
                 hasError = true;
                 errorString = "Enter unique login!";
             } else {

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app version = "4.0"
          xmlns = "http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
@@ -11,16 +12,10 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/flowershop/*</url-pattern>
     </servlet-mapping>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/application-context.xml</param-value>
-    </context-param>
 
     <servlet>
         <servlet-name>cxf</servlet-name>
@@ -31,6 +26,25 @@
         <servlet-name>cxf</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>jersey-servlet</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.accenture.flowershop.cg.services.rest</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jersey-servlet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/application-context.xml</param-value>
+    </context-param>
 
     <listener>
         <listener-class>

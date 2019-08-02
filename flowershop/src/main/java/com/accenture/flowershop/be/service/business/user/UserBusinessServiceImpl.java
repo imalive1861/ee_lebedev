@@ -46,8 +46,8 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return null;
     }
 
-    public boolean uniqueLogin(String login){
-        return userAccess.get(login) != null;
+    public boolean uniqueLogin(UserDTO userDTO){
+        return userAccess.get(userDTO.getLogin()) != null;
     }
 
     public void saveNewUser(String login, String password, String name,

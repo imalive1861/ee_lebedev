@@ -11,7 +11,7 @@ public interface UserBusinessService {
 
     UserDTO logIn(String login, String password);
 
-    boolean uniqueLogin(String login);
+    boolean uniqueLogin(UserDTO userDTO);
 
     void saveNewUser(String login, String password, String name,
                      String address, String phoneNumber);

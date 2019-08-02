@@ -27,7 +27,8 @@ public class SecurityFilter implements Filter {
         String servletPath = request.getServletPath();
         UserDTO loginedUser = SessionUtils.getLoginedUser(request.getSession());
 
-        if (servletPath.equals("/login") || servletPath.equals("/registration") || servletPath.equals("/ws")) {
+        if (servletPath.equals("/login") || servletPath.equals("/registration") || servletPath.equals("/ws")
+                || servletPath.equals("/rest")) {
             chain.doFilter(request, response);
             return;
         }
