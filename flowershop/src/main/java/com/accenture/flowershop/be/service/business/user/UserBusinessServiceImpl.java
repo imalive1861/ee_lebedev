@@ -3,7 +3,6 @@ package com.accenture.flowershop.be.service.business.user;
 import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
-import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
@@ -22,7 +21,8 @@ import java.util.Random;
 @Transactional
 public class UserBusinessServiceImpl implements UserBusinessService{
 
-    private Logger LOG = LoggerUtils.getLOG();
+    @Autowired
+    private Logger LOG;
 
     private UserMapper userMapper;
     private UserAccess userAccess;

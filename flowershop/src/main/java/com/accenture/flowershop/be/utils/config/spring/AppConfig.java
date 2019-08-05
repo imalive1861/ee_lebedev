@@ -3,6 +3,8 @@ package com.accenture.flowershop.be.utils.config.spring;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingServiceImpl;
 import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,5 +44,10 @@ public class AppConfig {
         Resource resource = new ClassPathResource("mapping.xml");
         castorMarshaller.setMappingLocation(resource);
         return castorMarshaller;
+    }
+
+    @Bean
+    public Logger logger(){
+        return LoggerFactory.getLogger("com.accenture.flowershop");
     }
 }

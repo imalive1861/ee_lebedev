@@ -2,11 +2,9 @@ package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Service
 public interface UserBusinessService {
 
     UserDTO logIn(String login, String password);

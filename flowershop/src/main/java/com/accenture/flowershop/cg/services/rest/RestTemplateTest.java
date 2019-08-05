@@ -9,13 +9,13 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateTest {
     public static void main(String[] args) {
 
-        UserDTO testLoginAdmin = new UserDTO();
-        testLoginAdmin.setLogin("admin");
+        UserDTO testUsedLoginAdmin = new UserDTO();
+        testUsedLoginAdmin.setLogin("admin");
 
         UserDTO testNotUsedLogin = new UserDTO();
         testNotUsedLogin.setLogin("asklfjsdasfrwqgerhtrlknheoruelfj");
 
-        if (testLogins(testLoginAdmin) && !testLogins(testNotUsedLogin)){
+        if (testLogins(testUsedLoginAdmin) && !testLogins(testNotUsedLogin)){
             System.out.println("All OK :)");
         } else {
             System.out.println("Somethings not right!");
@@ -31,9 +31,9 @@ public class RestTemplateTest {
         boolean e = restTemplate.postForObject(
                 "http://localhost:8080/rest/reg/checklogin", requestBody, Boolean.class);
         if (e) {
-            System.out.println("Login is used");
+            System.out.println("Login \"" + testLogin.getLogin() + "\" is used");
         } else {
-            System.out.println("Login is not used");
+            System.out.println("Login \"" + testLogin.getLogin() + "\" is not used");
         }
         return e;
     }

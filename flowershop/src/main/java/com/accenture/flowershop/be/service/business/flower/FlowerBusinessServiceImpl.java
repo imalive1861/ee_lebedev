@@ -2,7 +2,6 @@ package com.accenture.flowershop.be.service.business.flower;
 
 import com.accenture.flowershop.be.access.flower.FlowerAccess;
 import com.accenture.flowershop.be.entity.Flower;
-import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.slf4j.Logger;
@@ -16,7 +15,8 @@ import java.util.*;
 @Service
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
-    private Logger LOG = LoggerUtils.getLOG();
+    @Autowired
+    private Logger LOG;
 
     private FlowerAccess flowerAccess;
     private FlowerMapper flowerMapper;

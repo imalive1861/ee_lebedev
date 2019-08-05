@@ -2,7 +2,6 @@ package com.accenture.flowershop.be.service.business.order;
 
 import com.accenture.flowershop.be.access.order.OrderAccess;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
-import com.accenture.flowershop.be.utils.LoggerUtils;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
@@ -20,7 +19,8 @@ import java.util.List;
 @Transactional
 public class OrderBusinessServiceImpl implements OrderBusinessService {
 
-    private Logger LOG = LoggerUtils.getLOG();
+    @Autowired
+    private Logger LOG;
 
     private OrderAccess orderAccess;
     private UserBusinessService userBusinessService;

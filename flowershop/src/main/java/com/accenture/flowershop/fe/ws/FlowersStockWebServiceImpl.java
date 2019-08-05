@@ -3,11 +3,9 @@ package com.accenture.flowershop.fe.ws;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.jws.WebService;
 
-@Service
 @WebService
 public class FlowersStockWebServiceImpl implements FlowersStockWebService {
 
