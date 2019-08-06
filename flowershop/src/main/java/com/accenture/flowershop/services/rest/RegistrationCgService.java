@@ -1,4 +1,4 @@
-package com.accenture.flowershop.cg.services.rest;
+package com.accenture.flowershop.services.rest;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;

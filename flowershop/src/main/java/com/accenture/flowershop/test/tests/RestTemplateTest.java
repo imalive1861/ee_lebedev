@@ -1,4 +1,4 @@
-package com.accenture.flowershop.cg.services.rest;
+package com.accenture.flowershop.test.tests;
 
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.http.HttpEntity;

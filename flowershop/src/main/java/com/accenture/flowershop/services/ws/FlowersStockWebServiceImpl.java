@@ -1,4 +1,4 @@
-package com.accenture.flowershop.fe.ws;
+package com.accenture.flowershop.services.ws;
 
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.FlowerDTO;

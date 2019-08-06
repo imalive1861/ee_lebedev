@@ -15,7 +15,7 @@
 
     <jaxws:endpoint
             id="FlowersStockWebService"
-            implementor="com.accenture.flowershop.fe.ws.FlowersStockWebServiceImpl"
+            implementor="com.accenture.flowershop.services.ws.FlowersStockWebServiceImpl"
             address="/flowers">
     </jaxws:endpoint>
 </beans>

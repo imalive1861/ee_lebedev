@@ -1,4 +1,4 @@
-package com.accenture.flowershop.fe.ws;
+package com.accenture.flowershop.services.ws;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
