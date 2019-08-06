@@ -7,15 +7,14 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import com.accenture.flowershop.fe.enums.UserRoles;
+import com.accenture.flowershop.services.jms.ProducerTest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Random;
 
 @Service
 @Transactional
@@ -26,14 +25,14 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     private UserMapper userMapper;
     private UserAccess userAccess;
-    private UserMarshallingService userMarshallingService;
+    private ProducerTest producerTest;
 
     @Autowired
     public UserBusinessServiceImpl(UserAccess userAccess, UserMapper userMapper,
-                                   UserMarshallingService userMarshallingService){
+                                   ProducerTest producerTest){
         this.userAccess = userAccess;
         this.userMapper = userMapper;
-        this.userMarshallingService = userMarshallingService;
+        this.producerTest = producerTest;
     }
 
     public UserDTO logIn(String login, String password) {
@@ -52,15 +51,9 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
-        Random random = new Random();
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
-                new BigDecimal(2000.00),random.nextInt(10), UserRoles.CUSTOMER.getTitle());
-        User user = userMapper.userDtoToUser(userDTO);
-        try {
-            userMarshallingService.userMarshallingObjectToXML(userDTO);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                new BigDecimal(2000.00),0, UserRoles.CUSTOMER.getTitle());
+        User user = userMapper.userDtoToUser(producerTest.saleRequest(userDTO));
         userAccess.saveUser(user);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
     }

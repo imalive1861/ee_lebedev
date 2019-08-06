@@ -3,6 +3,9 @@ package com.accenture.flowershop.be.utils.config.spring;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingServiceImpl;
 import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
+import com.accenture.flowershop.services.jms.Cons;
+import com.accenture.flowershop.services.jms.Prod;
+import com.accenture.flowershop.services.jms.ProducerTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,21 @@ public class AppConfig {
     private Environment env;
 
     private static final String userXML = "filepath.user";
+
+    @Bean
+    public ProducerTest producerTest() {
+        return new ProducerTest(userMarshallingService(),prod(),cons());
+    }
+
+    @Bean
+    public Prod prod(){
+        return new Prod(env.getProperty(userXML));
+    }
+
+    @Bean
+    public Cons cons() {
+        return new Cons();
+    }
 
     @Bean
     public UserMarshallingService userMarshallingService() {
