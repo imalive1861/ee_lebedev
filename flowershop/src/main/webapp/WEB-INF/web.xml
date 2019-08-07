@@ -8,16 +8,6 @@
   <display-name>Archetype Created Web Application</display-name>
 
     <servlet>
-        <servlet-name>dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/flowershop/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>cxf</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -45,10 +35,4 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/application-context.xml</param-value>
     </context-param>
-
-    <listener>
-        <listener-class>
-            org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>
 </web-app>
