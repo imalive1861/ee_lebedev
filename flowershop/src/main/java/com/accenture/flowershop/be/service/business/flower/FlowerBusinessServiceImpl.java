@@ -1,7 +1,6 @@
 package com.accenture.flowershop.be.service.business.flower;
 
-import com.accenture.flowershop.be.access.flower.FlowerAccess;
-import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.be.repository.FlowerRepository;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.slf4j.Logger;
@@ -13,55 +12,48 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
+@Transactional
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
-    @Autowired
+    private FlowerRepository flowerRepository;
+    private FlowerMapper flowerMapper;
     private Logger LOG;
 
-    private FlowerAccess flowerAccess;
-    private FlowerMapper flowerMapper;
-
     @Autowired
-    public FlowerBusinessServiceImpl(FlowerAccess flowerAccess, FlowerMapper flowerMapper){
-        this.flowerAccess = flowerAccess;
+    public FlowerBusinessServiceImpl(FlowerRepository flowerRepository,
+                                     FlowerMapper flowerMapper,
+                                     Logger LOG){
+        this.flowerRepository = flowerRepository;
         this.flowerMapper = flowerMapper;
+        this.LOG = LOG;
     }
 
-    public void saveFlower(FlowerDTO flowerDTO) {
-        flowerAccess.saveFlower(flowerMapper.flowerDtoToFlower(flowerDTO));
-    }
-    @Transactional
     public void updateFlower(FlowerDTO flowerDTO){
-        flowerAccess.update(flowerMapper.flowerDtoToFlower(flowerDTO));
-    }
-
-    public void delete(Flower flower) {
-        if(flower != null) {
-            flowerAccess.delete(flower.getId());
-        }
+        flowerRepository.saveAndFlush(flowerMapper.flowerDtoToFlower(flowerDTO));
+        LOG.debug("Number of Flower with id = {} has been changed to = {}",
+                flowerDTO.getId(), flowerDTO.getNumber());
     }
 
     public FlowerDTO get(long id) {
         if(id != 0) {
-            return flowerMapper.flowerToFlowerDto(flowerAccess.get(id));
+            return flowerMapper.flowerToFlowerDto(flowerRepository.getOne(id));
         }
         return null;
     }
 
-    @Override
     public List<FlowerDTO> getAll() {
-        return flowerMapper.flowerToFlowerDtos(flowerAccess.getAll());
+        return flowerMapper.flowerToFlowerDtos(flowerRepository.findAll());
     }
 
     public List<FlowerDTO> getFlowerByName(String name) {
-        return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByName(name));
+        return flowerMapper.flowerToFlowerDtos(flowerRepository.findAllFlowerByName(name));
     }
 
     public List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max) {
-        return flowerMapper.flowerToFlowerDtos(flowerAccess.getFlowerByPrice(min,max));
+        return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPriceAndMaxPrice(min,max));
     }
 
     public BigDecimal getFlowerMaxPrice(){
-        return flowerAccess.getFlowerMaxPrice();
+        return flowerRepository.getFlowerMaxPrice();
     }
 }

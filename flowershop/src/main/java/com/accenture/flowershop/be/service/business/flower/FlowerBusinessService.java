@@ -1,16 +1,11 @@
 package com.accenture.flowershop.be.service.business.flower;
 
-import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface FlowerBusinessService {
-    void saveFlower(FlowerDTO flowerDTO);
-
-    void delete(Flower flower);
-
     void updateFlower(FlowerDTO flowerDTO);
 
     List<FlowerDTO> getAll();

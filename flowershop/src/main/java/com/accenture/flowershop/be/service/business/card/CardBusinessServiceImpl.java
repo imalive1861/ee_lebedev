@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.card;
 
-import com.accenture.flowershop.be.access.card.CardAccess;
+import com.accenture.flowershop.be.repository.CardRepository;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.CardDTO;
@@ -19,19 +19,19 @@ import java.util.List;
 @Transactional
 public class CardBusinessServiceImpl implements CardBusinessService{
 
-    private CardAccess cardAccess;
+    private CardRepository cardRepository;
     private CardService cardService;
     private CardMapper cardMapper;
     private OrderBusinessService orderBusinessService;
     private FlowerBusinessService flowerBusinessService;
 
     @Autowired
-    public CardBusinessServiceImpl(CardAccess cardAccess,
+    public CardBusinessServiceImpl(CardRepository cardRepository,
                                    CardService cardService,
                                    CardMapper cardMapper,
                                    OrderBusinessService orderBusinessService,
                                    FlowerBusinessService flowerBusinessService){
-        this.cardAccess = cardAccess;
+        this.cardRepository = cardRepository;
         this.cardService = cardService;
         this.cardMapper = cardMapper;
         this.orderBusinessService = orderBusinessService;
@@ -46,7 +46,7 @@ public class CardBusinessServiceImpl implements CardBusinessService{
             for (CustomerCardDTO c : customerCardDTOs) {
                 CardDTO cardDTO = new CardDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
                 flowerBusinessService.updateFlower(c.getFlowerDTO());
-                cardAccess.saveCard(cardMapper.cardDtoToCard(cardDTO));
+                cardRepository.save(cardMapper.cardDtoToCard(cardDTO));
             }
             cardService.getCard(userDTO.getLogin()).clear();
             return true;
@@ -55,6 +55,6 @@ public class CardBusinessServiceImpl implements CardBusinessService{
     }
     @Override
     public List<CardDTO> getAll() {
-        return cardMapper.cardToCardDtos(cardAccess.getAll());
+        return cardMapper.cardToCardDtos(cardRepository.findAll());
     }
 }

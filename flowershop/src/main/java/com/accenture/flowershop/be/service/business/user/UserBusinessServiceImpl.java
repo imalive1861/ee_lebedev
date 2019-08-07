@@ -1,8 +1,7 @@
 package com.accenture.flowershop.be.service.business.user;
 
-import com.accenture.flowershop.be.access.user.UserAccess;
 import com.accenture.flowershop.be.entity.User;
-import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
+import com.accenture.flowershop.be.repository.UserRepository;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
@@ -20,19 +19,20 @@ import java.math.RoundingMode;
 @Transactional
 public class UserBusinessServiceImpl implements UserBusinessService{
 
-    @Autowired
+    private UserRepository userRepository;
+    private UserMapper userMapper;
+    private ProducerTest producerTest;
     private Logger LOG;
 
-    private UserMapper userMapper;
-    private UserAccess userAccess;
-    private ProducerTest producerTest;
-
     @Autowired
-    public UserBusinessServiceImpl(UserAccess userAccess, UserMapper userMapper,
-                                   ProducerTest producerTest){
-        this.userAccess = userAccess;
+    public UserBusinessServiceImpl(UserRepository userRepository,
+                                   UserMapper userMapper,
+                                   ProducerTest producerTest,
+                                   Logger LOG){
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.producerTest = producerTest;
+        this.LOG = LOG;
     }
 
     public UserDTO logIn(String login, String password) {
@@ -46,7 +46,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     public boolean uniqueLogin(UserDTO userDTO){
-        return userAccess.get(userDTO.getLogin()) != null;
+        return userRepository.getByLogin(userDTO.getLogin()) != null;
     }
 
     public void saveNewUser(String login, String password, String name,
@@ -54,26 +54,26 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
                 new BigDecimal(2000.00),0, UserRoles.CUSTOMER.getTitle());
         User user = userMapper.userDtoToUser(producerTest.saleRequest(userDTO));
-        userAccess.saveUser(user);
+        userRepository.saveAndFlush(user);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());
     }
 
     public UserDTO get(String login) {
         if (login != null) {
-            return userMapper.userToUserDto(userAccess.get(login));
+            return userMapper.userToUserDto(userRepository.getByLogin(login));
         }
         return null;
     }
 
     public User get(UserDTO userDTO) {
-        return userAccess.get(userDTO.getLogin());
+        return userRepository.getByLogin(userDTO.getLogin());
     }
 
     public BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice){
         BigDecimal score = userDTO.getScore();
         if (sumPrice.compareTo(score) < 0) {
             userDTO.setScore(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
-            userAccess.update(userMapper.userDtoToUser(userDTO));
+            userRepository.saveAndFlush(userMapper.userDtoToUser(userDTO));
             return sumPrice.setScale(2, RoundingMode.UP);
         }
         return null;
