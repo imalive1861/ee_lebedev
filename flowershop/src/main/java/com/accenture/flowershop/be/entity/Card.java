@@ -12,11 +12,11 @@ public class Card {
     private long id;
     private int number;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name="orderId", nullable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name="flowerId", nullable = false)
     private Flower flower;
 

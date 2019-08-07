@@ -41,8 +41,8 @@ public class CardBusinessServiceImpl implements CardBusinessService{
     public boolean saveCardToOrder(BigDecimal sumPrice,
                                    List<CustomerCardDTO> customerCardDTOs,
                                    UserDTO userDTO){
-        OrderDTO orderDTO = orderBusinessService.openOrder(userDTO);
-        if (orderBusinessService.paidOrder(orderDTO, sumPrice)) {
+        OrderDTO orderDTO = orderBusinessService.paidOrder(userDTO, sumPrice);
+        if (orderDTO != null) {
             for (CustomerCardDTO c : customerCardDTOs) {
                 CardDTO cardDTO = new CardDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
                 flowerBusinessService.updateFlower(c.getFlowerDTO());

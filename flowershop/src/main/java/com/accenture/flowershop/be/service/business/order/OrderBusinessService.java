@@ -7,9 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderBusinessService {
-    OrderDTO openOrder(UserDTO userDTO);
-
-    boolean paidOrder(OrderDTO orderDTO, BigDecimal sumPrice);
+    OrderDTO paidOrder(UserDTO userDTO, BigDecimal sumPrice);
 
     void closeOrder(OrderDTO orderDTO);
 

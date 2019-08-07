@@ -36,26 +36,22 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         this.LOG = LOG;
     }
 
-    public OrderDTO openOrder(UserDTO userDTO){
-        OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
-                        new Date(), null, OrderStatus.OPENED.getTitle());
-        orderRepository.save(orderMapper.orderDtoToOrder(orderDTO));
-        orderDTO = orderMapper.orderToOrderDto(orderRepository.getOrderByStatusAndUserId(
-                OrderStatus.OPENED.getTitle(),userBusinessService.get(userDTO)));
-        return orderDTO;
-    }
-
-    public boolean paidOrder(OrderDTO orderDTO, BigDecimal sumPrice){
-        sumPrice = userBusinessService.checkScore(orderDTO.getUserId(), sumPrice);
+    public OrderDTO paidOrder(UserDTO userDTO, BigDecimal sumPrice){
+        sumPrice = userBusinessService.checkScore(userDTO, sumPrice);
         if (sumPrice != null) {
+            OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
+                    new Date(), null, OrderStatus.OPENED.getTitle());
+            orderRepository.save(orderMapper.orderDtoToOrder(orderDTO));
+            orderDTO = orderMapper.orderToOrderDto(orderRepository.getOrderByStatusAndUserId(
+                    OrderStatus.OPENED.getTitle(),userBusinessService.get(userDTO)));
             orderDTO.setSumPrice(sumPrice);
             orderDTO.setStatus(OrderStatus.PAID.getTitle());
             orderRepository.saveAndFlush(orderMapper.orderDtoToOrder(orderDTO));
             LOG.debug("Order with total price = {} date of creation = {} was paid",
                     orderDTO.getSumPrice(), orderDTO.getDateCreate());
-            return true;
+            return orderDTO;
         }
-        return false;
+        return null;
     }
 
     public void closeOrder(OrderDTO orderDTO){

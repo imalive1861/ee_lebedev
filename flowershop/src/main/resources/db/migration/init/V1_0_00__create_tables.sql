@@ -4,7 +4,7 @@ login VARCHAR(255) UNIQUE,
 password VARCHAR(255) NOT NULL,
 NAME VARCHAR(255),
 address VARCHAR(255),
-phoneNumber VARCHAR(255),
+phone_Number VARCHAR(255),
 score DECIMAL(20,2),
 sale INT,
 role VARCHAR(8) CHECK (role IN ('ADMIN', 'CUSTOMER'))
@@ -13,12 +13,12 @@ role VARCHAR(8) CHECK (role IN ('ADMIN', 'CUSTOMER'))
 
 CREATE TABLE ORDERS (
 ID BIGINT PRIMARY KEY auto_increment,
-sumPrice DECIMAL(20,2),
-dateCreate DATE,
-dateClose DATE,
+sum_Price DECIMAL(20,2),
+date_Create TIMESTAMP,
+date_Close TIMESTAMP,
 status VARCHAR(6) CHECK (status IN ('OPENED', 'PAID', 'CLOSED')),
-userId BIGINT,
-FOREIGN KEY(userId) REFERENCES users(id)
+user_Id BIGINT,
+FOREIGN KEY(user_Id) REFERENCES users(id)
 );
 
 CREATE TABLE FLOWERS (
