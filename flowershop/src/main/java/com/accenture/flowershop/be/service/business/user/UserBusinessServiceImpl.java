@@ -1,7 +1,7 @@
 package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.entity.User;
-import com.accenture.flowershop.be.repository.UserRepository;
+import com.accenture.flowershop.be.repository.user.UserRepository;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;

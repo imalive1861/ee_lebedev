@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.card;
 
-import com.accenture.flowershop.be.repository.CardRepository;
+import com.accenture.flowershop.be.repository.card.CardRepository;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.CardDTO;

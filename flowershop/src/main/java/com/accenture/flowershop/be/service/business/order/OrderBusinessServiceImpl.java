@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.order;
 
-import com.accenture.flowershop.be.repository.OrderRepository;
+import com.accenture.flowershop.be.repository.order.OrderRepository;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;

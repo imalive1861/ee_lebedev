@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.repository;
+package com.accenture.flowershop.be.repository.user;
 
 import com.accenture.flowershop.be.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

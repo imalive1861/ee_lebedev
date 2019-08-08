@@ -1,4 +1,4 @@
-package com.accenture.flowershop.be.repository;
+package com.accenture.flowershop.be.repository.order;
 
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;

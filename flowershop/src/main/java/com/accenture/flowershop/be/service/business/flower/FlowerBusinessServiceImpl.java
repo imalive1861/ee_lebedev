@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.service.business.flower;
 
-import com.accenture.flowershop.be.repository.FlowerRepository;
+import com.accenture.flowershop.be.repository.flower.FlowerRepository;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.slf4j.Logger;
