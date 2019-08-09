@@ -3,24 +3,24 @@ package com.accenture.flowershop.be.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CARD")
-@NamedQuery(name = "Card.getAll", query = "SELECT c from Card c")
-public class Card {
+@Table(name = "CARTS")
+public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator( name = "cartsSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     private long id;
     private int number;
 
     @ManyToOne
-    @JoinColumn(name="orderId", nullable = false)
+    @JoinColumn(name="order_id", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name="flowerId", nullable = false)
+    @JoinColumn(name="flower_id", nullable = false)
     private Flower flower;
 
-    public Card(){}
+    public Cart(){}
 
     public long getId() {
         return id;

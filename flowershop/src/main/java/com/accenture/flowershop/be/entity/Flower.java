@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "FLOWERS")
-@NamedQuery(name = "Flower.getAll", query = "SELECT c from Flower c")
 public class Flower {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator( name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flowersSeq")
     private long id;
     private String name;
     private BigDecimal price;
