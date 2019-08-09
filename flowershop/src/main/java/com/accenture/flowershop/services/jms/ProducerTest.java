@@ -25,7 +25,7 @@ public class ProducerTest {
             userMarshallingService.userMarshallingObjectToXML(userDTO);
             prod.producer();
             Sale sale = (Sale) cons.consumer();
-            userDTO.setSale(sale.getSale());
+            userDTO.setDiscount(sale.getSale());
         } catch (Exception e){
             e.printStackTrace();
         }
