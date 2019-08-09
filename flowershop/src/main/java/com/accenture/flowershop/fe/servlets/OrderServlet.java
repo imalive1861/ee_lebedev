@@ -1,7 +1,7 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardBusinessService;
-import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
+import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
@@ -22,10 +22,10 @@ import java.math.BigDecimal;
 public class OrderServlet extends HttpServlet {
 
     @Autowired
-    private CardService cardService;
+    private CartService cartService;
 
     @Autowired
-    private CardBusinessService cardBusinessService;
+    private CartBusinessService cartBusinessService;
 
     @Autowired
     private UserBusinessService userBusinessService;
@@ -57,26 +57,26 @@ public class OrderServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String createOrder = request.getParameter("createOrder");
-        String cleanCard = request.getParameter("cleanCard");
+        String cleanCart = request.getParameter("cleanCart");
         boolean hasError = false;
         String errorString = null;
         UserDTO user = SessionUtils.getLoginedUser(session);
-        BigDecimal allSum = cardService.getAllSumPrice(user.getSale(), user.getLogin());
+        BigDecimal allSum = cartService.getAllSumPrice(user.getDiscount(), user.getLogin());
         request.setAttribute("allSum", allSum);
 
         if (createOrder != null) {
             UserDTO userDTO = SessionUtils.getLoginedUser(session);
-            if (cardBusinessService.saveCardToOrder(allSum, SessionUtils.getUserCard(session), userDTO)) {
+            if (cartBusinessService.saveCartToOrder(allSum, SessionUtils.getUserCart(session), userDTO)) {
                 SessionUtils.storeLoginedUser(session, userBusinessService.get(userDTO.getLogin()));
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {
                 hasError = true;
                 errorString = "Need more gold!";
             }
-        } else if (cleanCard != null){
-            cardService.clear(user.getLogin());
+        } else if (cleanCart != null){
+            cartService.clear(user.getLogin());
             hasError = true;
-            errorString = "Card clean right now!";
+            errorString = "Cart clean right now!";
         } else {
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         }

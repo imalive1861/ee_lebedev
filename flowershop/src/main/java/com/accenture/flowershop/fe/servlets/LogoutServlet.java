@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -18,7 +18,7 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
     @Autowired
-    private CardService cardService;
+    private CartService cartService;
 
     public LogoutServlet(){
         super();
@@ -41,7 +41,7 @@ public class LogoutServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        cardService.clear(SessionUtils.getLoginedUser(session).getLogin());
+        cartService.clear(SessionUtils.getLoginedUser(session).getLogin());
         session.invalidate();
         response.sendRedirect(request.getContextPath() + "/");
     }

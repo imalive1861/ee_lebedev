@@ -47,12 +47,12 @@
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
                                 </tr>
-                                <c:forEach items="${cardList}" var="card" >
+                                <c:forEach items="${cartList}" var="cart" >
                                     <c:choose>
-                                        <c:when test="${order.id == card.order.id}">
+                                        <c:when test="${order.id == cart.order.id}">
                                             <tr>
-                                                <td>${card.flower.name}</td>
-                                                <td>${card.number}</td>
+                                                <td>${cart.flower.name}</td>
+                                                <td>${cart.number}</td>
                                             </tr>
                                         </c:when>
                                     </c:choose>
@@ -94,12 +94,12 @@
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
                                 </tr>
-                                <c:forEach items="${cardList}" var="card" >
+                                <c:forEach items="${cartList}" var="cart" >
                                     <c:choose>
-                                        <c:when test="${order.id == card.order.id}">
+                                        <c:when test="${order.id == cart.order.id}">
                                             <tr>
-                                                <td>${card.flower.name}</td>
-                                                <td>${card.number}</td>
+                                                <td>${cart.flower.name}</td>
+                                                <td>${cart.number}</td>
                                             </tr>
                                         </c:when>
                                     </c:choose>

@@ -1,9 +1,9 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.dto.CustomerCardDTO;
+import com.accenture.flowershop.fe.dto.CustomerCartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -27,7 +27,7 @@ public class CustomerServlet extends HttpServlet {
     private FlowerBusinessService flowerBusinessService;
 
     @Autowired
-    private CardService cardService;
+    private CartService cartService;
 
     public CustomerServlet() {
         super();
@@ -46,7 +46,7 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String numberToCard = request.getParameter("numberToCard");
+        String numberToCart = request.getParameter("numberToCart");
         String flowerId = request.getParameter("flowerId");
         String searchFlowerByName = request.getParameter("searchFlowerByName");
         String searchNameClick = request.getParameter("searchNameClick");
@@ -79,33 +79,33 @@ public class CustomerServlet extends HttpServlet {
         }
         request.setAttribute("flowerList",flowerList);
 
-        if (numberToCard != null && flowerId != null) {
+        if (numberToCart != null && flowerId != null) {
             long flowerIds = Long.parseLong(flowerId);
-            int numbersToCard = Integer.parseInt(numberToCard);
+            int numbersToCart = Integer.parseInt(numberToCart);
             FlowerDTO flowerDTO = flowerBusinessService.get(flowerIds);
-            if (numbersToCard > flowerDTO.getNumber()) {
+            if (numbersToCart > flowerDTO.getNumber()) {
                 hasError = true;
                 errorString = "There are not enough flowers available";
             } else {
-                if (numbersToCard < 0) {
+                if (numbersToCart < 0) {
                     hasError = true;
                     errorString = "Incorrect number";
                 } else {
                     HttpSession session = request.getSession();
                     String login = SessionUtils.getLoginedUser(session).getLogin();
-                    CustomerCardDTO flower = cardService.getCardById(login, flowerIds);
+                    CustomerCartDTO flower = cartService.getCartById(login, flowerIds);
                     if (flower != null) {
-                        if (numbersToCard <= (flowerDTO.getNumber() -
+                        if (numbersToCart <= (flowerDTO.getNumber() -
                                 flower.getNumber())){
-                            cardService.editCard(login, flowerIds, numbersToCard,
-                                    (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
+                            cartService.editCart(login, flowerIds, numbersToCart,
+                                    (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
                         } else {
                             hasError = true;
                             errorString = "There are not enough flowers available";
                         }
                     } else {
-                        cardService.addNewFlowerToCard(login, flowerDTO, numbersToCard,
-                                (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCard))));
+                        cartService.addNewFlowerToCart(login, flowerDTO, numbersToCart,
+                                (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
                     }
                 }
             }

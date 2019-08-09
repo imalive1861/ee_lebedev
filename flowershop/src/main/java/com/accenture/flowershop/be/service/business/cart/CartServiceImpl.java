@@ -1,6 +1,6 @@
-package com.accenture.flowershop.be.service.business.card;
+package com.accenture.flowershop.be.service.business.cart;
 
-import com.accenture.flowershop.fe.dto.CustomerCardDTO;
+import com.accenture.flowershop.fe.dto.CustomerCartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.TreeMap;
 import static java.math.RoundingMode.UP;
 
 @Service
-public class CardServiceImpl implements CardService {
+public class CartServiceImpl implements CartService {
 
-    private Map<String, List<CustomerCardDTO>> card = new TreeMap<>();
+    private Map<String, List<CustomerCartDTO>> cart = new TreeMap<>();
 
-    public CardServiceImpl(){
+    public CartServiceImpl(){
     }
 
-    public CustomerCardDTO getCardById(String login, long flowerId){
-        for (CustomerCardDTO i: card.get(login)) {
+    public CustomerCartDTO getCartById(String login, long flowerId){
+        for (CustomerCartDTO i: cart.get(login)) {
             if (i.getFlowerDTO().getId() == flowerId) {
                 return i;
             }
@@ -29,23 +29,23 @@ public class CardServiceImpl implements CardService {
         return null;
     }
 
-    public List<CustomerCardDTO> setCardFromSession(String login){
-        if (!card.containsKey(login)){
-            card.put(login, new ArrayList<>());
+    public List<CustomerCartDTO> setCartFromSession(String login){
+        if (!cart.containsKey(login)){
+            cart.put(login, new ArrayList<>());
         }
-        return card.get(login);
+        return cart.get(login);
     }
 
-    public void addNewFlowerToCard(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
-        if (card.containsKey(login)) {
-            CustomerCardDTO customerCardDTO = new CustomerCardDTO(flowerDTO, number, sumPrice);
+    public void addNewFlowerToCart(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
+        if (cart.containsKey(login)) {
+            CustomerCartDTO customerCartDTO = new CustomerCartDTO(flowerDTO, number, sumPrice);
             flowerDTO.setNumber(flowerDTO.getNumber() - number);
-            this.card.get(login).add(customerCardDTO);
+            this.cart.get(login).add(customerCartDTO);
         }
     }
 
-    public void editCard(String login, long flowerId, int number, BigDecimal sumPrice){
-        CustomerCardDTO i = getCardById(login, flowerId);
+    public void editCart(String login, long flowerId, int number, BigDecimal sumPrice){
+        CustomerCartDTO i = getCartById(login, flowerId);
         if (i != null) {
             i.setNumber(i.getNumber() + number);
             i.getFlowerDTO().setNumber(i.getFlowerDTO().getNumber() - number);
@@ -54,17 +54,17 @@ public class CardServiceImpl implements CardService {
     }
 
     public void clear(String login){
-        this.card.get(login).clear();
+        this.cart.get(login).clear();
     }
 
-    public List<CustomerCardDTO> getCard(String login) {
-        return card.get(login);
+    public List<CustomerCartDTO> getCart(String login) {
+        return cart.get(login);
     }
 
     public BigDecimal getAllSumPrice(int sale, String login){
         BigDecimal sum = new BigDecimal(0.00);
-        if (!card.isEmpty()) {
-            for (CustomerCardDTO c : card.get(login)) {
+        if (!cart.isEmpty()) {
+            for (CustomerCartDTO c : cart.get(login)) {
                 sum = sum.add(c.getSumPrice());
             }
             BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);

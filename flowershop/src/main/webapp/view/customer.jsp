@@ -31,8 +31,8 @@
           <th>Name</th>
           <th>Price</th>
           <th>Number</th>
-          <th>Number to card</th>
-          <th>Add to card</th>
+          <th>Number to cart</th>
+          <th>Add to cart</th>
        </tr>
        <c:forEach items="${flowerList}" var="flower" >
           <tr>
@@ -41,10 +41,10 @@
              <td>${flower.price}</td>
              <td>${flower.number}</td>
              <form method="GET" action="${pageContext.request.contextPath}/customer">
-                 <td><input type="number" min="0" name="numberToCard" value="0"/></td>
+                 <td><input type="number" min="0" name="numberToCart" value="0"/></td>
                  <td>
                     <input type="hidden" name="flowerId" value="${flower.id}"/>
-                    <input type="submit" value= "Add to card" />
+                    <input type="submit" value= "Add to cart" />
                  </td>
              </form>
           </tr>

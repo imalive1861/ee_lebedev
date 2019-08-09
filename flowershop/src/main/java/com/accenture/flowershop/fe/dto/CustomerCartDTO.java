@@ -2,13 +2,13 @@ package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
 
-public class CustomerCardDTO {
+public class CustomerCartDTO {
 
     private FlowerDTO flowerDTO;
     private int number;
     private BigDecimal sumPrice;
 
-    public CustomerCardDTO(FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
+    public CustomerCartDTO(FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
         this.flowerDTO = flowerDTO;
         this.number = number;
         this.sumPrice = sumPrice;

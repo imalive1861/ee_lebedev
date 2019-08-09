@@ -15,24 +15,24 @@
                 <th>Number</th>
                 <th>Sum Price</th>
             </tr>
-            <c:forEach items="${userCard}" var="card" >
+            <c:forEach items="${userCart}" var="cart" >
                 <tr>
-                    <td>${card.flowerDTO.id}</td>
-                    <td>${card.flowerDTO.name}</td>
-                    <td>${card.number}</td>
-                    <td>${card.sumPrice}</td>
+                    <td>${cart.flowerDTO.id}</td>
+                    <td>${cart.flowerDTO.name}</td>
+                    <td>${cart.number}</td>
+                    <td>${cart.sumPrice}</td>
                 </tr>
             </c:forEach>
             <tr>
                 <c:choose>
-                    <c:when test="${userCard.isEmpty()}">
-                        <td colspan="4">Card is empty</td>
+                    <c:when test="${userCart.isEmpty()}">
+                        <td colspan="4">Cart is empty</td>
                     </c:when>
                     <c:otherwise>
                         <td>
                             <form method="GET" action="${pageContext.request.contextPath}/order">
-                                <input type="hidden" name="cleanCard" value="YESURU"/>
-                                <input type="submit" value= "Clean card" />
+                                <input type="hidden" name="cleanCart" value="YESURU"/>
+                                <input type="submit" value= "Clean cart" />
                             </form>
                         </td>
                         <td>

@@ -9,22 +9,22 @@ public class UserDTO {
     private String name;
     private String address;
     private String phoneNumber;
-    private BigDecimal score;
-    private int sale;
+    private BigDecimal cash;
+    private int discount;
     private String role;
 
     public UserDTO(){
     }
 
     public UserDTO(String login, String password, String name,
-                   String address, String phoneNumber, BigDecimal score, int sale, String role){
+                   String address, String phoneNumber, BigDecimal cash, int discount, String role){
         this.login = login;
         this.password = password;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.score = score;
-        this.sale = sale;
+        this.cash = cash;
+        this.discount = discount;
         this.role = role;
     }
 
@@ -70,18 +70,18 @@ public class UserDTO {
         return phoneNumber;
     }
 
-    public void setScore(BigDecimal score) {
-        this.score = score;
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
     }
-    public BigDecimal getScore() {
-        return score;
+    public BigDecimal getCash() {
+        return cash;
     }
 
-    public void setSale(int sale) {
-        this.sale = sale;
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
-    public int getSale() {
-        return sale;
+    public int getDiscount() {
+        return discount;
     }
 
     public void setRole(String role) {

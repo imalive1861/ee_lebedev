@@ -10,7 +10,7 @@
                 <c:when test="${!(loginedUser.login eq 'admin')}">
                 <a href="${pageContext.request.contextPath}/customer">Flowers</a>
                 |
-                <a href="${pageContext.request.contextPath}/order">Card</a>
+                <a href="${pageContext.request.contextPath}/order">Cart</a>
                 |
                 </c:when>
                 <c:otherwise>

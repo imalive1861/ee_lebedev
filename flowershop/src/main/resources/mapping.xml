@@ -12,7 +12,7 @@
         <field name="name" type="string"/>
         <field name="address" type="string"/>
         <field name="phoneNumber" type="string"/>
-        <field name="sale" type="int"/>
-        <field name="score"/>
+        <field name="discount" type="int"/>
+        <field name="cash"/>
     </class>
 </mapping>

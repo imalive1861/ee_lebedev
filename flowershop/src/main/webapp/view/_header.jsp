@@ -13,9 +13,9 @@
                 <c:choose>
                     <c:when test="${!(loginedUser.login eq 'admin')}">
                         <br/>
-                        Your score: <b>${loginedUser.score}</b>
+                        Your cash: <b>${loginedUser.cash}</b>
                         <br/>
-                        Your sale: <b>${loginedUser.sale} %</b>
+                        Your discount: <b>${loginedUser.discount} %</b>
                         <br/>
                     </c:when>
                 </c:choose>

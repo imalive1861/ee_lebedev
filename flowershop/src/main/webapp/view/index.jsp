@@ -14,7 +14,7 @@
     <c:choose>
         <c:when test="${!(loginedUser.login eq 'admin')}">
             Flower catalog is <a href="${pageContext.request.contextPath}/customer">here</a>.<br/>
-            See the card <a href="${pageContext.request.contextPath}/order">here</a>.<br/>
+            See the cart <a href="${pageContext.request.contextPath}/order">here</a>.<br/>
             See account information <a href="${pageContext.request.contextPath}/userInfo">here</a>.<br/>
         </c:when>
         <c:otherwise>

@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardBusinessService;
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -21,7 +21,7 @@ public class AdminServlet extends HttpServlet {
     private OrderBusinessService orderBusinessService;
 
     @Autowired
-    private CardBusinessService cardBusinessService;
+    private CartBusinessService cartBusinessService;
 
     public AdminServlet() {
         super();
@@ -43,13 +43,13 @@ public class AdminServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setAttribute("orderList", orderBusinessService.getAll());
-        request.setAttribute("cardList", cardBusinessService.getAll());
+        request.setAttribute("cartList", cartBusinessService.getAll());
         String orderId = request.getParameter("orderId");
 
         if (orderId != null) {
             orderBusinessService.closeOrder(orderBusinessService.get(Long.parseLong(orderId)));
             request.setAttribute("orderList", orderBusinessService.getAll());
-            request.setAttribute("cardList", cardBusinessService.getAll());
+            request.setAttribute("cartList", cartBusinessService.getAll());
         }
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/admin.jsp");

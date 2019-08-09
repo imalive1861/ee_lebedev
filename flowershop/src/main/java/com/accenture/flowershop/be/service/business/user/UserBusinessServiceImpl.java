@@ -70,9 +70,9 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     public BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice){
-        BigDecimal score = userDTO.getScore();
+        BigDecimal score = userDTO.getCash();
         if (sumPrice.compareTo(score) < 0) {
-            userDTO.setScore(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
+            userDTO.setCash(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
             userRepository.saveAndFlush(userMapper.userDtoToUser(userDTO));
             return sumPrice.setScale(2, RoundingMode.UP);
         }

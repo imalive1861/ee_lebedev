@@ -1,15 +1,15 @@
 package com.accenture.flowershop.fe.dto;
 
-public class CardDTO {
+public class CartDTO {
 
     private long id;
     private OrderDTO order;
     private FlowerDTO flower;
     private int number;
 
-    public CardDTO(){}
+    public CartDTO(){}
 
-    public CardDTO(OrderDTO order, FlowerDTO flower, int number){
+    public CartDTO(OrderDTO order, FlowerDTO flower, int number){
         this.order = order;
         this.flower = flower;
         this.number = number;

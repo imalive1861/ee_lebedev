@@ -1,11 +1,10 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.card.CardService;
+import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -22,7 +21,7 @@ public class LoginServlet extends HttpServlet {
     private UserBusinessService userBusinessService;
 
     @Autowired
-    private CardService cardService;
+    private CartService cartService;
 
     public LoginServlet(){
         super();
@@ -80,7 +79,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             HttpSession session = request.getSession();
             SessionUtils.storeLoginedUser(session, user);
-            SessionUtils.storeUserCard(session, cardService.setCardFromSession(login));
+            SessionUtils.storeUserCart(session, cartService.setCartFromSession(login));
 
             if (user.getRole().equals("ADMIN")){
                 response.sendRedirect(request.getContextPath() + "/admin");
