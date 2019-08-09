@@ -17,6 +17,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <tomcat.version>7.0.94</tomcat.version>
     <springframework.version>5.1.9.RELEASE</springframework.version>
+    <org.hibernate.version>5.4.3.Final</org.hibernate.version>
     <cxf.version>3.0.8</cxf.version>
     <jersey.version>2.29</jersey.version>
     <fasterxml.jackson.version>2.9.9</fasterxml.jackson.version>
@@ -94,12 +95,17 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>4.3.0.Final</version>
+      <version>${org.hibernate.version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
-      <version>4.3.0.Final</version>
+      <version>${org.hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${org.hibernate.version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
@@ -348,6 +354,9 @@
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <version>3.2.2</version>
+          <configuration>
+            <failOnMissingWebXml>false</failOnMissingWebXml>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

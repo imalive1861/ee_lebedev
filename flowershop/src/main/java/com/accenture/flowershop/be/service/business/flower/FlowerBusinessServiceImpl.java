@@ -15,18 +15,14 @@ import java.util.*;
 @Transactional
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
+    @Autowired
     private FlowerRepository flowerRepository;
+    @Autowired
     private FlowerMapper flowerMapper;
+    @Autowired
     private Logger LOG;
 
-    @Autowired
-    public FlowerBusinessServiceImpl(FlowerRepository flowerRepository,
-                                     FlowerMapper flowerMapper,
-                                     Logger LOG){
-        this.flowerRepository = flowerRepository;
-        this.flowerMapper = flowerMapper;
-        this.LOG = LOG;
-    }
+    public FlowerBusinessServiceImpl(){}
 
     public void updateFlower(FlowerDTO flowerDTO){
         flowerRepository.saveAndFlush(flowerMapper.flowerDtoToFlower(flowerDTO));

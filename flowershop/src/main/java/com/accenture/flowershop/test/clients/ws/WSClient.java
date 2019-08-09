@@ -29,7 +29,7 @@ class AddFlowers extends TimerTask {
     private void add(int num) throws MalformedURLException{
         URL wsdlURL = new URL("http://localhost:8080/ws/flowers?wsdl");
         QName SERVICE_NAME = new QName(
-                "http://ws.fe.flowershop.accenture.com/", "FlowersStockWebServiceImplService");
+                "http://ws.services.flowershop.accenture.com/", "FlowersStockWebServiceImplService");
         Service service = Service.create(wsdlURL, SERVICE_NAME);
         FlowersStockWebService client = service.getPort(FlowersStockWebService.class);
         client.increaseFlowersStockSize(num);
