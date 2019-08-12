@@ -56,20 +56,10 @@ public class CustomerServlet extends HttpServlet {
         boolean hasError = false;
         String errorString = null;
         List<FlowerDTO> flowerList;
-        if (searchNameClick != null && !searchFlowerByName.equals("")) {
+        if (searchNameClick != null) {
             flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
-        } else if (searchPriceClick != null && (!minFlowerPrice.equals("") || !maxFlowerPrice.equals(""))) {
-            BigDecimal min = new BigDecimal(0.00);
-            BigDecimal max = flowerBusinessService.getFlowerMaxPrice();
-            if (minFlowerPrice.equals("")){
-                max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-            } else if (maxFlowerPrice.equals("")){
-                min = new BigDecimal(Double.parseDouble(minFlowerPrice));
-            } else {
-                min = new BigDecimal(Double.parseDouble(minFlowerPrice));
-                max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-            }
-            flowerList = flowerBusinessService.getFlowerByPrice(min,max);
+        } else  if (searchPriceClick != null) {
+            flowerList = flowerBusinessService.getFlowerByPrice(minFlowerPrice,maxFlowerPrice);
         } else {
             flowerList = flowerBusinessService.getAll();
         }

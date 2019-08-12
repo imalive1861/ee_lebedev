@@ -12,9 +12,7 @@ public interface FlowerBusinessService {
 
     List<FlowerDTO> getFlowerByName(String name);
 
-    List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max);
+    List<FlowerDTO> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice);
 
     FlowerDTO get(long id);
-
-    BigDecimal getFlowerMaxPrice();
 }

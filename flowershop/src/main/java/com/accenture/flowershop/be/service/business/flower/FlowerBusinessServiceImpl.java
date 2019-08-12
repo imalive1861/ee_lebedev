@@ -42,14 +42,26 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     }
 
     public List<FlowerDTO> getFlowerByName(String name) {
+        if (name.equals("")){
+            return getAll();
+        }
         return flowerMapper.flowerToFlowerDtos(flowerRepository.findAllFlowerByName(name));
     }
 
-    public List<FlowerDTO> getFlowerByPrice(BigDecimal min, BigDecimal max) {
-        return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPriceAndMaxPrice(min,max));
-    }
-
-    public BigDecimal getFlowerMaxPrice(){
-        return flowerRepository.getFlowerMaxPrice();
+    public List<FlowerDTO> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice) {
+        if (minFlowerPrice.equals("") && maxFlowerPrice.equals("")){
+            return getAll();
+        }
+        if (minFlowerPrice.equals("")){
+            BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
+            return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMaxPrice(max));
+        }
+        if (maxFlowerPrice.equals("")){
+            BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
+            return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPrice(min));
+        }
+        BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
+        BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
+        return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPriceAndMaxPrice(min, max));
     }
 }

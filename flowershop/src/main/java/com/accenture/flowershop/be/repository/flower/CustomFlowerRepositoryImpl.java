@@ -17,20 +17,29 @@ public class CustomFlowerRepositoryImpl implements CustomFlowerRepository {
     private EntityManager entityManager;
 
     @Override
-    public BigDecimal getFlowerMaxPrice() {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QFlower flower = QFlower.flower;
-        return queryFactory.selectFrom(flower)
-                .select(flower.price.max())
-                .fetchFirst();
-    }
-
-    @Override
     public List<Flower> getFlowerByMinPriceAndMaxPrice(BigDecimal min, BigDecimal max) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QFlower flower = QFlower.flower;
         return queryFactory.selectFrom(flower)
                 .where(flower.price.goe(min).and(flower.price.loe(max)))
+                .fetch();
+    }
+
+    @Override
+    public List getFlowerByMinPrice(BigDecimal min) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QFlower flower = QFlower.flower;
+        return queryFactory.selectFrom(flower)
+                .where(flower.price.goe(min))
+                .fetch();
+    }
+
+    @Override
+    public List getFlowerByMaxPrice(BigDecimal max) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QFlower flower = QFlower.flower;
+        return queryFactory.selectFrom(flower)
+                .where(flower.price.loe(max))
                 .fetch();
     }
 }
