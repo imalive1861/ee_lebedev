@@ -52,7 +52,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     public void saveNewUser(String login, String password, String name,
                            String address, String phoneNumber){
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
-                new BigDecimal(2000.00),0, UserRoles.CUSTOMER.getTitle());
+                new BigDecimal(2000.00),0, UserRoles.CUSTOMER);
         User user = userMapper.userDtoToUser(producerTest.saleRequest(userDTO));
         userRepository.saveAndFlush(user);
         LOG.debug("Customer with login = {} name = {} was created", userDTO.getLogin(), userDTO.getName());

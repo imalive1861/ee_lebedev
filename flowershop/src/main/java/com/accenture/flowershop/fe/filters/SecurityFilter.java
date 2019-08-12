@@ -40,7 +40,7 @@ public class SecurityFilter implements Filter {
         }
 
         String userName = loginedUser.getLogin();
-        String role = loginedUser.getRole();
+        String role = loginedUser.getRole().name();
         wrapRequest = new UserRoleRequestWrapper(userName, role, request);
 
         if (SecurityUtils.isSecurityPage(request)) {

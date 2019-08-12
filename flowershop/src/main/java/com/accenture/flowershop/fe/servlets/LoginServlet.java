@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
             SessionUtils.storeLoginedUser(session, user);
             SessionUtils.storeUserCart(session, cartService.setCartFromSession(login));
 
-            if (user.getRole().equals("ADMIN")){
+            if (user.getRole().name().equals("ADMIN")){
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else {
                 response.sendRedirect(request.getContextPath() + "/customer");

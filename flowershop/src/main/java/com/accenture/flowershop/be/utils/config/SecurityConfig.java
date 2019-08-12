@@ -20,14 +20,14 @@ public class SecurityConfig {
         urlPatterns1.add("/customer");
         urlPatterns1.add("/order");
 
-        mapConfig.put(UserRoles.CUSTOMER.getTitle(), urlPatterns1);
+        mapConfig.put(UserRoles.CUSTOMER.name(), urlPatterns1);
 
         List<String> urlPatterns2 = new ArrayList<>();
 
         urlPatterns2.add("/userInfo");
         urlPatterns2.add("/admin");
 
-        mapConfig.put(UserRoles.ADMIN.getTitle(), urlPatterns2);
+        mapConfig.put(UserRoles.ADMIN.name(), urlPatterns2);
     }
 
     public static Set<String> getAllAppRoles() {

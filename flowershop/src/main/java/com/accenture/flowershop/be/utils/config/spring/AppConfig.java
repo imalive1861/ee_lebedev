@@ -66,7 +66,7 @@ public class AppConfig {
     @Bean
     public CastorMarshaller castorMarshaller() {
         CastorMarshaller castorMarshaller = new CastorMarshaller();
-        Resource resource = new ClassPathResource("mapping.xml");
+        Resource resource = new ClassPathResource("config/mapping.xml");
         castorMarshaller.setMappingLocation(resource);
         return castorMarshaller;
     }

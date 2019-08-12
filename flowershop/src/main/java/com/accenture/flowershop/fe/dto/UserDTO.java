@@ -1,5 +1,7 @@
 package com.accenture.flowershop.fe.dto;
 
+import com.accenture.flowershop.fe.enums.UserRoles;
+
 import java.math.BigDecimal;
 
 public class UserDTO {
@@ -11,13 +13,13 @@ public class UserDTO {
     private String phoneNumber;
     private BigDecimal cash;
     private int discount;
-    private String role;
+    private UserRoles role;
 
     public UserDTO(){
     }
 
     public UserDTO(String login, String password, String name,
-                   String address, String phoneNumber, BigDecimal cash, int discount, String role){
+                   String address, String phoneNumber, BigDecimal cash, int discount, UserRoles role){
         this.login = login;
         this.password = password;
         this.name = name;
@@ -84,10 +86,10 @@ public class UserDTO {
         return discount;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRoles role) {
         this.role = role;
     }
-    public String getRole() {
+    public UserRoles getRole() {
         return role;
     }
 }

@@ -1,5 +1,7 @@
 package com.accenture.flowershop.be.entity;
 
+import com.accenture.flowershop.fe.enums.UserRoles;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,12 +22,13 @@ public class User implements Serializable {
     private String phoneNumber;
     private BigDecimal cash;
     private int discount;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
 
     public User(){}
 
     public User(String login, String password, String name,
-                String address, String phoneNumber, BigDecimal cash, int discount, String role){
+                String address, String phoneNumber, BigDecimal cash, int discount, UserRoles role){
         this.login = login;
         this.password = password;
         this.name = name;
@@ -92,10 +95,10 @@ public class User implements Serializable {
         return discount;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRoles role) {
         this.role = role;
     }
-    public String getRole() {
+    public UserRoles getRole() {
         return role;
     }
 }
