@@ -1,5 +1,7 @@
 package com.accenture.flowershop.fe.dto;
 
+import com.accenture.flowershop.fe.enums.OrderStatus;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,12 +12,12 @@ public class OrderDTO {
     private BigDecimal sumPrice;
     private Date dateCreate;
     private Date dateClose;
-    private String status;
+    private OrderStatus status;
 
     public OrderDTO(){}
 
     public OrderDTO(UserDTO userId, BigDecimal sumPrice,
-                    Date dateCreate, Date dateClose, String status) {
+                    Date dateCreate, Date dateClose, OrderStatus status) {
         this.userId = userId;
         this.sumPrice = sumPrice;
         this.dateCreate = dateCreate;
@@ -58,10 +60,10 @@ public class OrderDTO {
         return dateClose;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 }

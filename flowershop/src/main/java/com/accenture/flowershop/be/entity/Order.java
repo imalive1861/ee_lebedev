@@ -1,9 +1,10 @@
 package com.accenture.flowershop.be.entity;
 
+import com.accenture.flowershop.fe.enums.OrderStatus;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
 
 @Entity
 @Table(name = "ORDERS")
@@ -19,8 +20,8 @@ public class Order {
     private Date dateCreate;
     @Column(name = "date_close")
     private Date dateClose;
-    private String status;
-
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
@@ -55,10 +56,10 @@ public class Order {
         return dateClose;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
