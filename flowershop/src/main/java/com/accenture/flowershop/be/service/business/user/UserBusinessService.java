@@ -10,8 +10,7 @@ public interface UserBusinessService {
 
     boolean isUniqueLogin(User user);
 
-    void save(String login, String password, String name,
-              String address, String phoneNumber);
+    void save(User user);
 
     User getByLogin(String login);
     User get(User user);

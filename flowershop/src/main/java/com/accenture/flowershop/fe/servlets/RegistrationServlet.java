@@ -2,6 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
+import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -19,6 +20,9 @@ public class RegistrationServlet extends HttpServlet {
 
     @Autowired
     private UserBusinessService userBusinessService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     public RegistrationServlet(){
         super();
@@ -43,18 +47,26 @@ public class RegistrationServlet extends HttpServlet {
         String address = request.getParameter("address");
         String phoneNumber = request.getParameter("phoneNumber");
 
-        UserDTO user = null;
+        UserDTO userDTO;
         boolean hasError = false;
         String errorString = null;
-        String okString = null;
+        String okString;
 
-        if (login == null || login.length() == 0 || password == null || password.length() == 0 ||
-        name == null || name.length() == 0 || address == null || address.length() == 0 ||
-        phoneNumber == null || phoneNumber.length() == 0) {
+        userDTO = new UserDTO();
+        userDTO.setLogin(login);
+        userDTO.setName(name);
+        userDTO.setAddress(address);
+        userDTO.setPhoneNumber(phoneNumber);
+
+        if (    login == null ||        login.length() == 0 ||
+                password == null ||     password.length() == 0 ||
+                name == null ||         name.length() == 0 ||
+                address == null ||      address.length() == 0 ||
+                phoneNumber == null ||  phoneNumber.length() == 0) {
             hasError = true;
             errorString = "Fill empty sells!";
         } else {
-            if (false/*userBusinessService.uniqueLogin(login)*/) {
+            if (userBusinessService.isUniqueLogin(userMapper.userDtoToUser(userDTO))) {
                 hasError = true;
                 errorString = "Enter unique login!";
             } else {
@@ -65,20 +77,15 @@ public class RegistrationServlet extends HttpServlet {
             }
         }
         if (hasError){
-            user = new UserDTO();
-            user.setLogin(login);
-            user.setName(name);
-            user.setAddress(address);
-            user.setPhoneNumber(phoneNumber);
-
             request.setAttribute("errorString", errorString);
-            request.setAttribute("user", user);
+            request.setAttribute("user", userDTO);
 
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
                     "/view/registration.jsp");
             dispatcher.forward(request, response);
         } else {
-            userBusinessService.save(login,password,name,address,phoneNumber);
+            userDTO.setPassword(password);
+            userBusinessService.save(userMapper.userDtoToUser(userDTO));
             okString = "Registration completed successfully!";
 
             request.setAttribute("okString", okString);

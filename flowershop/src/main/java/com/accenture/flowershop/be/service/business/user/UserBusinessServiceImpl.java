@@ -44,10 +44,10 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userRepository.getByLogin(user.getLogin()) != null;
     }
 
-    public void save(String login, String password, String name,
-                     String address, String phoneNumber){
-        User user = new User(login, password, name, address, phoneNumber,
-                new BigDecimal(2000.00),0, UserRoles.CUSTOMER);
+    public void save(User user){
+        user.setCash(new BigDecimal(2000.00));
+        user.setDiscount(0);
+        user.setRole(UserRoles.CUSTOMER);
         user = producerTest.saleRequest(user);
         userRepository.saveAndFlush(user);
         LOG.debug("Customer with login = {} name = {} was created", user.getLogin(), user.getName());
