@@ -2,7 +2,10 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
+import com.accenture.flowershop.fe.dto.OrderDTO;
+import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -23,6 +26,9 @@ public class AdminServlet extends HttpServlet {
     @Autowired
     private CartBusinessService cartBusinessService;
 
+    @Autowired
+    private OrderMapper orderMapper;
+
     public AdminServlet() {
         super();
     }
@@ -42,13 +48,13 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setAttribute("orderList", orderBusinessService.getAll());
+        request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
         request.setAttribute("cartList", cartBusinessService.getAll());
         String orderId = request.getParameter("orderId");
 
         if (orderId != null) {
-            orderBusinessService.close(orderBusinessService.get(Long.parseLong(orderId)));
-            request.setAttribute("orderList", orderBusinessService.getAll());
+            orderBusinessService.close(Long.parseLong(orderId));
+            request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
             request.setAttribute("cartList", cartBusinessService.getAll());
         }
 

@@ -1,10 +1,9 @@
 package com.accenture.flowershop.be.service.business.order;
 
+import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.order.OrderRepository;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
-import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import com.accenture.flowershop.fe.enums.OrderStatus;
@@ -24,8 +23,6 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
 
     private UserBusinessService userBusinessService;
     private OrderRepository orderRepository;
-    private OrderMapper orderMapper;
-    private UserMapper userMapper;
     private Logger LOG;
 
     @Autowired
@@ -36,47 +33,43 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
                                     Logger LOG){
         this.userBusinessService = userBusinessService;
         this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.userMapper = userMapper;
         this.LOG = LOG;
     }
 
-    public OrderDTO create(User user, BigDecimal sumPrice){
+    public Order create(User user, BigDecimal sumPrice){
         sumPrice = userBusinessService.checkScore(user, sumPrice);
         if (sumPrice != null) {
-            OrderDTO orderDTO = new OrderDTO(userMapper.userToUserDto(user), new BigDecimal(0.00),
+            Order order = new Order(user, new BigDecimal(0.00),
                     new Date(), null, OrderStatus.OPENED);
-            orderRepository.save(orderMapper.orderDtoToOrder(orderDTO));
-            orderDTO = orderMapper.orderToOrderDto(orderRepository.getOrderByStatusAndUserId(
-                    OrderStatus.OPENED,userBusinessService.get(user)));
-            orderDTO.setSumPrice(sumPrice);
-            orderDTO.setStatus(OrderStatus.PAID);
-            orderRepository.saveAndFlush(orderMapper.orderDtoToOrder(orderDTO));
+            orderRepository.save(order);
+            order = orderRepository.getOrderByStatusAndUserId(
+                    OrderStatus.OPENED,userBusinessService.get(user));
+            order.setSumPrice(sumPrice);
+            order.setStatus(OrderStatus.PAID);
+            orderRepository.saveAndFlush(order);
             LOG.debug("Order with total price = {} date of creation = {} was paid",
-                    orderDTO.getSumPrice(), orderDTO.getDateCreate());
-            return orderDTO;
+                    order.getSumPrice(), order.getDateCreate());
+            return order;
         }
         return null;
     }
 
-    public void close(OrderDTO orderDTO){
-        if (orderDTO.getStatus().equals(OrderStatus.PAID)) {
-            orderDTO.setDateClose(new Date());
-            orderDTO.setStatus(OrderStatus.CLOSED);
-            orderRepository.saveAndFlush(orderMapper.orderDtoToOrder(orderDTO));
+    public void close(Long orderId){
+        Order order = get(orderId);
+        if (order.getStatus().equals(OrderStatus.PAID)) {
+            order.setDateClose(new Date());
+            order.setStatus(OrderStatus.CLOSED);
+            orderRepository.saveAndFlush(order);
         }
         LOG.debug("Order with total price = {} date of creation = {} was closed = {}",
-                orderDTO.getSumPrice(), orderDTO.getDateCreate(), orderDTO.getDateClose());
+                order.getSumPrice(), order.getDateCreate(), order.getDateClose());
     }
     @Override
-    public List<OrderDTO> getAll() {
-        return orderMapper.orderToOrderDtos(orderRepository.findAll(Sort.by("dateCreate")));
+    public List<Order> getAll() {
+        return orderRepository.findAll(Sort.by("dateCreate"));
     }
 
-    public OrderDTO get(long id) {
-        if(id != 0) {
-            return orderMapper.orderToOrderDto(orderRepository.getOne(id));
-        }
-        return null;
+    public Order get(long id) {
+            return orderRepository.getOne(id);
     }
 }

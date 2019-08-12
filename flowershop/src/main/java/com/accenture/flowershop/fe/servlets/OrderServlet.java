@@ -64,12 +64,11 @@ public class OrderServlet extends HttpServlet {
         String cleanCart = request.getParameter("cleanCart");
         boolean hasError = false;
         String errorString = null;
-        UserDTO user = SessionUtils.getLoginedUser(session);
-        BigDecimal allSum = cartService.getAllSumPrice(user.getDiscount(), user.getLogin());
+        UserDTO userDTO = SessionUtils.getLoginedUser(session);
+        BigDecimal allSum = cartService.getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin());
         request.setAttribute("allSum", allSum);
 
         if (createOrder != null) {
-            UserDTO userDTO = SessionUtils.getLoginedUser(session);
             if (cartBusinessService.save(allSum,
                     SessionUtils.getUserCart(session),
                     userMapper.userDtoToUser(userDTO))) {
@@ -81,7 +80,7 @@ public class OrderServlet extends HttpServlet {
                 errorString = "Need more gold!";
             }
         } else if (cleanCart != null){
-            cartService.clear(user.getLogin());
+            cartService.clear(userDTO.getLogin());
             hasError = true;
             errorString = "Cart clean right now!";
         } else {

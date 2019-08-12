@@ -1,13 +1,14 @@
 package com.accenture.flowershop.be.service.business.cart;
 
+import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.cart.CartRepository;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.CustomerCartDTO;
-import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.mappers.CartMapper;
+import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,27 +25,30 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     private CartMapper cartMapper;
     private OrderBusinessService orderBusinessService;
     private FlowerBusinessService flowerBusinessService;
+    private OrderMapper orderMapper;
 
     @Autowired
     public CartBusinessServiceImpl(CartRepository cartRepository,
                                    CartService cartService,
                                    CartMapper cartMapper,
                                    OrderBusinessService orderBusinessService,
-                                   FlowerBusinessService flowerBusinessService){
+                                   FlowerBusinessService flowerBusinessService,
+                                   OrderMapper orderMapper){
         this.cartRepository = cartRepository;
         this.cartService = cartService;
         this.cartMapper = cartMapper;
         this.orderBusinessService = orderBusinessService;
         this.flowerBusinessService = flowerBusinessService;
+        this.orderMapper = orderMapper;
     }
 
     public boolean save(BigDecimal sumPrice,
                         List<CustomerCartDTO> customerCartDTOS,
                         User user){
-        OrderDTO orderDTO = orderBusinessService.create(user, sumPrice);
-        if (orderDTO != null) {
+        Order order = orderBusinessService.create(user, sumPrice);
+        if (order != null) {
             for (CustomerCartDTO c : customerCartDTOS) {
-                CartDTO cartDTO = new CartDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
+                CartDTO cartDTO = new CartDTO(orderMapper.orderToOrderDto(order), c.getFlowerDTO(), c.getNumber());
                 flowerBusinessService.update(c.getFlowerDTO());
                 cartRepository.save(cartMapper.cartDtoToCart(cartDTO));
             }
