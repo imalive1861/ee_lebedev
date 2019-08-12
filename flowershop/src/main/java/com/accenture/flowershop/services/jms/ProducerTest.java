@@ -22,7 +22,7 @@ public class ProducerTest {
 
     public UserDTO saleRequest(UserDTO userDTO) {
         try {
-            userMarshallingService.userMarshallingObjectToXML(userDTO);
+            userMarshallingService.marshallingObjectToXML(userDTO);
             prod.producer();
             Sale sale = (Sale) cons.consumer();
             userDTO.setDiscount(sale.getSale());

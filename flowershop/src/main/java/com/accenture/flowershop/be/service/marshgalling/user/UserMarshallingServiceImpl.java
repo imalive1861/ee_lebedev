@@ -10,7 +10,7 @@ import java.io.IOException;
 @Service
 public class UserMarshallingServiceImpl implements UserMarshallingService {
 
-    private String userXML;
+    private String userXmlPath;
     private XMLConverter converter;
 
     @Autowired
@@ -18,17 +18,17 @@ public class UserMarshallingServiceImpl implements UserMarshallingService {
         this.converter = converter;
     }
 
-    public void setUserXML(String userXML) {
-        this.userXML = userXML;
+    public void setUserXmlPath(String userXmlPath) {
+        this.userXmlPath = userXmlPath;
     }
 
-    public void userMarshallingObjectToXML(UserDTO userDTO)
+    public void marshallingObjectToXML(UserDTO userDTO)
             throws IOException {
-        converter.convertFromObjectToXML(userDTO, userXML);
+        converter.convertFromObjectToXML(userDTO, userXmlPath);
     }
 
-    public UserDTO userMarshallingXMLToObject() throws IOException {
-        return (UserDTO) converter.convertFromXMLToObject(userXML);
+    public UserDTO marshallingXMLToObject() throws IOException {
+        return (UserDTO) converter.convertFromXMLToObject(userXmlPath);
     }
 
 }

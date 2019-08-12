@@ -66,7 +66,7 @@ public class OrderServlet extends HttpServlet {
 
         if (createOrder != null) {
             UserDTO userDTO = SessionUtils.getLoginedUser(session);
-            if (cartBusinessService.saveCartToOrder(allSum, SessionUtils.getUserCart(session), userDTO)) {
+            if (cartBusinessService.save(allSum, SessionUtils.getUserCart(session), userDTO)) {
                 SessionUtils.storeLoginedUser(session, userBusinessService.get(userDTO.getLogin()));
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {

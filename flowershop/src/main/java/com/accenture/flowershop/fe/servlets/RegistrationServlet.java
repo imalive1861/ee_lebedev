@@ -78,7 +78,7 @@ public class RegistrationServlet extends HttpServlet {
                     "/view/registration.jsp");
             dispatcher.forward(request, response);
         } else {
-            userBusinessService.saveNewUser(login,password,name,address,phoneNumber);
+            userBusinessService.save(login,password,name,address,phoneNumber);
             okString = "Registration completed successfully!";
 
             request.setAttribute("okString", okString);

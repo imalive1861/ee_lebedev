@@ -38,17 +38,17 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         this.flowerBusinessService = flowerBusinessService;
     }
 
-    public boolean saveCartToOrder(BigDecimal sumPrice,
-                                   List<CustomerCartDTO> customerCartDTOS,
-                                   UserDTO userDTO){
-        OrderDTO orderDTO = orderBusinessService.paidOrder(userDTO, sumPrice);
+    public boolean save(BigDecimal sumPrice,
+                        List<CustomerCartDTO> customerCartDTOS,
+                        UserDTO userDTO){
+        OrderDTO orderDTO = orderBusinessService.create(userDTO, sumPrice);
         if (orderDTO != null) {
             for (CustomerCartDTO c : customerCartDTOS) {
                 CartDTO cartDTO = new CartDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
-                flowerBusinessService.updateFlower(c.getFlowerDTO());
+                flowerBusinessService.update(c.getFlowerDTO());
                 cartRepository.save(cartMapper.cartDtoToCart(cartDTO));
             }
-            cartService.getCart(userDTO.getLogin()).clear();
+            cartService.getCartByUserLogin(userDTO.getLogin()).clear();
             return true;
         }
         return false;

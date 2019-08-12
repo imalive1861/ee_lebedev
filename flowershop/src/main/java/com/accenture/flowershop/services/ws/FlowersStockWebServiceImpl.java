@@ -20,7 +20,7 @@ public class FlowersStockWebServiceImpl implements FlowersStockWebService {
     public void increaseFlowersStockSize(int count) {
         for (FlowerDTO f: flowerBusinessService.getAll()){
             f.setNumber(f.getNumber() + count);
-            flowerBusinessService.updateFlower(f);
+            flowerBusinessService.update(f);
         }
     }
 }

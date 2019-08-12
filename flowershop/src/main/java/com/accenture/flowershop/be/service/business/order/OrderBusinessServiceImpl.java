@@ -36,7 +36,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         this.LOG = LOG;
     }
 
-    public OrderDTO paidOrder(UserDTO userDTO, BigDecimal sumPrice){
+    public OrderDTO create(UserDTO userDTO, BigDecimal sumPrice){
         sumPrice = userBusinessService.checkScore(userDTO, sumPrice);
         if (sumPrice != null) {
             OrderDTO orderDTO = new OrderDTO(userDTO, new BigDecimal(0.00),
@@ -54,7 +54,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         return null;
     }
 
-    public void closeOrder(OrderDTO orderDTO){
+    public void close(OrderDTO orderDTO){
         if (orderDTO.getStatus().equals(OrderStatus.PAID)) {
             orderDTO.setDateClose(new Date());
             orderDTO.setStatus(OrderStatus.CLOSED);

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface CartBusinessService {
-    boolean saveCartToOrder(BigDecimal sumPrice,
-                            List<CustomerCartDTO> customerCartDTOS, UserDTO userDTO);
+    boolean save(BigDecimal sumPrice,
+                 List<CustomerCartDTO> customerCartDTOS, UserDTO userDTO);
     List<CartDTO> getAll();
 }

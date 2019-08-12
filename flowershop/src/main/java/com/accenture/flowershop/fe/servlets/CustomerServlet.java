@@ -97,14 +97,14 @@ public class CustomerServlet extends HttpServlet {
                     if (flower != null) {
                         if (numbersToCart <= (flowerDTO.getNumber() -
                                 flower.getNumber())){
-                            cartService.editCart(login, flowerIds, numbersToCart,
+                            cartService.edit(login, flowerIds, numbersToCart,
                                     (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
                         } else {
                             hasError = true;
                             errorString = "There are not enough flowers available";
                         }
                     } else {
-                        cartService.addNewFlowerToCart(login, flowerDTO, numbersToCart,
+                        cartService.addFlowerToCart(login, flowerDTO, numbersToCart,
                                 (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
                     }
                 }

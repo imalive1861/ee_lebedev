@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface FlowerBusinessService {
-    void updateFlower(FlowerDTO flowerDTO);
+    void update(FlowerDTO flowerDTO);
 
     List<FlowerDTO> getAll();
 

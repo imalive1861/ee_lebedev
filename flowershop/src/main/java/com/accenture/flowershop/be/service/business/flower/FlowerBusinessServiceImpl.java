@@ -24,7 +24,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     public FlowerBusinessServiceImpl(){}
 
-    public void updateFlower(FlowerDTO flowerDTO){
+    public void update(FlowerDTO flowerDTO){
         flowerRepository.saveAndFlush(flowerMapper.flowerDtoToFlower(flowerDTO));
         LOG.debug("Number of Flower with id = {} has been changed to = {}",
                 flowerDTO.getId(), flowerDTO.getNumber());

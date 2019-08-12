@@ -51,7 +51,7 @@ public class AppConfig {
     @Bean
     public UserMarshallingService userMarshallingService() {
         UserMarshallingService ums = new UserMarshallingServiceImpl(xmlConverter());
-        ums.setUserXML(userXML);
+        ums.setUserXmlPath(userXML);
         return ums;
     }
 

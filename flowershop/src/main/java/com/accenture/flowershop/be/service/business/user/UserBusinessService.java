@@ -9,10 +9,10 @@ public interface UserBusinessService {
 
     UserDTO logIn(String login, String password);
 
-    boolean uniqueLogin(UserDTO userDTO);
+    boolean isUniqueLogin(UserDTO userDTO);
 
-    void saveNewUser(String login, String password, String name,
-                     String address, String phoneNumber);
+    void save(String login, String password, String name,
+              String address, String phoneNumber);
 
     UserDTO get(String login);
     User get(UserDTO userDTO);

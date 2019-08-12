@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderBusinessService {
-    OrderDTO paidOrder(UserDTO userDTO, BigDecimal sumPrice);
+    OrderDTO create(UserDTO userDTO, BigDecimal sumPrice);
 
-    void closeOrder(OrderDTO orderDTO);
+    void close(OrderDTO orderDTO);
 
     List<OrderDTO> getAll();
 

@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
         return cart.get(login);
     }
 
-    public void addNewFlowerToCart(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
+    public void addFlowerToCart(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
         if (cart.containsKey(login)) {
             CustomerCartDTO customerCartDTO = new CustomerCartDTO(flowerDTO, number, sumPrice);
             flowerDTO.setNumber(flowerDTO.getNumber() - number);
@@ -44,7 +44,7 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    public void editCart(String login, long flowerId, int number, BigDecimal sumPrice){
+    public void edit(String login, long flowerId, int number, BigDecimal sumPrice){
         CustomerCartDTO i = getCartById(login, flowerId);
         if (i != null) {
             i.setNumber(i.getNumber() + number);
@@ -57,7 +57,7 @@ public class CartServiceImpl implements CartService {
         this.cart.get(login).clear();
     }
 
-    public List<CustomerCartDTO> getCart(String login) {
+    public List<CustomerCartDTO> getCartByUserLogin(String login) {
         return cart.get(login);
     }
 

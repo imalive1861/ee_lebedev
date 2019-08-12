@@ -47,7 +47,7 @@ public class AdminServlet extends HttpServlet {
         String orderId = request.getParameter("orderId");
 
         if (orderId != null) {
-            orderBusinessService.closeOrder(orderBusinessService.get(Long.parseLong(orderId)));
+            orderBusinessService.close(orderBusinessService.get(Long.parseLong(orderId)));
             request.setAttribute("orderList", orderBusinessService.getAll());
             request.setAttribute("cartList", cartBusinessService.getAll());
         }

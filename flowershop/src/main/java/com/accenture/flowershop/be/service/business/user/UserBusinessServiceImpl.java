@@ -45,12 +45,12 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return null;
     }
 
-    public boolean uniqueLogin(UserDTO userDTO){
+    public boolean isUniqueLogin(UserDTO userDTO){
         return userRepository.getByLogin(userDTO.getLogin()) != null;
     }
 
-    public void saveNewUser(String login, String password, String name,
-                           String address, String phoneNumber){
+    public void save(String login, String password, String name,
+                     String address, String phoneNumber){
         UserDTO userDTO = new UserDTO(login, password, name, address, phoneNumber,
                 new BigDecimal(2000.00),0, UserRoles.CUSTOMER);
         User user = userMapper.userDtoToUser(producerTest.saleRequest(userDTO));
