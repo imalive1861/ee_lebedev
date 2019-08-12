@@ -1,12 +1,12 @@
 package com.accenture.flowershop.be.service.business.cart;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.cart.CartRepository;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.CustomerCartDTO;
 import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.dto.mappers.CartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,15 +40,15 @@ public class CartBusinessServiceImpl implements CartBusinessService {
 
     public boolean save(BigDecimal sumPrice,
                         List<CustomerCartDTO> customerCartDTOS,
-                        UserDTO userDTO){
-        OrderDTO orderDTO = orderBusinessService.create(userDTO, sumPrice);
+                        User user){
+        OrderDTO orderDTO = orderBusinessService.create(user, sumPrice);
         if (orderDTO != null) {
             for (CustomerCartDTO c : customerCartDTOS) {
                 CartDTO cartDTO = new CartDTO(orderDTO, c.getFlowerDTO(), c.getNumber());
                 flowerBusinessService.update(c.getFlowerDTO());
                 cartRepository.save(cartMapper.cartDtoToCart(cartDTO));
             }
-            cartService.getCartByUserLogin(userDTO.getLogin()).clear();
+            cartService.getCartByUserLogin(user.getLogin()).clear();
             return true;
         }
         return false;

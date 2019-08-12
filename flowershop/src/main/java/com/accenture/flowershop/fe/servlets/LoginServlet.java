@@ -4,6 +4,7 @@ import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -22,6 +23,9 @@ public class LoginServlet extends HttpServlet {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     public LoginServlet(){
         super();
@@ -52,7 +56,7 @@ public class LoginServlet extends HttpServlet {
         } else {
 
             try{
-                user = userBusinessService.logIn(login, password);
+                user = userMapper.userToUserDto(userBusinessService.logIn(login, password));
 
                 if (user == null) {
                     hasError = true;

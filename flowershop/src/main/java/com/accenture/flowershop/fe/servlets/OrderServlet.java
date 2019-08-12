@@ -5,6 +5,7 @@ import com.accenture.flowershop.be.service.business.cart.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
+import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -29,6 +30,9 @@ public class OrderServlet extends HttpServlet {
 
     @Autowired
     private UserBusinessService userBusinessService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     public OrderServlet(){
         super();
@@ -66,8 +70,11 @@ public class OrderServlet extends HttpServlet {
 
         if (createOrder != null) {
             UserDTO userDTO = SessionUtils.getLoginedUser(session);
-            if (cartBusinessService.save(allSum, SessionUtils.getUserCart(session), userDTO)) {
-                SessionUtils.storeLoginedUser(session, userBusinessService.get(userDTO.getLogin()));
+            if (cartBusinessService.save(allSum,
+                    SessionUtils.getUserCart(session),
+                    userMapper.userDtoToUser(userDTO))) {
+                SessionUtils.storeLoginedUser(session,
+                        userMapper.userToUserDto(userBusinessService.getByLogin(userDTO.getLogin())));
                 response.sendRedirect(request.getContextPath() + "/customer");
             } else {
                 hasError = true;

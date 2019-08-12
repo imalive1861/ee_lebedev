@@ -1,7 +1,7 @@
 package com.accenture.flowershop.services.jms;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,16 +20,16 @@ public class ProducerTest {
         this.cons = cons;
     }
 
-    public UserDTO saleRequest(UserDTO userDTO) {
+    public User saleRequest(User user) {
         try {
-            userMarshallingService.marshallingObjectToXML(userDTO);
+            userMarshallingService.marshallingObjectToXML(user);
             prod.producer();
             Sale sale = (Sale) cons.consumer();
-            userDTO.setDiscount(sale.getSale());
+            user.setDiscount(sale.getSale());
         } catch (Exception e){
             e.printStackTrace();
         }
-        return userDTO;
+        return user;
     }
 
 

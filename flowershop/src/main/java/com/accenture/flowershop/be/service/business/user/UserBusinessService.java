@@ -1,21 +1,20 @@
 package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.entity.User;
-import com.accenture.flowershop.fe.dto.UserDTO;
 
 import java.math.BigDecimal;
 
 public interface UserBusinessService {
 
-    UserDTO logIn(String login, String password);
+    User logIn(String login, String password);
 
-    boolean isUniqueLogin(UserDTO userDTO);
+    boolean isUniqueLogin(User user);
 
     void save(String login, String password, String name,
               String address, String phoneNumber);
 
-    UserDTO get(String login);
-    User get(UserDTO userDTO);
+    User getByLogin(String login);
+    User get(User user);
 
-    BigDecimal checkScore(UserDTO userDTO, BigDecimal sumPrice);
+    BigDecimal checkScore(User user, BigDecimal sumPrice);
 }

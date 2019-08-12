@@ -1,7 +1,7 @@
 package com.accenture.flowershop.services.rest;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
@@ -17,7 +17,7 @@ public class RegistrationCgService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/checklogin")
-    public boolean checkLogin(UserDTO userDTO){
-        return userBusinessService.isUniqueLogin(userDTO);
+    public boolean checkLogin(User user){
+        return userBusinessService.isUniqueLogin(user);
     }
 }

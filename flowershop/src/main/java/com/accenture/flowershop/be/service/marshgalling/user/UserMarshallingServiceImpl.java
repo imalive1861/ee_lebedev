@@ -1,5 +1,6 @@
 package com.accenture.flowershop.be.service.marshgalling.user;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.utils.marshalling.XMLConverter;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ public class UserMarshallingServiceImpl implements UserMarshallingService {
         this.userXmlPath = userXmlPath;
     }
 
-    public void marshallingObjectToXML(UserDTO userDTO)
+    public void marshallingObjectToXML(User user)
             throws IOException {
-        converter.convertFromObjectToXML(userDTO, userXmlPath);
+        converter.convertFromObjectToXML(user, userXmlPath);
     }
 
-    public UserDTO marshallingXMLToObject() throws IOException {
-        return (UserDTO) converter.convertFromXMLToObject(userXmlPath);
+    public User marshallingXMLToObject() throws IOException {
+        return (User) converter.convertFromXMLToObject(userXmlPath);
     }
 
 }
