@@ -1,7 +1,7 @@
-package com.accenture.flowershop.fe.servicedto.customercartdto;
+package com.accenture.flowershop.fe.servicedto.cartdto;
 
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
-import com.accenture.flowershop.fe.dto.CustomerCartDTO;
+import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +26,21 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private FlowerBusinessService flowerBusinessService;
 
-    private Map<String, List<CustomerCartDTO>> cart = new TreeMap<>();
+    private Map<String, List<CartDTO>> cart = new TreeMap<>();
 
     public CartServiceImpl(){
     }
 
-    public CustomerCartDTO getCartById(String login, long flowerId){
-        for (CustomerCartDTO i: cart.get(login)) {
-            if (i.getFlowerDTO().getId() == flowerId) {
+    public CartDTO getCartById(String login, long flowerId){
+        for (CartDTO i: cart.get(login)) {
+            if (i.getFlower().getId() == flowerId) {
                 return i;
             }
         }
         return null;
     }
 
-    public List<CustomerCartDTO> setCartFromSession(String login){
+    public List<CartDTO> setCartFromSession(String login){
         if (!cart.containsKey(login)){
             cart.put(login, new ArrayList<>());
         }
@@ -52,13 +52,13 @@ public class CartServiceImpl implements CartService {
             return false;
         }
         FlowerDTO flowerDTO;
-        CustomerCartDTO cart = getCartById(login, flowerId);
+        CartDTO cart = getCartById(login, flowerId);
         if (cart == null) {
             flowerDTO = flowerMapper.flowerToFlowerDto(flowerBusinessService.get(flowerId));
-            cart = new CustomerCartDTO(flowerDTO,0,new BigDecimal(0.00));
+            cart = new CartDTO(null, flowerDTO,0,new BigDecimal(0.00));
             this.cart.get(login).add(cart);
         }
-        flowerDTO = cart.getFlowerDTO();
+        flowerDTO = cart.getFlower();
         int i = flowerDTO.getNumber() - number;
         if (i < 0) {
             return false;
@@ -74,14 +74,14 @@ public class CartServiceImpl implements CartService {
         this.cart.get(login).clear();
     }
 
-    public List<CustomerCartDTO> getCartByUserLogin(String login) {
+    public List<CartDTO> getCartByUserLogin(String login) {
         return cart.get(login);
     }
 
     public BigDecimal getAllSumPrice(int sale, String login){
         BigDecimal sum = new BigDecimal(0.00);
         if (!cart.isEmpty()) {
-            for (CustomerCartDTO c : cart.get(login)) {
+            for (CartDTO c : cart.get(login)) {
                 sum = sum.add(c.getSumPrice());
             }
             BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);

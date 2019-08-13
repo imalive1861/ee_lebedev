@@ -17,8 +17,8 @@
             </tr>
             <c:forEach items="${userCart}" var="cart" >
                 <tr>
-                    <td>${cart.flowerDTO.id}</td>
-                    <td>${cart.flowerDTO.name}</td>
+                    <td>${cart.flower.id}</td>
+                    <td>${cart.flower.name}</td>
                     <td>${cart.number}</td>
                     <td>${cart.sumPrice}</td>
                 </tr>

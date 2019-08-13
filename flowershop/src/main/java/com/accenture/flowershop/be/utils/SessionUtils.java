@@ -1,6 +1,6 @@
 package com.accenture.flowershop.be.utils;
 
-import com.accenture.flowershop.fe.dto.CustomerCartDTO;
+import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
@@ -17,11 +17,11 @@ public class SessionUtils {
         return (UserDTO) session.getAttribute("loginedUser");
     }
 
-    public static void storeUserCart(HttpSession session, List<CustomerCartDTO> userCart){
+    public static void storeUserCart(HttpSession session, List<CartDTO> userCart){
         session.setAttribute("userCart", userCart);
     }
 
-    public static List<CustomerCartDTO> getUserCart(HttpSession session){
-        return (List<CustomerCartDTO>) session.getAttribute("userCart");
+    public static List<CartDTO> getUserCart(HttpSession session){
+        return (List<CartDTO>) session.getAttribute("userCart");
     }
 }

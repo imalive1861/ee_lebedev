@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.fe.servicedto.customercartdto.CartService;
+import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;

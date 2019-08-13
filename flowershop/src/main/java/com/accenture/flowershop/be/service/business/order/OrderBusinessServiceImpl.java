@@ -4,8 +4,6 @@ import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.order.OrderRepository;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
-import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
-import com.accenture.flowershop.fe.dto.mappers.UserMapper;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,6 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     @Autowired
     public OrderBusinessServiceImpl(UserBusinessService userBusinessService,
                                     OrderRepository orderRepository,
-                                    OrderMapper orderMapper,
-                                    UserMapper userMapper,
                                     Logger LOG){
         this.userBusinessService = userBusinessService;
         this.orderRepository = orderRepository;

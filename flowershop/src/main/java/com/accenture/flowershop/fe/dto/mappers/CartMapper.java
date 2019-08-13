@@ -11,4 +11,5 @@ public interface CartMapper {
     CartDTO cartToCartDto(Cart cart);
     Cart cartDtoToCart(CartDTO cartDTO);
     List<CartDTO> cartToCartDtos(List<Cart> carts);
+    List<Cart> cartDtosToCart(List<CartDTO> carts);
 }

@@ -1,7 +1,7 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Flower;
-import com.accenture.flowershop.fe.servicedto.customercartdto.CartService;
+import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;

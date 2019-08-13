@@ -2,10 +2,9 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
-import com.accenture.flowershop.fe.dto.OrderDTO;
+import com.accenture.flowershop.fe.dto.mappers.CartMapper;
 import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -22,12 +21,13 @@ public class AdminServlet extends HttpServlet {
 
     @Autowired
     private OrderBusinessService orderBusinessService;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Autowired
     private CartBusinessService cartBusinessService;
-
     @Autowired
-    private OrderMapper orderMapper;
+    private CartMapper cartMapper;
 
     public AdminServlet() {
         super();
@@ -48,25 +48,23 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
-        request.setAttribute("cartList", cartBusinessService.getAll());
-        String orderId = request.getParameter("orderId");
-
-        if (orderId != null) {
-            orderBusinessService.close(Long.parseLong(orderId));
-            request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
-            request.setAttribute("cartList", cartBusinessService.getAll());
-        }
+        closeOrder(request.getParameter("orderId"), request);
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/admin.jsp");
-
         dispatcher.forward(request, response);
-
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request,response);
+    }
+
+    private void closeOrder(String orderId, HttpServletRequest request){
+        if (orderId != null){
+            orderBusinessService.close(Long.parseLong(orderId));
+        }
+        request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
+        request.setAttribute("cartList", cartMapper.cartToCartDtos(cartBusinessService.getAll()));
     }
 }

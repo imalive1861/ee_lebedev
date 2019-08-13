@@ -1,7 +1,8 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
-import com.accenture.flowershop.fe.servicedto.customercartdto.CartService;
+import com.accenture.flowershop.fe.dto.mappers.CartMapper;
+import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
@@ -23,14 +24,14 @@ import java.math.BigDecimal;
 public class OrderServlet extends HttpServlet {
 
     @Autowired
-    private CartService cartService;
-
-    @Autowired
     private CartBusinessService cartBusinessService;
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private CartMapper cartMapper;
 
     @Autowired
     private UserBusinessService userBusinessService;
-
     @Autowired
     private UserMapper userMapper;
 
@@ -58,7 +59,6 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         HttpSession session = request.getSession();
         String createOrder = request.getParameter("createOrder");
         String cleanCart = request.getParameter("cleanCart");
@@ -70,7 +70,7 @@ public class OrderServlet extends HttpServlet {
 
         if (createOrder != null) {
             if (cartBusinessService.save(allSum,
-                    SessionUtils.getUserCart(session),
+                    cartMapper.cartDtosToCart(SessionUtils.getUserCart(session)),
                     userMapper.userDtoToUser(userDTO))) {
                 SessionUtils.storeLoginedUser(session,
                         userMapper.userToUserDto(userBusinessService.getByLogin(userDTO.getLogin())));
