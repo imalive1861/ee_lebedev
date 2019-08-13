@@ -44,7 +44,7 @@
                  <td><input type="number" min="0" name="numberToCart" value="0"/></td>
                  <td>
                     <input type="hidden" name="flowerId" value="${flower.id}"/>
-                    <input type="submit" value= "Add to cart" />
+                    <input type="submit" name="addToCardButton" value= "Add to cart" />
                  </td>
              </form>
           </tr>

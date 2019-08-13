@@ -1,8 +1,12 @@
-package com.accenture.flowershop.be.service.business.cart;
+package com.accenture.flowershop.fe.servicedto.customercartdto;
 
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.CustomerCartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
+import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +17,14 @@ import java.util.TreeMap;
 import static java.math.RoundingMode.UP;
 
 @Service
+@Transactional
 public class CartServiceImpl implements CartService {
+
+    @Autowired
+    private FlowerMapper flowerMapper;
+
+    @Autowired
+    private FlowerBusinessService flowerBusinessService;
 
     private Map<String, List<CustomerCartDTO>> cart = new TreeMap<>();
 
@@ -36,21 +47,27 @@ public class CartServiceImpl implements CartService {
         return cart.get(login);
     }
 
-    public void addFlowerToCart(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice){
-        if (cart.containsKey(login)) {
-            CustomerCartDTO customerCartDTO = new CustomerCartDTO(flowerDTO, number, sumPrice);
-            flowerDTO.setNumber(flowerDTO.getNumber() - number);
-            this.cart.get(login).add(customerCartDTO);
+    public boolean isAddFlowerToCart(String login, long flowerId, int number){
+        if (number < 0) {
+            return false;
         }
-    }
-
-    public void edit(String login, long flowerId, int number, BigDecimal sumPrice){
-        CustomerCartDTO i = getCartById(login, flowerId);
-        if (i != null) {
-            i.setNumber(i.getNumber() + number);
-            i.getFlowerDTO().setNumber(i.getFlowerDTO().getNumber() - number);
-            i.setSumPrice(i.getSumPrice().add(sumPrice));
+        FlowerDTO flowerDTO;
+        CustomerCartDTO cart = getCartById(login, flowerId);
+        if (cart == null) {
+            flowerDTO = flowerMapper.flowerToFlowerDto(flowerBusinessService.get(flowerId));
+            cart = new CustomerCartDTO(flowerDTO,0,new BigDecimal(0.00));
+            this.cart.get(login).add(cart);
         }
+        flowerDTO = cart.getFlowerDTO();
+        int i = flowerDTO.getNumber() - number;
+        if (i < 0) {
+            return false;
+        }
+        BigDecimal sumPrice = flowerDTO.getPrice().multiply(new BigDecimal(number));
+        cart.setNumber(cart.getNumber() + number);
+        flowerDTO.setNumber(flowerDTO.getNumber() - number);
+        cart.setSumPrice(cart.getSumPrice().add(sumPrice));
+        return true;
     }
 
     public void clear(String login){

@@ -1,8 +1,7 @@
 package com.accenture.flowershop.be.service.business.flower;
 
+import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.repository.flower.FlowerRepository;
-import com.accenture.flowershop.fe.dto.FlowerDTO;
-import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,50 +17,45 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     @Autowired
     private FlowerRepository flowerRepository;
     @Autowired
-    private FlowerMapper flowerMapper;
-    @Autowired
     private Logger LOG;
 
     public FlowerBusinessServiceImpl(){}
 
-    public void update(FlowerDTO flowerDTO){
-        flowerRepository.saveAndFlush(flowerMapper.flowerDtoToFlower(flowerDTO));
+    public void update(Flower flower){
+        flowerRepository.saveAndFlush(flower);
         LOG.debug("Number of Flower with id = {} has been changed to = {}",
-                flowerDTO.getId(), flowerDTO.getNumber());
+                flower.getId(), flower.getNumber());
     }
 
-    public FlowerDTO get(long id) {
-        if(id != 0) {
-            return flowerMapper.flowerToFlowerDto(flowerRepository.getOne(id));
-        }
-        return null;
+    public Flower get(long id) {
+            return flowerRepository.getOne(id);
     }
 
-    public List<FlowerDTO> getAll() {
-        return flowerMapper.flowerToFlowerDtos(flowerRepository.findAll());
+    public List<Flower> getAll() {
+        return flowerRepository.findAll();
     }
 
-    public List<FlowerDTO> getFlowerByName(String name) {
+    public List<Flower> getFlowerByName(String name) {
         if (name.equals("")){
             return getAll();
         }
-        return flowerMapper.flowerToFlowerDtos(flowerRepository.findAllFlowerByName(name));
+        return flowerRepository.findAllFlowerByName(name);
     }
 
-    public List<FlowerDTO> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice) {
+    public List<Flower> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice) {
         if (minFlowerPrice.equals("") && maxFlowerPrice.equals("")){
             return getAll();
         }
         if (minFlowerPrice.equals("")){
             BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-            return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMaxPrice(max));
+            return flowerRepository.getFlowerByMaxPrice(max);
         }
         if (maxFlowerPrice.equals("")){
             BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
-            return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPrice(min));
+            return flowerRepository.getFlowerByMinPrice(min);
         }
         BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
         BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-        return flowerMapper.flowerToFlowerDtos(flowerRepository.getFlowerByMinPriceAndMaxPrice(min, max));
+        return flowerRepository.getFlowerByMinPriceAndMaxPrice(min, max);
     }
 }

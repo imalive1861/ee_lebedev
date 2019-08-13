@@ -1,18 +1,17 @@
 package com.accenture.flowershop.be.service.business.flower;
 
-import com.accenture.flowershop.fe.dto.FlowerDTO;
+import com.accenture.flowershop.be.entity.Flower;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface FlowerBusinessService {
-    void update(FlowerDTO flowerDTO);
+    void update(Flower flower);
 
-    List<FlowerDTO> getAll();
+    List<Flower> getAll();
 
-    List<FlowerDTO> getFlowerByName(String name);
+    List<Flower> getFlowerByName(String name);
 
-    List<FlowerDTO> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice);
+    List<Flower> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice);
 
-    FlowerDTO get(long id);
+    Flower get(long id);
 }

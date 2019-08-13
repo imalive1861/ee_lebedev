@@ -1,10 +1,11 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.cart.CartService;
+import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.fe.servicedto.customercartdto.CartService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.dto.CustomerCartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
+import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
@@ -28,6 +28,9 @@ public class CustomerServlet extends HttpServlet {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private FlowerMapper flowerMapper;
 
     public CustomerServlet() {
         super();
@@ -44,60 +47,32 @@ public class CustomerServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        String numberToCart = request.getParameter("numberToCart");
-        String flowerId = request.getParameter("flowerId");
-        String searchFlowerByName = request.getParameter("searchFlowerByName");
-        String searchNameClick = request.getParameter("searchNameClick");
-        String searchPriceClick = request.getParameter("searchPriceClick");
-        String minFlowerPrice = request.getParameter("minFlowerPrice");
-        String maxFlowerPrice = request.getParameter("maxFlowerPrice");
         boolean hasError = false;
         String errorString = null;
-        List<FlowerDTO> flowerList;
-        if (searchNameClick != null) {
-            flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
-        } else  if (searchPriceClick != null) {
-            flowerList = flowerBusinessService.getFlowerByPrice(minFlowerPrice,maxFlowerPrice);
-        } else {
-            flowerList = flowerBusinessService.getAll();
-        }
+
+        List<FlowerDTO> flowerList = getFlowerDTOs(
+                request.getParameter("searchNameClick"),
+                request.getParameter("searchFlowerByName"),
+                request.getParameter("searchPriceClick"),
+                request.getParameter("minFlowerPrice"),
+                request.getParameter("maxFlowerPrice"));
+
         if (flowerList.isEmpty()) {
             hasError = true;
             errorString = "Flower not found!";
         }
         request.setAttribute("flowerList",flowerList);
 
-        if (numberToCart != null && flowerId != null) {
-            long flowerIds = Long.parseLong(flowerId);
-            int numbersToCart = Integer.parseInt(numberToCart);
-            FlowerDTO flowerDTO = flowerBusinessService.get(flowerIds);
-            if (numbersToCart > flowerDTO.getNumber()) {
+        HttpSession session = request.getSession();
+
+        if (request.getParameter("addToCardButton") != null) {
+            if (!(isAddFlowerToCart(request.getParameter("numberToCart"),
+                    request.getParameter("flowerId"), session))) {
                 hasError = true;
                 errorString = "There are not enough flowers available";
-            } else {
-                if (numbersToCart < 0) {
-                    hasError = true;
-                    errorString = "Incorrect number";
-                } else {
-                    HttpSession session = request.getSession();
-                    String login = SessionUtils.getLoginedUser(session).getLogin();
-                    CustomerCartDTO flower = cartService.getCartById(login, flowerIds);
-                    if (flower != null) {
-                        if (numbersToCart <= (flowerDTO.getNumber() -
-                                flower.getNumber())){
-                            cartService.edit(login, flowerIds, numbersToCart,
-                                    (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
-                        } else {
-                            hasError = true;
-                            errorString = "There are not enough flowers available";
-                        }
-                    } else {
-                        cartService.addFlowerToCart(login, flowerDTO, numbersToCart,
-                                (flowerDTO.getPrice().multiply(new BigDecimal(numbersToCart))));
-                    }
-                }
             }
         }
 
@@ -110,7 +85,36 @@ public class CustomerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request,response);
+    }
+
+    private List<FlowerDTO> getFlowerDTOs(String searchNameClick,
+                                          String searchFlowerByName,
+                                          String searchPriceClick,
+                                          String minFlowerPrice,
+                                          String maxFlowerPrice){
+        List<Flower> flowerList;
+        if (searchNameClick != null) {
+            flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
+        } else  if (searchPriceClick != null) {
+            flowerList = flowerBusinessService.getFlowerByPrice(minFlowerPrice,maxFlowerPrice);
+        } else {
+            flowerList = flowerBusinessService.getAll();
+        }
+        return flowerMapper.flowerToFlowerDtos(flowerList);
+    }
+
+    private boolean isAddFlowerToCart(String numberToCart,
+                                      String flowerId,
+                                      HttpSession session){
+        if (numberToCart != null && flowerId != null) {
+            long flowerIds = Long.parseLong(flowerId);
+            int numbersToCart = Integer.parseInt(numberToCart);
+            String login = SessionUtils.getLoginedUser(session).getLogin();
+            return cartService.isAddFlowerToCart(login,flowerIds,numbersToCart);
+        }
+        return false;
     }
 }

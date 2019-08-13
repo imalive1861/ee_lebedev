@@ -1,14 +1,12 @@
-package com.accenture.flowershop.be.service.business.cart;
+package com.accenture.flowershop.fe.servicedto.customercartdto;
 
 import com.accenture.flowershop.fe.dto.CustomerCartDTO;
-import com.accenture.flowershop.fe.dto.FlowerDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface CartService {
-    void addFlowerToCart(String login, FlowerDTO flowerDTO, int number, BigDecimal sumPrice);
-    void edit(String login, long flowerId, int number, BigDecimal sumPrice);
+    boolean isAddFlowerToCart(String login, long flower, int number);
     void clear(String login);
     List<CustomerCartDTO> setCartFromSession(String login);
     CustomerCartDTO getCartById(String login, long flowerId);
