@@ -34,7 +34,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         this.flowerBusinessService = flowerBusinessService;
     }
 
-    public boolean save(BigDecimal sumPrice,
+    /*public boolean save(BigDecimal sumPrice,
                         List<Cart> carts,
                         User user){
         Order order = orderBusinessService.create(user, sumPrice);
@@ -48,7 +48,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
             return true;
         }
         return false;
-    }
+    }*/
     @Override
     public List<Cart> getAll() {
         return cartRepository.findAll();

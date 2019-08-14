@@ -65,6 +65,5 @@ public class AdminServlet extends HttpServlet {
             orderBusinessService.close(Long.parseLong(orderId));
         }
         request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
-        request.setAttribute("cartList", cartMapper.cartToCartDtos(cartBusinessService.getAll()));
     }
 }

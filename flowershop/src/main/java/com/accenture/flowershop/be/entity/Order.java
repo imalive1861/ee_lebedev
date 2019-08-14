@@ -5,6 +5,7 @@ import com.accenture.flowershop.fe.enums.OrderStatus;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
@@ -25,6 +26,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
+
+    @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
+    private List<Cart> carts;
 
     public Order(){}
 
@@ -76,5 +80,12 @@ public class Order {
     }
     public void setUserId(User user) {
         this.userId = user;
+    }
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
     }
 }

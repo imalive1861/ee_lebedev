@@ -1,6 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
+import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.mappers.CartMapper;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
@@ -24,8 +24,6 @@ import java.math.BigDecimal;
 public class OrderServlet extends HttpServlet {
 
     @Autowired
-    private CartBusinessService cartBusinessService;
-    @Autowired
     private CartService cartService;
     @Autowired
     private CartMapper cartMapper;
@@ -34,6 +32,9 @@ public class OrderServlet extends HttpServlet {
     private UserBusinessService userBusinessService;
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private OrderBusinessService orderBusinessService;
 
     public OrderServlet(){
         super();
@@ -69,7 +70,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("allSum", allSum);
 
         if (createOrder != null) {
-            if (cartBusinessService.save(allSum,
+            if (orderBusinessService.create(allSum,
                     cartMapper.cartDtosToCart(SessionUtils.getUserCart(session)),
                     userMapper.userDtoToUser(userDTO))) {
                 SessionUtils.storeLoginedUser(session,

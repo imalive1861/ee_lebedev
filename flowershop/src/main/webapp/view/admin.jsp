@@ -47,15 +47,11 @@
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
                                 </tr>
-                                <c:forEach items="${cartList}" var="cart" >
-                                    <c:choose>
-                                        <c:when test="${order.id == cart.order.id}">
-                                            <tr>
-                                                <td>${cart.flower.name}</td>
-                                                <td>${cart.number}</td>
-                                            </tr>
-                                        </c:when>
-                                    </c:choose>
+                                <c:forEach items="${order.carts}" var="cart" >
+                                    <tr>
+                                        <td>${cart.flower.name}</td>
+                                        <td>${cart.number}</td>
+                                    </tr>
                                 </c:forEach>
                             </table>
                         </td>
@@ -94,15 +90,11 @@
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
                                 </tr>
-                                <c:forEach items="${cartList}" var="cart" >
-                                    <c:choose>
-                                        <c:when test="${order.id == cart.order.id}">
-                                            <tr>
-                                                <td>${cart.flower.name}</td>
-                                                <td>${cart.number}</td>
-                                            </tr>
-                                        </c:when>
-                                    </c:choose>
+                                <c:forEach items="${order.carts}" var="cart" >
+                                    <tr>
+                                        <td>${cart.flower.name}</td>
+                                        <td>${cart.number}</td>
+                                    </tr>
                                 </c:forEach>
                             </table>
                         </td>

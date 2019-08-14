@@ -1,5 +1,6 @@
 package com.accenture.flowershop.be.service.business.order;
 
+import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.order.OrderRepository;
@@ -32,22 +33,22 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         this.LOG = LOG;
     }
 
-    public Order create(User user, BigDecimal sumPrice){
+    public boolean create(BigDecimal sumPrice,
+                        List<Cart> carts,
+                        User user){
         sumPrice = userBusinessService.checkScore(user, sumPrice);
         if (sumPrice != null) {
-            Order order = new Order(user, new BigDecimal(0.00),
-                    new Date(), null, OrderStatus.OPENED);
-            orderRepository.save(order);
-            order = orderRepository.getOrderByStatusAndUserId(
-                    OrderStatus.OPENED,userBusinessService.get(user));
-            order.setSumPrice(sumPrice);
-            order.setStatus(OrderStatus.PAID);
+            Order order = new Order(user, sumPrice, new Date(), null, OrderStatus.PAID);
+            for (Cart c : carts) {
+                c.setOrder(order);
+            }
+            order.setCarts(carts);
             orderRepository.saveAndFlush(order);
             LOG.debug("Order with total price = {} date of creation = {} was paid",
                     order.getSumPrice(), order.getDateCreate());
-            return order;
+            return true;
         }
-        return null;
+        return false;
     }
 
     public void close(Long orderId){
