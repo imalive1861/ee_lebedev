@@ -32,14 +32,6 @@ public class Order {
 
     public Order(){}
 
-    public Order(User userId, BigDecimal sumPrice, Date dateCreate, Date dateClose, OrderStatus status){
-        this.userId = userId;
-        this.sumPrice = sumPrice;
-        this.dateCreate = dateCreate;
-        this.dateClose = dateClose;
-        this.status = status;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -87,5 +79,47 @@ public class Order {
     }
     public void setCarts(List<Cart> carts) {
         this.carts = carts;
+    }
+
+    public static class Builder {
+        private Order newOrder;
+
+        public Builder() {
+            newOrder = new Order();
+        }
+
+        public Builder sumPrice(BigDecimal sumPrice){
+            newOrder.sumPrice = sumPrice;
+            return this;
+        }
+
+        public Builder dateCreate(Date dateCreate){
+            newOrder.dateCreate = dateCreate;
+            return this;
+        }
+
+        public Builder dateClose(Date dateClose){
+            newOrder.dateClose = dateClose;
+            return this;
+        }
+
+        public Builder status(OrderStatus status){
+            newOrder.status = status;
+            return this;
+        }
+
+        public Builder userId(User userId){
+            newOrder.userId = userId;
+            return this;
+        }
+
+        public Builder carts(List<Cart> carts){
+            newOrder.carts = carts;
+            return this;
+        }
+
+        public Order build(){
+            return newOrder;
+        }
     }
 }

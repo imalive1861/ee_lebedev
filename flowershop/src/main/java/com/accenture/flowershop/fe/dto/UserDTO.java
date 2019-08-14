@@ -15,20 +15,7 @@ public class UserDTO {
     private int discount;
     private UserRoles role;
 
-    public UserDTO(){
-    }
-
-    public UserDTO(String login, String password, String name,
-                   String address, String phoneNumber, BigDecimal cash, int discount, UserRoles role){
-        this.login = login;
-        this.password = password;
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.cash = cash;
-        this.discount = discount;
-        this.role = role;
-    }
+    public UserDTO(){}
 
     public void setId(long id) {
         this.id = id;
@@ -91,5 +78,51 @@ public class UserDTO {
     }
     public UserRoles getRole() {
         return role;
+    }
+
+    public static class Builder {
+        private UserDTO newUserDTO;
+
+        public Builder() {
+            newUserDTO = new UserDTO();
+        }
+
+        public Builder login(String login){
+            newUserDTO.login = login;
+            return this;
+        }
+
+        public Builder password(String password){
+            newUserDTO.password = password;
+            return this;
+        }
+        public Builder name(String name){
+            newUserDTO.name = name;
+            return this;
+        }
+        public Builder address(String address){
+            newUserDTO.address = address;
+            return this;
+        }
+        public Builder phoneNumber(String phoneNumber){
+            newUserDTO.phoneNumber = phoneNumber;
+            return this;
+        }
+        public Builder cash(BigDecimal cash){
+            newUserDTO.cash = cash;
+            return this;
+        }
+        public Builder discount(int discount){
+            newUserDTO.discount = discount;
+            return this;
+        }
+        public Builder role(UserRoles role){
+            newUserDTO.role = role;
+            return this;
+        }
+
+        public UserDTO build(){
+            return newUserDTO;
+        }
     }
 }

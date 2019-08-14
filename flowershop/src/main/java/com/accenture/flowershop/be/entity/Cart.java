@@ -25,13 +25,6 @@ public class Cart {
 
     public Cart(){}
 
-    public Cart(Order order, int number, Flower flower, BigDecimal sumPrice){
-        this.order = order;
-        this.number = number;
-        this.flower = flower;
-        this.sumPrice = sumPrice;
-    }
-
     public long getId() {
         return id;
     }
@@ -65,5 +58,34 @@ public class Cart {
     }
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
+    }
+
+    public static class Builder {
+        private Cart newCart;
+
+        public Builder() {
+            newCart = new Cart();
+        }
+
+        public Builder order(Order order){
+            newCart.order = order;
+            return this;
+        }
+        public Builder flower(Flower flower){
+            newCart.flower = flower;
+            return this;
+        }
+        public Builder number(int number){
+            newCart.number = number;
+            return this;
+        }
+        public Builder sumPrice(BigDecimal sumPrice){
+            newCart.sumPrice = sumPrice;
+            return this;
+        }
+
+        public Cart build(){
+            return newCart;
+        }
     }
 }

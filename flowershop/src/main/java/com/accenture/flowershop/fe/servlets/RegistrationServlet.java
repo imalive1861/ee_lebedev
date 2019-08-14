@@ -52,11 +52,12 @@ public class RegistrationServlet extends HttpServlet {
         String errorString = null;
         String okString;
 
-        userDTO = new UserDTO();
-        userDTO.setLogin(login);
-        userDTO.setName(name);
-        userDTO.setAddress(address);
-        userDTO.setPhoneNumber(phoneNumber);
+        userDTO = new UserDTO.Builder()
+                .login(login)
+                .name(name)
+                .address(address)
+                .phoneNumber(phoneNumber)
+                .build();
 
         if (    login == null ||        login.length() == 0 ||
                 password == null ||     password.length() == 0 ||

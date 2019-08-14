@@ -1,6 +1,7 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
+import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.mappers.CartMapper;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
@@ -61,36 +63,44 @@ public class OrderServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        String createOrder = request.getParameter("createOrder");
-        String cleanCart = request.getParameter("cleanCart");
-        boolean hasError = false;
+
+        boolean hasError = true;
         String errorString = null;
+
         UserDTO userDTO = SessionUtils.getLoginedUser(session);
+        List<CartDTO> cartDTO = SessionUtils.getUserCart(session);
         BigDecimal allSum = cartService.getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin());
+
         request.setAttribute("allSum", allSum);
 
-        if (createOrder != null) {
-            if (orderBusinessService.create(allSum,
-                    cartMapper.cartDtosToCart(SessionUtils.getUserCart(session)),
-                    userMapper.userDtoToUser(userDTO))) {
-                SessionUtils.storeLoginedUser(session,
-                        userMapper.userToUserDto(userBusinessService.getByLogin(userDTO.getLogin())));
-                response.sendRedirect(request.getContextPath() + "/customer");
+        if (request.getParameter("createOrder") != null) {
+            if (userBusinessService.checkCash(userMapper.userDtoToUser(userDTO), allSum)) {
+                createOrder(userDTO, allSum, cartDTO);
+                hasError = false;
             } else {
-                hasError = true;
                 errorString = "Need more gold!";
             }
-        } else if (cleanCart != null){
+        }
+
+        if (request.getParameter("cleanCart") != null){
             cartService.clear(userDTO.getLogin());
-            hasError = true;
             errorString = "Cart clean right now!";
-        } else {
-            request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         }
 
         if (hasError) {
             request.setAttribute("errorString", errorString);
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         }
+
+        SessionUtils.storeLoginedUser(session,
+                userMapper.userToUserDto(userBusinessService.getByLogin(userDTO.getLogin())));
+        response.sendRedirect(request.getContextPath() + "/customer");
+    }
+
+    private void createOrder(UserDTO userDTO, BigDecimal allSum, List<CartDTO> cartDTO) {
+        orderBusinessService.create(allSum,
+                cartMapper.cartDtosToCart(cartDTO),
+                userMapper.userDtoToUser(userDTO));
+        cartService.clear(userDTO.getLogin());
     }
 }

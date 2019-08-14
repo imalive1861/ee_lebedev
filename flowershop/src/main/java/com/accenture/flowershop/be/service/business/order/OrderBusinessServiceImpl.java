@@ -4,7 +4,7 @@ import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.order.OrderRepository;
-import com.accenture.flowershop.be.service.business.user.UserBusinessService;
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ import java.util.List;
 @Transactional
 public class OrderBusinessServiceImpl implements OrderBusinessService {
 
-    private UserBusinessService userBusinessService;
+    private FlowerBusinessService flowerBusinessService;
     private OrderRepository orderRepository;
     private Logger LOG;
 
     @Autowired
-    public OrderBusinessServiceImpl(UserBusinessService userBusinessService,
+    public OrderBusinessServiceImpl(FlowerBusinessService flowerBusinessService,
                                     OrderRepository orderRepository,
                                     Logger LOG){
-        this.userBusinessService = userBusinessService;
+        this.flowerBusinessService = flowerBusinessService;
         this.orderRepository = orderRepository;
         this.LOG = LOG;
     }
@@ -36,11 +36,16 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     public boolean create(BigDecimal sumPrice,
                         List<Cart> carts,
                         User user){
-        sumPrice = userBusinessService.checkScore(user, sumPrice);
         if (sumPrice != null) {
-            Order order = new Order(user, sumPrice, new Date(), null, OrderStatus.PAID);
+            Order order = new Order.Builder()
+                    .dateCreate(new Date())
+                    .sumPrice(sumPrice)
+                    .status(OrderStatus.PAID)
+                    .userId(user)
+                    .build();
             for (Cart c : carts) {
                 c.setOrder(order);
+                flowerBusinessService.update(c.getFlower());
             }
             order.setCarts(carts);
             orderRepository.saveAndFlush(order);

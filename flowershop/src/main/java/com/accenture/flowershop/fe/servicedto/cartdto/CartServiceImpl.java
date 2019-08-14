@@ -55,7 +55,11 @@ public class CartServiceImpl implements CartService {
         CartDTO cart = getCartById(login, flowerId);
         if (cart == null) {
             flowerDTO = flowerMapper.flowerToFlowerDto(flowerBusinessService.get(flowerId));
-            cart = new CartDTO(null, flowerDTO,0,new BigDecimal(0.00));
+            cart = new CartDTO.Builder()
+                    .flower(flowerDTO)
+                    .number(number)
+                    .sumPrice(new BigDecimal(0.00))
+                    .build();
             this.cart.get(login).add(cart);
         }
         flowerDTO = cart.getFlower();
@@ -65,7 +69,7 @@ public class CartServiceImpl implements CartService {
         }
         BigDecimal sumPrice = flowerDTO.getPrice().multiply(new BigDecimal(number));
         cart.setNumber(cart.getNumber() + number);
-        flowerDTO.setNumber(flowerDTO.getNumber() - number);
+        flowerDTO.setNumber(i);
         cart.setSumPrice(cart.getSumPrice().add(sumPrice));
         return true;
     }

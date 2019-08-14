@@ -12,19 +12,6 @@ public class CartDTO {
 
     public CartDTO(){}
 
-    public CartDTO(OrderDTO order, FlowerDTO flower, int number){
-        this.order = order;
-        this.flower = flower;
-        this.number = number;
-    }
-
-    public CartDTO(OrderDTO order, FlowerDTO flower, int number, BigDecimal sumPrice){
-        this.order = order;
-        this.flower = flower;
-        this.number = number;
-        this.sumPrice = sumPrice;
-    }
-
     public long getId() {
         return id;
     }
@@ -58,5 +45,34 @@ public class CartDTO {
     }
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
+    }
+
+    public static class Builder {
+        private CartDTO newCartDTO;
+
+        public Builder() {
+            newCartDTO = new CartDTO();
+        }
+
+        public Builder order(OrderDTO order){
+            newCartDTO.order = order;
+            return this;
+        }
+        public Builder flower(FlowerDTO flower){
+            newCartDTO.flower = flower;
+            return this;
+        }
+        public Builder number(int number){
+            newCartDTO.number = number;
+            return this;
+        }
+        public Builder sumPrice(BigDecimal sumPrice){
+            newCartDTO.sumPrice = sumPrice;
+            return this;
+        }
+
+        public CartDTO build(){
+            return newCartDTO;
+        }
     }
 }

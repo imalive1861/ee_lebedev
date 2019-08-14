@@ -54,23 +54,20 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     public User getByLogin(String login) {
-        if (login != null) {
             return userRepository.getByLogin(login);
-        }
-        return null;
     }
 
     public User get(User user) {
         return userRepository.getByLogin(user.getLogin());
     }
 
-    public BigDecimal checkScore(User user, BigDecimal sumPrice){
+    public boolean checkCash(User user, BigDecimal sumPrice){
         BigDecimal score = user.getCash();
         if (sumPrice.compareTo(score) < 0) {
             user.setCash(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
             userRepository.saveAndFlush(user);
-            return sumPrice.setScale(2, RoundingMode.UP);
+            return true;
         }
-        return null;
+        return false;
     }
 }

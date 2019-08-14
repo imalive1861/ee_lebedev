@@ -17,12 +17,6 @@ public class Flower {
 
     public Flower(){}
 
-    public Flower(String name, BigDecimal price, int number){
-        this.name = name;
-        this.price = price;
-        this.number = number;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -49,5 +43,32 @@ public class Flower {
     }
     public int getNumber() {
         return number;
+    }
+
+    public static class Builder {
+        private Flower newFlower;
+
+        public Builder() {
+            newFlower = new Flower();
+        }
+
+        public Builder name(String name){
+            newFlower.name = name;
+            return this;
+        }
+
+        public Builder price(BigDecimal price){
+            newFlower.price = price;
+            return this;
+        }
+
+        public Builder number(int number){
+            newFlower.number = number;
+            return this;
+        }
+
+        public Flower build(){
+            return newFlower;
+        }
     }
 }

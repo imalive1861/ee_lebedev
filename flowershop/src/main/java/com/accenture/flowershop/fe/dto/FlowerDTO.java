@@ -11,13 +11,6 @@ public class FlowerDTO {
 
     public FlowerDTO(){}
 
-    public FlowerDTO(long id, String name, BigDecimal price, int number) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.number = number;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -44,5 +37,32 @@ public class FlowerDTO {
     }
     public int getNumber() {
         return number;
+    }
+
+    public static class Builder {
+        private FlowerDTO newFlowerDTO;
+
+        public Builder() {
+            newFlowerDTO = new FlowerDTO();
+        }
+
+        public Builder name(String name){
+            newFlowerDTO.name = name;
+            return this;
+        }
+
+        public Builder price(BigDecimal price){
+            newFlowerDTO.price = price;
+            return this;
+        }
+
+        public Builder number(int number){
+            newFlowerDTO.number = number;
+            return this;
+        }
+
+        public FlowerDTO build(){
+            return newFlowerDTO;
+        }
     }
 }

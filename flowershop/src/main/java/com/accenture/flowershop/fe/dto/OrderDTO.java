@@ -18,15 +18,6 @@ public class OrderDTO {
 
     public OrderDTO(){}
 
-    public OrderDTO(UserDTO userId, BigDecimal sumPrice,
-                    Date dateCreate, Date dateClose, OrderStatus status) {
-        this.userId = userId;
-        this.sumPrice = sumPrice;
-        this.dateCreate = dateCreate;
-        this.dateClose = dateClose;
-        this.status = status;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -74,5 +65,47 @@ public class OrderDTO {
     }
     public List<CartDTO> getCarts() {
         return carts;
+    }
+
+    public static class Builder {
+        private OrderDTO newOrderDTO;
+
+        public Builder() {
+            newOrderDTO = new OrderDTO();
+        }
+
+        public Builder sumPrice(BigDecimal sumPrice){
+            newOrderDTO.sumPrice = sumPrice;
+            return this;
+        }
+
+        public Builder dateCreate(Date dateCreate){
+            newOrderDTO.dateCreate = dateCreate;
+            return this;
+        }
+
+        public Builder dateClose(Date dateClose){
+            newOrderDTO.dateClose = dateClose;
+            return this;
+        }
+
+        public Builder status(OrderStatus status){
+            newOrderDTO.status = status;
+            return this;
+        }
+
+        public Builder userId(UserDTO userId){
+            newOrderDTO.userId = userId;
+            return this;
+        }
+
+        public Builder carts(List<CartDTO> carts){
+            newOrderDTO.carts = carts;
+            return this;
+        }
+
+        public OrderDTO build(){
+            return newOrderDTO;
+        }
     }
 }

@@ -27,18 +27,6 @@ public class User implements Serializable {
 
     public User(){}
 
-    public User(String login, String password, String name,
-                String address, String phoneNumber, BigDecimal cash, int discount, UserRoles role){
-        this.login = login;
-        this.password = password;
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.cash = cash;
-        this.discount = discount;
-        this.role = role;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -100,5 +88,51 @@ public class User implements Serializable {
     }
     public UserRoles getRole() {
         return role;
+    }
+
+    public static class Builder {
+        private User newUser;
+
+        public Builder() {
+            newUser = new User();
+        }
+
+        public Builder login(String login){
+            newUser.login = login;
+            return this;
+        }
+
+        public Builder password(String password){
+            newUser.password = password;
+            return this;
+        }
+        public Builder name(String name){
+            newUser.name = name;
+            return this;
+        }
+        public Builder address(String address){
+            newUser.address = address;
+            return this;
+        }
+        public Builder phoneNumber(String phoneNumber){
+            newUser.phoneNumber = phoneNumber;
+            return this;
+        }
+        public Builder cash(BigDecimal cash){
+            newUser.cash = cash;
+            return this;
+        }
+        public Builder discount(int discount){
+            newUser.discount = discount;
+            return this;
+        }
+        public Builder role(UserRoles role){
+            newUser.role = role;
+            return this;
+        }
+
+        public User build(){
+            return newUser;
+        }
     }
 }
