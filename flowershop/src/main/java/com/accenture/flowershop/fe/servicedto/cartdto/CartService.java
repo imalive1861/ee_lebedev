@@ -1,16 +1,14 @@
 package com.accenture.flowershop.fe.servicedto.cartdto;
 
-import com.accenture.flowershop.fe.dto.CartDTO;
+import com.accenture.flowershop.fe.dto.FlowerDTO;
+import com.accenture.flowershop.fe.dto.OrderDTO;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface CartService {
-    boolean isAddFlowerToCart(String login, long flower, int number);
+    boolean isAddFlowerToCart(String login, FlowerDTO flowerDTO, int number);
     void clear(String login);
-    List<CartDTO> setCartFromSession(String login);
-    CartDTO getCartById(String login, long flowerId);
-    List<CartDTO> getCartByUserLogin(String login);
+    OrderDTO setCartFromSession(String login);
     BigDecimal getAllSumPrice(int sale, String login);
 
 }

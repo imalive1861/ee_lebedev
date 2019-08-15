@@ -1,91 +1,87 @@
 package com.accenture.flowershop.fe.servicedto.cartdto;
 
-import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
-import com.accenture.flowershop.fe.dto.mappers.FlowerMapper;
+import com.accenture.flowershop.fe.dto.OrderDTO;
+import com.accenture.flowershop.fe.enums.OrderStatus;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.math.RoundingMode.UP;
 
 @Service
-@Transactional
 public class CartServiceImpl implements CartService {
 
     @Autowired
-    private FlowerMapper flowerMapper;
+    private Mapper mapper;
 
-    @Autowired
-    private FlowerBusinessService flowerBusinessService;
-
-    private Map<String, List<CartDTO>> cart = new TreeMap<>();
+    private Map<String, OrderDTO> cart = new TreeMap<>();
 
     public CartServiceImpl(){
     }
 
-    public CartDTO getCartById(String login, long flowerId){
-        for (CartDTO i: cart.get(login)) {
-            if (i.getFlower().getId() == flowerId) {
-                return i;
+    private OrderDTO getCartById(String login){
+            if (cart.get(login) != null) {
+                return cart.get(login);
             }
-        }
         return null;
     }
 
-    public List<CartDTO> setCartFromSession(String login){
+    public OrderDTO setCartFromSession(String login){
         if (!cart.containsKey(login)){
-            cart.put(login, new ArrayList<>());
+            cart.put(login, new OrderDTO.Builder()
+                    .status(OrderStatus.OPENED)
+                    .build());
         }
         return cart.get(login);
     }
 
-    public boolean isAddFlowerToCart(String login, long flowerId, int number){
+    public boolean isAddFlowerToCart(String login, FlowerDTO flowerDTO, int number){
         if (number < 0) {
             return false;
         }
-        FlowerDTO flowerDTO;
-        CartDTO cart = getCartById(login, flowerId);
-        if (cart == null) {
-            flowerDTO = flowerMapper.flowerToFlowerDto(flowerBusinessService.get(flowerId));
-            cart = new CartDTO.Builder()
-                    .flower(flowerDTO)
-                    .number(number)
-                    .sumPrice(new BigDecimal(0.00))
-                    .build();
-            this.cart.get(login).add(cart);
-        }
-        flowerDTO = cart.getFlower();
         int i = flowerDTO.getNumber() - number;
         if (i < 0) {
             return false;
         }
+        OrderDTO orderDTO = getCartById(login);
+        CartDTO cartDTO = null;
+        for (CartDTO c: orderDTO.getCarts()) {
+            if (c.getFlower().getId() == flowerDTO.getId()) {
+                cartDTO = c;
+            }
+        }
         BigDecimal sumPrice = flowerDTO.getPrice().multiply(new BigDecimal(number));
-        cart.setNumber(cart.getNumber() + number);
+        if (cartDTO == null) {
+            cartDTO = new CartDTO.Builder()
+                    .order(orderDTO)
+                    .flower(flowerDTO)
+                    .number(0)
+                    .sumPrice(new BigDecimal(0.00))
+                    .build();
+            this.cart.get(login).getCarts().add(cartDTO);
+        }
+        flowerDTO = cartDTO.getFlower();
+        cartDTO.setNumber(cartDTO.getNumber() + number);
         flowerDTO.setNumber(i);
-        cart.setSumPrice(cart.getSumPrice().add(sumPrice));
+        cartDTO.setSumPrice(cartDTO.getSumPrice().add(sumPrice));
         return true;
     }
 
     public void clear(String login){
-        this.cart.get(login).clear();
-    }
-
-    public List<CartDTO> getCartByUserLogin(String login) {
-        return cart.get(login);
+        cart.put(login, new OrderDTO.Builder()
+                .status(OrderStatus.OPENED)
+                .build());
     }
 
     public BigDecimal getAllSumPrice(int sale, String login){
         BigDecimal sum = new BigDecimal(0.00);
         if (!cart.isEmpty()) {
-            for (CartDTO c : cart.get(login)) {
+            for (CartDTO c : cart.get(login).getCarts()) {
                 sum = sum.add(c.getSumPrice());
             }
             BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);

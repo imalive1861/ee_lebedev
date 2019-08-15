@@ -1,9 +1,9 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
+import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
-import com.accenture.flowershop.fe.dto.mappers.CartMapper;
-import com.accenture.flowershop.fe.dto.mappers.OrderMapper;
+import com.accenture.flowershop.fe.dto.OrderDTO;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -15,19 +15,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
 
     @Autowired
     private OrderBusinessService orderBusinessService;
-    @Autowired
-    private OrderMapper orderMapper;
 
     @Autowired
-    private CartBusinessService cartBusinessService;
-    @Autowired
-    private CartMapper cartMapper;
+    private Mapper mapper;
 
     public AdminServlet() {
         super();
@@ -64,6 +62,10 @@ public class AdminServlet extends HttpServlet {
         if (orderId != null){
             orderBusinessService.close(Long.parseLong(orderId));
         }
-        request.setAttribute("orderList", orderMapper.orderToOrderDtos(orderBusinessService.getAll()));
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+        for (Order o: orderBusinessService.getAll()){
+            orderDTOs.add(mapper.map(o,OrderDTO.class));
+        }
+        request.setAttribute("orderList", orderDTOs);
     }
 }

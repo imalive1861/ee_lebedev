@@ -3,6 +3,7 @@ package com.accenture.flowershop.fe.dto;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class OrderDTO {
     private Date dateCreate;
     private Date dateClose;
     private OrderStatus status;
-    private List<CartDTO> carts;
+    private List<CartDTO> carts = new ArrayList<>();
 
     public OrderDTO(){}
 

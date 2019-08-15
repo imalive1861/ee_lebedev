@@ -15,7 +15,7 @@
                 <th>Number</th>
                 <th>Sum Price</th>
             </tr>
-            <c:forEach items="${userCart}" var="cart" >
+            <c:forEach items="${userCart.carts}" var="cart" >
                 <tr>
                     <td>${cart.flower.id}</td>
                     <td>${cart.flower.name}</td>
@@ -25,7 +25,7 @@
             </c:forEach>
             <tr>
                 <c:choose>
-                    <c:when test="${userCart.isEmpty()}">
+                    <c:when test="${userCart.carts.isEmpty()}">
                         <td colspan="4">Cart is empty</td>
                     </c:when>
                     <c:otherwise>

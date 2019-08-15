@@ -4,6 +4,7 @@ import com.accenture.flowershop.fe.enums.OrderStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Order {
     private User userId;
 
     @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
-    private List<Cart> carts;
+    private List<Cart> carts = new ArrayList<>();
 
     public Order(){}
 

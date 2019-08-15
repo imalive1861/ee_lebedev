@@ -1,8 +1,9 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.dto.mappers.UserMapper;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -22,7 +23,7 @@ public class RegistrationServlet extends HttpServlet {
     private UserBusinessService userBusinessService;
 
     @Autowired
-    private UserMapper userMapper;
+    private Mapper mapper;
 
     public RegistrationServlet(){
         super();
@@ -67,7 +68,7 @@ public class RegistrationServlet extends HttpServlet {
             hasError = true;
             errorString = "Fill empty sells!";
         } else {
-            if (userBusinessService.isUniqueLogin(userMapper.userDtoToUser(userDTO))) {
+            if (userBusinessService.isUniqueLogin(mapper.map(userDTO, User.class))) {
                 hasError = true;
                 errorString = "Enter unique login!";
             } else {
@@ -86,7 +87,7 @@ public class RegistrationServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } else {
             userDTO.setPassword(password);
-            userBusinessService.save(userMapper.userDtoToUser(userDTO));
+            userBusinessService.save(mapper.map(userDTO, User.class));
             okString = "Registration completed successfully!";
 
             request.setAttribute("okString", okString);

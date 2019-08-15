@@ -17,7 +17,7 @@ public class Cart {
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="flower_id", nullable = false)
     private Flower flower;
 

@@ -5,6 +5,8 @@ import com.accenture.flowershop.fe.enums.UserRoles;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -24,6 +26,8 @@ public class User implements Serializable {
     private int discount;
     @Enumerated(EnumType.STRING)
     private UserRoles role;
+    @OneToMany(mappedBy="userId", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public User(){}
 
@@ -90,6 +94,13 @@ public class User implements Serializable {
         return role;
     }
 
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public static class Builder {
         private User newUser;
 
@@ -128,6 +139,10 @@ public class User implements Serializable {
         }
         public Builder role(UserRoles role){
             newUser.role = role;
+            return this;
+        }
+        public Builder orders(List<Order> orders){
+            newUser.orders = orders;
             return this;
         }
 

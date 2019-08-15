@@ -1,13 +1,12 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
-import com.accenture.flowershop.fe.dto.CartDTO;
-import com.accenture.flowershop.fe.dto.mappers.CartMapper;
+import com.accenture.flowershop.be.entity.Order;
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.dto.mappers.UserMapper;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -20,23 +19,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
 
     @Autowired
     private CartService cartService;
-    @Autowired
-    private CartMapper cartMapper;
 
     @Autowired
     private UserBusinessService userBusinessService;
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
-    private OrderBusinessService orderBusinessService;
+    private Mapper mapper;
 
     public OrderServlet(){
         super();
@@ -68,14 +62,16 @@ public class OrderServlet extends HttpServlet {
         String errorString = null;
 
         UserDTO userDTO = SessionUtils.getLoginedUser(session);
-        List<CartDTO> cartDTO = SessionUtils.getUserCart(session);
-        BigDecimal allSum = cartService.getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin());
 
+        Order order = mapper.map(SessionUtils.getUserCart(session),Order.class);
+
+        BigDecimal allSum = cartService.getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin());
         request.setAttribute("allSum", allSum);
 
         if (request.getParameter("createOrder") != null) {
-            if (userBusinessService.checkCash(userMapper.userDtoToUser(userDTO), allSum)) {
-                createOrder(userDTO, allSum, cartDTO);
+            User user = mapper.map(userDTO, User.class);
+            if (userBusinessService.checkCash(user, allSum)) {
+                userBusinessService.createOrder(user, allSum, order);
                 hasError = false;
             } else {
                 errorString = "Need more gold!";
@@ -90,17 +86,10 @@ public class OrderServlet extends HttpServlet {
         if (hasError) {
             request.setAttribute("errorString", errorString);
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
+        } else {
+            SessionUtils.storeLoginedUser(session,
+                    mapper.map(userBusinessService.getByLogin(userDTO.getLogin()), UserDTO.class));
+            response.sendRedirect(request.getContextPath() + "/customer");
         }
-
-        SessionUtils.storeLoginedUser(session,
-                userMapper.userToUserDto(userBusinessService.getByLogin(userDTO.getLogin())));
-        response.sendRedirect(request.getContextPath() + "/customer");
-    }
-
-    private void createOrder(UserDTO userDTO, BigDecimal allSum, List<CartDTO> cartDTO) {
-        orderBusinessService.create(allSum,
-                cartMapper.cartDtosToCart(cartDTO),
-                userMapper.userDtoToUser(userDTO));
-        cartService.clear(userDTO.getLogin());
     }
 }

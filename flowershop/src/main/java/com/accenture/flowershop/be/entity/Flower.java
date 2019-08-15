@@ -2,6 +2,8 @@ package com.accenture.flowershop.be.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "FLOWERS")
@@ -14,6 +16,8 @@ public class Flower {
     private String name;
     private BigDecimal price;
     private int number;
+    @OneToMany(mappedBy="flower", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<Cart> carts = new ArrayList<>();
 
     public Flower(){}
 
@@ -43,6 +47,13 @@ public class Flower {
     }
     public int getNumber() {
         return number;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
+    public List<Cart> getCarts() {
+        return carts;
     }
 
     public static class Builder {

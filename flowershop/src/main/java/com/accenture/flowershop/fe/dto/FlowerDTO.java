@@ -1,6 +1,8 @@
 package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlowerDTO {
 
@@ -8,6 +10,7 @@ public class FlowerDTO {
     private String name;
     private BigDecimal price;
     private int number;
+    private List<CartDTO> carts = new ArrayList<>();
 
     public FlowerDTO(){}
 
@@ -39,6 +42,13 @@ public class FlowerDTO {
         return number;
     }
 
+    public void setCarts(List<CartDTO> carts) {
+        this.carts = carts;
+    }
+    public List<CartDTO> getCarts() {
+        return carts;
+    }
+
     public static class Builder {
         private FlowerDTO newFlowerDTO;
 
@@ -58,6 +68,11 @@ public class FlowerDTO {
 
         public Builder number(int number){
             newFlowerDTO.number = number;
+            return this;
+        }
+
+        public Builder carts(List<CartDTO> carts){
+            newFlowerDTO.carts = carts;
             return this;
         }
 

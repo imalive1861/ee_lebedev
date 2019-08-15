@@ -1,8 +1,11 @@
 package com.accenture.flowershop.fe.dto;
 
+import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.fe.enums.UserRoles;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDTO {
     private long id;
@@ -14,6 +17,7 @@ public class UserDTO {
     private BigDecimal cash;
     private int discount;
     private UserRoles role;
+    private List<OrderDTO> orders = new ArrayList<>();
 
     public UserDTO(){}
 
@@ -80,6 +84,13 @@ public class UserDTO {
         return role;
     }
 
+    public void setOrders(List<OrderDTO> orders) {
+        this.orders = orders;
+    }
+    public List<OrderDTO> getOrders() {
+        return orders;
+    }
+
     public static class Builder {
         private UserDTO newUserDTO;
 
@@ -118,6 +129,10 @@ public class UserDTO {
         }
         public Builder role(UserRoles role){
             newUserDTO.role = role;
+            return this;
+        }
+        public Builder orders(List<OrderDTO> orders){
+            newUserDTO.orders = orders;
             return this;
         }
 
