@@ -40,65 +40,74 @@ public class RegistrationServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
                 config.getServletContext());
     }
+
+    private boolean hasError = true;
+    private String errorString = null;
+    private String okString = null;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        registration(request);
+
+        request.setAttribute("errorString", errorString);
+        request.setAttribute("okString", okString);
+
+        if (hasError){
+            errorString = null;
+            okString = null;
+            RequestDispatcher dispatcher =
+                    this.getServletContext().getRequestDispatcher("/view/registration.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            hasError = true;
+            RequestDispatcher dispatcher =
+                    this.getServletContext().getRequestDispatcher("/view/login.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/view/registration.jsp").forward(request, response);
+    }
+
+    private void registration(HttpServletRequest request) {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String address = request.getParameter("address");
         String phoneNumber = request.getParameter("phoneNumber");
 
-        UserDTO userDTO;
-        boolean hasError = false;
-        String errorString = null;
-        String okString;
-
-        userDTO = new UserDTO.Builder()
+        UserDTO userDTO = new UserDTO.Builder()
                 .login(login)
                 .name(name)
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .build();
 
-        if (    login == null ||        login.length() == 0 ||
-                password == null ||     password.length() == 0 ||
-                name == null ||         name.length() == 0 ||
-                address == null ||      address.length() == 0 ||
-                phoneNumber == null ||  phoneNumber.length() == 0) {
-            hasError = true;
+        if (login == null ||        login.length() == 0 ||
+            password == null ||     password.length() == 0 ||
+            name == null ||         name.length() == 0 ||
+            address == null ||      address.length() == 0 ||
+            phoneNumber == null ||  phoneNumber.length() == 0) {
             errorString = "Fill empty sells!";
-        } else {
-            if (userBusinessService.isUniqueLogin(mapper.map(userDTO, User.class))) {
-                hasError = true;
-                errorString = "Enter unique login!";
-            } else {
-                if (password.length() < 8){
-                    hasError = true;
-                    errorString = "Password must be more than 8 symbols!";
-                }
-            }
+            return;
         }
-        if (hasError){
-            request.setAttribute("errorString", errorString);
+        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
             request.setAttribute("user", userDTO);
-
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
-                    "/view/registration.jsp");
-            dispatcher.forward(request, response);
-        } else {
-            userDTO.setPassword(password);
-            userBusinessService.save(mapper.map(userDTO, User.class));
-            okString = "Registration completed successfully!";
-
-            request.setAttribute("okString", okString);
-
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(
-                    "/view/login.jsp");
-            dispatcher.forward(request, response);
+            errorString = "Enter unique login!";
+            return;
         }
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/view/registration.jsp").forward(request, response);
+        if (password.length() < 8){
+            request.setAttribute("user", userDTO);
+            errorString = "Password must be more than 8 symbols!";
+            return;
+        }
+        hasError = false;
+        request.setAttribute("user", userDTO);
+        userDTO.setPassword(password);
+        userBusinessService.save(mapper.map(userDTO, User.class));
+        okString = "Registration completed successfully!";
     }
 }

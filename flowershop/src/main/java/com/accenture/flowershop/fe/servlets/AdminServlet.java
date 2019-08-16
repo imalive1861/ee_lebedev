@@ -46,7 +46,11 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        closeOrder(request.getParameter("orderId"), request);
+        if (request.getParameter("closeOrderButton") != null) {
+            closeOrder(request.getParameter("orderId"));
+        }
+
+        dataOutput(request);
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/admin.jsp");
         dispatcher.forward(request, response);
@@ -58,10 +62,13 @@ public class AdminServlet extends HttpServlet {
         doGet(request,response);
     }
 
-    private void closeOrder(String orderId, HttpServletRequest request){
-        if (orderId != null){
+    private void closeOrder(String orderId) {
+        if (orderId != null) {
             orderBusinessService.close(Long.parseLong(orderId));
         }
+    }
+
+    private void dataOutput(HttpServletRequest request) {
         List<OrderDTO> orderDTOs = new ArrayList<>();
         for (Order o: orderBusinessService.getAll()){
             orderDTOs.add(mapper.map(o,OrderDTO.class));

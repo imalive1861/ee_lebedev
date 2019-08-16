@@ -35,8 +35,6 @@ public class CustomerServlet extends HttpServlet {
     @Autowired
     private Mapper mapper;
 
-    private Map<Long, FlowerDTO> flowerDTOs = new TreeMap<>();
-
     public CustomerServlet() {
         super();
     }
@@ -52,37 +50,20 @@ public class CustomerServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
+    private boolean hasError = true;
+    private String errorString = null;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        boolean hasError = false;
-        String errorString = null;
+        checkButtonClick(request);
 
-        getFlowerDTOs(
-                request.getParameter("searchNameClick"),
-                request.getParameter("searchFlowerByName"),
-                request.getParameter("searchPriceClick"),
-                request.getParameter("minFlowerPrice"),
-                request.getParameter("maxFlowerPrice"));
-
-        if (flowerDTOs.values().isEmpty()) {
-            hasError = true;
-            errorString = "Flower not found!";
-        }
-        request.setAttribute("flowerList",flowerDTOs.values());
-
-        HttpSession session = request.getSession();
-
-        if (request.getParameter("addToCardButton") != null) {
-            if (!(isAddFlowerToCart(request.getParameter("numberToCart"),
-                    request.getParameter("flowerId"), session))) {
-                hasError = true;
-                errorString = "There are not enough flowers available";
-            }
-        }
+        request.setAttribute("errorString", errorString);
 
         if (hasError) {
-            request.setAttribute("errorString", errorString);
+            errorString = null;
+        } else {
+            hasError = true;
         }
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/customer.jsp");
@@ -95,33 +76,54 @@ public class CustomerServlet extends HttpServlet {
         doGet(request,response);
     }
 
-    private void getFlowerDTOs(String searchNameClick,
-                               String searchFlowerByName,
-                               String searchPriceClick,
-                               String minFlowerPrice,
-                               String maxFlowerPrice){
-        List<Flower> flowerList;
-        if (searchNameClick != null) {
-            flowerList = flowerBusinessService.getFlowerByName(searchFlowerByName);
-        } else if (searchPriceClick != null) {
-            flowerList = flowerBusinessService.getFlowerByPrice(minFlowerPrice, maxFlowerPrice);
-        } else {
-            flowerList = flowerBusinessService.getAll();
-        }
-        for (Flower f : flowerList) {
-            flowerDTOs.put(f.getId(), mapper.map(f, FlowerDTO.class));
+    private void checkButtonClick(HttpServletRequest request) {
+        Map<Long, FlowerDTO> flowerDTOs = mapFlowerDto(getFlowerDTOs(request));
+        request.setAttribute("flowerList",flowerDTOs.values());
+
+        HttpSession session = request.getSession();
+        if (request.getParameter("addToCardButton") != null) {
+            if (isAddFlowerToCart(
+                    Integer.parseInt(request.getParameter("numberToCart")),
+                    flowerDTOs.get(Long.parseLong(request.getParameter("flowerId"))),
+                    SessionUtils.getLoginedUser(session))) {
+                hasError = false;
+                return;
+            }
+            errorString = "There are not enough flowers available";
         }
     }
 
-    private boolean isAddFlowerToCart(String numberToCart,
-                                      String flowerId,
-                                      HttpSession session){
-        if (numberToCart != null && flowerId != null) {
-            long flowerIds = Long.parseLong(flowerId);
-            int numbersToCart = Integer.parseInt(numberToCart);
-            UserDTO userDTO = SessionUtils.getLoginedUser(session);
-            return cartService.isAddFlowerToCart(userDTO,flowerDTOs.get(flowerIds),numbersToCart);
+    private List<Flower> getFlowerDTOs(HttpServletRequest request) {
+        List<Flower> flowerList;
+        if (request.getParameter("searchNameClick") != null) {
+
+            flowerList = flowerBusinessService.getFlowerByName(
+                    request.getParameter("searchFlowerByName"));
+
+        } else if (request.getParameter("searchPriceClick") != null) {
+
+            flowerList = flowerBusinessService.getFlowerByPrice(
+                    request.getParameter("minFlowerPrice"),
+                    request.getParameter("maxFlowerPrice"));
+
+        } else {
+            flowerList = flowerBusinessService.getAll();
         }
-        return false;
+        return flowerList;
+    }
+
+    private Map<Long, FlowerDTO> mapFlowerDto(List<Flower> flowerList) {
+        Map<Long, FlowerDTO> flowerDTOs = new TreeMap<>();
+        for (Flower f : flowerList) {
+            flowerDTOs.put(f.getId(), mapper.map(f, FlowerDTO.class));
+        }
+        if (flowerDTOs.values().isEmpty()) {
+            errorString = "Flower not found!";
+        }
+        return flowerDTOs;
+    }
+
+    private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, UserDTO userDTO){
+        return cartService.isAddFlowerToCart(userDTO,flowerDTO,numberToCart);
     }
 }

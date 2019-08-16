@@ -1,5 +1,6 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
@@ -42,58 +43,49 @@ public class LoginServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
+    private boolean hasError = true;
+    private String errorString = null;
 
-        UserDTO user = null;
-        boolean hasError = false;
-        String errorString = null;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        if (login == null || password == null || login.length() == 0 || password.length() == 0) {
-            hasError = true;
-            errorString = "Required username and password!";
-        } else {
+        login(request);
 
-            try{
-                user = mapper.map(userBusinessService.logIn(login, password), UserDTO.class);
-
-                if (user == null) {
-                    hasError = true;
-                    errorString = "User Name or password invalid";
-                }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-                hasError = true;
-                errorString = e.getMessage();
-            }
-        }
+        request.setAttribute("errorString", errorString);
 
         if (hasError) {
-            user = new UserDTO();
-            user.setLogin(login);
-            user.setPassword(password);
-
-            request.setAttribute("errorString", errorString);
-            request.setAttribute("user", user);
-
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/login.jsp");
+            errorString = null;
+            RequestDispatcher dispatcher =
+                    this.getServletContext().getRequestDispatcher("/view/login.jsp");
             dispatcher.forward(request, response);
         } else {
-            HttpSession session = request.getSession();
-            SessionUtils.storeLoginedUser(session, user);
-            SessionUtils.storeUserCart(session, cartService.setCartFromSession(login));
-
-            if (user.getRole().name().equals("ADMIN")){
-                response.sendRedirect(request.getContextPath() + "/admin");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/customer");
-            }
+            hasError = true;
+            response.sendRedirect(request.getContextPath() + "/");
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/login.jsp");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher =
+                this.getServletContext().getRequestDispatcher("/view/login.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private void login(HttpServletRequest request) {
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+        if (login == null || password == null || login.length() == 0 || password.length() == 0) {
+            errorString = "Required username and password!";
+            return;
+        }
+        User user = userBusinessService.logIn(login, password);
+        if (user != null) {
+            hasError = false;
+            HttpSession session = request.getSession();
+            SessionUtils.storeLoginedUser(session, mapper.map(user, UserDTO.class));
+            SessionUtils.storeUserCart(session, cartService.setCartFromSession(login));
+            return;
+        }
+        errorString = "User Name or password invalid";
     }
 }

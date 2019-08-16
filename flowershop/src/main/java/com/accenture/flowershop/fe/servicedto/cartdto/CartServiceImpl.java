@@ -45,10 +45,6 @@ public class CartServiceImpl implements CartService {
         if (number <= 0) {
             return false;
         }
-        int i = flowerDTO.getNumber() - number;
-        if (i < 0) {
-            return false;
-        }
         OrderDTO orderDTO = getCartById(userDTO.getLogin());
         CartDTO cartDTO = null;
         for (CartDTO c: orderDTO.getCarts()) {
@@ -56,7 +52,7 @@ public class CartServiceImpl implements CartService {
                 cartDTO = c;
             }
         }
-        BigDecimal sumPrice = flowerDTO.getPrice().multiply(new BigDecimal(number));
+        BigDecimal sumPrice = getSumPriceWithDiscount(flowerDTO.getPrice(),userDTO.getDiscount(),number);
         if (cartDTO == null) {
             cartDTO = new CartDTO.Builder()
                     .order(orderDTO)
@@ -67,11 +63,24 @@ public class CartServiceImpl implements CartService {
             this.cart.get(userDTO.getLogin()).getCarts().add(cartDTO);
         }
         flowerDTO = cartDTO.getFlower();
+        int i = flowerDTO.getNumber() - number;
+        if (i < 0) {
+            return false;
+        }
         cartDTO.setNumber(cartDTO.getNumber() + number);
         flowerDTO.setNumber(i);
         cartDTO.setSumPrice(cartDTO.getSumPrice().add(sumPrice));
         orderDTO.setSumPrice(getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin()));
         return true;
+    }
+
+    private BigDecimal getSumPriceWithDiscount(BigDecimal price, int sale, int number) {
+        BigDecimal sum = price.multiply(new BigDecimal(number));
+        BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);
+        newSale = newSale.divide(new BigDecimal(100.00), UP).setScale(2, UP);
+        newSale = newSale.multiply(sum).setScale(2, UP);
+        sum = sum.subtract(newSale).setScale(2, UP);
+        return sum;
     }
 
     public OrderDTO clear(String login){
@@ -89,10 +98,6 @@ public class CartServiceImpl implements CartService {
             for (CartDTO c : carts) {
                 sum = sum.add(c.getSumPrice());
             }
-            BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);
-            newSale = newSale.divide(new BigDecimal(100.00), UP).setScale(2, UP);
-            newSale = newSale.multiply(sum).setScale(2, UP);
-            sum = sum.subtract(newSale).setScale(2, UP);
         }
         return sum;
     }

@@ -10,6 +10,7 @@
 <body>
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
+    <a href="${pageContext.request.contextPath}/order">Go to Cart</a><br/>
     <p style="color: red;">${errorString}</p>
     Search<br/>
     <form method="GET" action="${pageContext.request.contextPath}/customer">

@@ -1,8 +1,9 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.UserDTO;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,8 +31,12 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/index.jsp");
-        dispatcher.forward(request, response);
+        UserDTO userDTO = SessionUtils.getLoginedUser(request.getSession());
+        if (userDTO.getRole().name().equals("ADMIN")){
+            response.sendRedirect(request.getContextPath() + "/admin");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/customer");
+        }
     }
 
     @Override

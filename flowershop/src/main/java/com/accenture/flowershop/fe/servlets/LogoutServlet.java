@@ -40,9 +40,13 @@ public class LogoutServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logOut(request);
+        response.sendRedirect(request.getContextPath() + "/");
+    }
+
+    private void logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         cartService.clear(SessionUtils.getLoginedUser(session).getLogin());
         session.invalidate();
-        response.sendRedirect(request.getContextPath() + "/");
     }
 }

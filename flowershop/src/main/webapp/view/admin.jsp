@@ -36,7 +36,7 @@
                         <form method="GET" action="${pageContext.request.contextPath}/admin">
                             <td>
                                 <input type="hidden" name="orderId" value="${order.id}"/>
-                                <input type="submit" value= "Close order"/>
+                                <input type="submit" name="closeOrderButton" value= "Close order"/>
                             </td>
                         </form>
                     </tr>
@@ -91,11 +91,13 @@
                                 <tr>
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
+                                    <th>Price of Flower</th>
                                 </tr>
                                 <c:forEach items="${order.carts}" var="cart" >
                                     <tr>
                                         <td>${cart.flower.name}</td>
                                         <td>${cart.number}</td>
+                                        <td>${cart.sumPrice}</td>
                                     </tr>
                                 </c:forEach>
                             </table>
