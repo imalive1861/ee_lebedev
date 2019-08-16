@@ -16,7 +16,7 @@ public class Flower {
     private String name;
     private BigDecimal price;
     private int number;
-    @OneToMany(mappedBy="flower", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(mappedBy="flower")
     private List<Cart> carts = new ArrayList<>();
 
     public Flower(){}

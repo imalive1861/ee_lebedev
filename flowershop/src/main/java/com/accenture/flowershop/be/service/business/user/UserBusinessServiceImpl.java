@@ -6,7 +6,6 @@ import com.accenture.flowershop.be.repository.user.UserRepository;
 
 import com.accenture.flowershop.fe.enums.OrderStatus;
 import com.accenture.flowershop.fe.enums.UserRoles;
-import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.services.jms.ProducerTest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +22,14 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     private UserRepository userRepository;
     private ProducerTest producerTest;
-    private CartService cartService;
     private Logger LOG;
 
     @Autowired
     public UserBusinessServiceImpl(UserRepository userRepository,
                                    ProducerTest producerTest,
-                                   CartService cartService,
                                    Logger LOG){
         this.userRepository = userRepository;
         this.producerTest = producerTest;
-        this.cartService = cartService;
         this.LOG = LOG;
     }
 
@@ -48,7 +44,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     public boolean isUniqueLogin(User user){
-        return userRepository.getByLogin(user.getLogin()) != null;
+        return userRepository.existsByLogin(user.getLogin());
     }
 
     public void save(User user){
@@ -60,14 +56,16 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         LOG.debug("Customer with login = {} name = {} was created", user.getLogin(), user.getName());
     }
 
-    public void createOrder(User user, BigDecimal allSum, Order order) {
-        order.setDateCreate(new Date());
-        order.setSumPrice(allSum);
-        order.setStatus(OrderStatus.PAID);
-        order.setUserId(user);
-        user.getOrders().add(order);
-        update(user);
-        cartService.clear(user.getLogin());
+    public boolean isOrderCreated(User user, Order order) {
+        if (checkCash(user, order.getSumPrice())) {
+            order.setDateCreate(new Date());
+            order.setStatus(OrderStatus.PAID);
+            order.setUserId(user);
+            user.getOrders().add(order);
+            update(user);
+            return true;
+        }
+        return false;
     }
 
     public void update(User user) {
@@ -82,10 +80,10 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         return userRepository.getByLogin(user.getLogin());
     }
 
-    public boolean checkCash(User user, BigDecimal sumPrice){
-        BigDecimal score = user.getCash();
-        if (sumPrice.compareTo(score) < 0) {
-            user.setCash(score.subtract(sumPrice).setScale(2, RoundingMode.UP));
+    private boolean checkCash(User user, BigDecimal sumPrice){
+        BigDecimal cash = user.getCash();
+        if (sumPrice.compareTo(cash) < 0) {
+            user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));
             return true;
         }
         return false;

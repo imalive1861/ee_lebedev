@@ -42,7 +42,7 @@
                             </form>
                         </td>
                         <td>Total price:</td>
-                        <td>${allSum}</td>
+                        <td>${userCart.sumPrice}</td>
                     </c:otherwise>
                 </c:choose>
             </tr>

@@ -1,6 +1,7 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
@@ -118,8 +119,8 @@ public class CustomerServlet extends HttpServlet {
         if (numberToCart != null && flowerId != null) {
             long flowerIds = Long.parseLong(flowerId);
             int numbersToCart = Integer.parseInt(numberToCart);
-            String login = SessionUtils.getLoginedUser(session).getLogin();
-            return cartService.isAddFlowerToCart(login,flowerDTOs.get(flowerIds),numbersToCart);
+            UserDTO userDTO = SessionUtils.getLoginedUser(session);
+            return cartService.isAddFlowerToCart(userDTO,flowerDTOs.get(flowerIds),numbersToCart);
         }
         return false;
     }

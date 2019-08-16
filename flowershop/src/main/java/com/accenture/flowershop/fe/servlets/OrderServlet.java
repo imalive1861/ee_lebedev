@@ -2,6 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
@@ -62,16 +62,13 @@ public class OrderServlet extends HttpServlet {
         String errorString = null;
 
         UserDTO userDTO = SessionUtils.getLoginedUser(session);
-
-        Order order = mapper.map(SessionUtils.getUserCart(session),Order.class);
-
-        BigDecimal allSum = cartService.getAllSumPrice(userDTO.getDiscount(), userDTO.getLogin());
-        request.setAttribute("allSum", allSum);
+        OrderDTO orderDTO = SessionUtils.getUserCart(session);
 
         if (request.getParameter("createOrder") != null) {
             User user = mapper.map(userDTO, User.class);
-            if (userBusinessService.checkCash(user, allSum)) {
-                userBusinessService.createOrder(user, allSum, order);
+            Order order = mapper.map(orderDTO,Order.class);
+            if (userBusinessService.isOrderCreated(user, order)) {
+                SessionUtils.storeUserCart(session, cartService.clear(userDTO.getLogin()));
                 hasError = false;
             } else {
                 errorString = "Need more gold!";
@@ -79,16 +76,17 @@ public class OrderServlet extends HttpServlet {
         }
 
         if (request.getParameter("cleanCart") != null){
-            cartService.clear(userDTO.getLogin());
+            SessionUtils.storeUserCart(session, cartService.clear(userDTO.getLogin()));
             errorString = "Cart clean right now!";
         }
+
+        SessionUtils.storeLoginedUser(session,
+                mapper.map(userBusinessService.getByLogin(userDTO.getLogin()), UserDTO.class));
 
         if (hasError) {
             request.setAttribute("errorString", errorString);
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         } else {
-            SessionUtils.storeLoginedUser(session,
-                    mapper.map(userBusinessService.getByLogin(userDTO.getLogin()), UserDTO.class));
             response.sendRedirect(request.getContextPath() + "/customer");
         }
     }

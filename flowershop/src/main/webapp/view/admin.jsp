@@ -46,11 +46,13 @@
                                 <tr>
                                     <th>Flower Name</th>
                                     <th>Number of Flower</th>
+                                    <th>Price of Flower</th>
                                 </tr>
                                 <c:forEach items="${order.carts}" var="cart" >
                                     <tr>
                                         <td>${cart.flower.name}</td>
                                         <td>${cart.number}</td>
+                                        <td>${cart.sumPrice}</td>
                                     </tr>
                                 </c:forEach>
                             </table>
