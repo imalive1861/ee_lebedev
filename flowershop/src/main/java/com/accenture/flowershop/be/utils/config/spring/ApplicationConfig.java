@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Конфигурационный класс для инициализации контекста веб-приложения.
+ */
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("com.accenture.flowershop")

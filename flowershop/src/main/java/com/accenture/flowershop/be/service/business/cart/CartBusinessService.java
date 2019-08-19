@@ -2,9 +2,14 @@ package com.accenture.flowershop.be.service.business.cart;
 
 import com.accenture.flowershop.be.entity.Cart;
 
-import java.util.List;
-
+/**
+ * Интерфейс бизнес логики для сущности Cart.
+ */
 public interface CartBusinessService {
-    List<Cart> getAll();
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     * @param id - идентификатор позиции в корзине
+     * @return объект Cart
+     */
     Cart get(long id);
 }

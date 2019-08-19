@@ -7,14 +7,45 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Класс транспортного уровня, хранящий информацию о заказе.
+ * Свойства: id, sumPrice, dateCreate, dateClose, status, userId.
+ */
 public class OrderDTO {
 
+    /**
+     * Иднтификатор заказа.
+     */
     private long id;
+
+    /**
+     * Покупатель, который создал заказ.
+     */
     private UserDTO userId;
+
+    /**
+     * Суммарная цена за все позиции заказа.
+     */
     private BigDecimal sumPrice;
+
+    /**
+     * Дата создания заказа покупателем.
+     */
     private Date dateCreate;
+
+    /**
+     * Дата закрытия заказа администратором.
+     */
     private Date dateClose;
+
+    /**
+     * Статус заказа.
+     */
     private OrderStatus status;
+
+    /**
+     * Позиции корзины, относящиеся к данному заказу.
+     */
     private List<CartDTO> carts = new ArrayList<>();
 
     public OrderDTO(){}

@@ -1,22 +1,66 @@
 package com.accenture.flowershop.fe.dto;
 
-import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.fe.enums.UserRoles;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс транспортного уровня, хранящий информацию о пользователе.
+ * Свойства: id, login, password, name, address,
+ * phoneNumber, cash, discount, role, orders.
+ */
 public class UserDTO {
+
+    /**
+     * Иднтификатор пользователя.
+     */
     private long id;
+
+    /**
+     * Логин для авторизации.
+     */
     private String login;
+
+    /**
+     * Пароль для авторизации.
+     */
     private String password;
+
+    /**
+     * Имя пользователя.
+     */
     private String name;
+
+    /**
+     * Адрес пользователя.
+     */
     private String address;
+
+    /**
+     * Номер телефона пользователя.
+     */
     private String phoneNumber;
+
+    /**
+     * Кошелек (количество средств, доступных для покупки товаров) пользователя.
+     */
     private BigDecimal cash;
+
+    /**
+     * Предоставляемая магазином для пользователя скидка на товар.
+     */
     private int discount;
+
+    /**
+     * Роль пользователя. (ADMIN или CUSTOMER)
+     */
     private UserRoles role;
+
+    /**
+     * Список заказов, сделанных пользователем.
+     */
     private List<OrderDTO> orders = new ArrayList<>();
 
     public UserDTO(){}

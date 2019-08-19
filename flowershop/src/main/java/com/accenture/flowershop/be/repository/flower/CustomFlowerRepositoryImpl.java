@@ -10,6 +10,9 @@ import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Реализация интерфейса CustomFlowerRepository.
+ */
 @Repository
 public class CustomFlowerRepositoryImpl implements CustomFlowerRepository {
 

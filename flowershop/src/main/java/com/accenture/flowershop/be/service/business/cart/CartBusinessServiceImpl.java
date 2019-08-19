@@ -4,25 +4,20 @@ import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.be.repository.cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+/**
+ * Реализация интерфейса CartBusinessService.
+ */
 @Service
-@Transactional
 public class CartBusinessServiceImpl implements CartBusinessService {
 
+    /**
+     * Ссылка на уровень доступа к базе данных для сущности Cart.
+     */
+    @Autowired
     private CartRepository cartRepository;
 
-    @Autowired
-    public CartBusinessServiceImpl(CartRepository cartRepository){
-        this.cartRepository = cartRepository;
-    }
-
-    @Override
-    public List<Cart> getAll() {
-        return cartRepository.findAll();
-    }
+    public CartBusinessServiceImpl() {}
 
     @Override
     public Cart get(long id) {

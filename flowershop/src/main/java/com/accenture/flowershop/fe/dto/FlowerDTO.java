@@ -4,12 +4,35 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс транспортного уровня, содержащий информацию о цветке.
+ * Свойства: id, name, price, number, carts.
+ */
 public class FlowerDTO {
 
+    /**
+     * Иднтификатор цветка.
+     */
     private long id;
+
+    /**
+     * Название цветка.
+     */
     private String name;
+
+    /**
+     * Цена цветка.
+     */
     private BigDecimal price;
+
+    /**
+     * Количество цветов.
+     */
     private int number;
+
+    /**
+     * Позиции корзины, в которых собержится ссылка на данный цветок.
+     */
     private List<CartDTO> carts = new ArrayList<>();
 
     public FlowerDTO(){}

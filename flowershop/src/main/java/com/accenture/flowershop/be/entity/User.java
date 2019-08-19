@@ -8,24 +8,68 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс, хранящий информацию о пользователе.
+ * Свойства: id, login, password, name, address,
+ * phoneNumber, cash, discount, role, orders.
+ */
 @Entity
 @Table(name = "USERS")
 public class User implements Serializable {
 
+    /**
+     * Иднтификатор пользователя.
+     */
     @Id
     @SequenceGenerator( name = "usersSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
     private long id;
+
+    /**
+     * Логин для авторизации.
+     */
     private String login;
+
+    /**
+     * Пароль для авторизации.
+     */
     private String password;
+
+    /**
+     * Имя пользователя.
+     */
     private String name;
+
+    /**
+     * Адрес пользователя.
+     */
     private String address;
+
+    /**
+     * Номер телефона пользователя.
+     */
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    /**
+     * Кошелек (количество средств, доступных для покупки товаров) пользователя.
+     */
     private BigDecimal cash;
+
+    /**
+     * Предоставляемая магазином для пользователя скидка на товар.
+     */
     private int discount;
+
+    /**
+     * Роль пользователя. (ADMIN или CUSTOMER)
+     */
     @Enumerated(EnumType.STRING)
     private UserRoles role;
+
+    /**
+     * Список заказов, сделанных пользователем.
+     */
     @OneToMany(mappedBy="userId", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 

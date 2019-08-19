@@ -9,6 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+/**
+ * Конфигурационный класс для инициализации SprinMVC.
+ */
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = { "com.accenture.flowershop" })

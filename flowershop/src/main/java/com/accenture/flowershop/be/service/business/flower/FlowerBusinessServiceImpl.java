@@ -5,36 +5,47 @@ import com.accenture.flowershop.be.repository.flower.FlowerRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Реализация интерфейса FlowerBusinessService.
+ */
 @Service
-@Transactional
 public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
+    /**
+     * Ссылка на уровень доступа к базе данных для сущности Flower.
+     */
     @Autowired
     private FlowerRepository flowerRepository;
+    /**
+     * Логгер.
+     */
     @Autowired
     private Logger LOG;
 
     public FlowerBusinessServiceImpl(){}
 
+    @Override
     public void update(Flower flower){
         flowerRepository.saveAndFlush(flower);
         LOG.debug("Number of Flower with id = {} has been changed to = {}",
                 flower.getId(), flower.getNumber());
     }
 
+    @Override
     public Flower get(long id) {
             return flowerRepository.getOne(id);
     }
 
+    @Override
     public List<Flower> getAll() {
         return flowerRepository.findAll();
     }
 
+    @Override
     public List<Flower> getFlowerByName(String name) {
         if (name.equals("")){
             return getAll();
@@ -42,6 +53,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
         return flowerRepository.findAllFlowerByName(name);
     }
 
+    @Override
     public List<Flower> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice) {
         if (minFlowerPrice.equals("") && maxFlowerPrice.equals("")){
             return getAll();

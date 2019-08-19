@@ -5,17 +5,40 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс, содержащий информацию о цветке.
+ * Свойства: id, name, price, number, carts.
+ */
 @Entity
 @Table(name = "FLOWERS")
 public class Flower {
 
+    /**
+     * Иднтификатор цветка.
+     */
     @Id
     @SequenceGenerator( name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flowersSeq")
     private long id;
+
+    /**
+     * Название цветка.
+     */
     private String name;
+
+    /**
+     * Цена цветка.
+     */
     private BigDecimal price;
+
+    /**
+     * Количество цветов.
+     */
     private int number;
+
+    /**
+     * Позиции корзины, в которых собержится ссылка на данный цветок.
+     */
     @OneToMany(mappedBy="flower")
     private List<Cart> carts = new ArrayList<>();
 

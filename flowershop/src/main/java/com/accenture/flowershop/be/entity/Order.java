@@ -8,26 +8,57 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Класс, хранящий информацию о заказе.
+ * Свойства: id, sumPrice, dateCreate, dateClose, status, userId.
+ */
 @Entity
 @Table(name = "ORDERS")
 public class Order {
 
+    /**
+     * Иднтификатор заказа.
+     */
     @Id
     @SequenceGenerator( name = "ordersSeq", sequenceName = "ORDERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordersSeq")
     private long id;
+
+    /**
+     * Суммарная цена за все позиции заказа.
+     */
     @Column(name = "sum_price")
     private BigDecimal sumPrice;
+
+    /**
+     * Дата создания заказа покупателем.
+     */
     @Column(name = "date_create")
     private Date dateCreate;
+
+    /**
+     * Дата закрытия заказа администратором.
+     */
     @Column(name = "date_close")
     private Date dateClose;
+
+    /**
+     * Статус заказа.
+     */
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    /**
+     * Покупатель, который создал заказ.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
+    /**
+     * Позиции корзины, относящиеся к данному заказу.
+     */
     @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 

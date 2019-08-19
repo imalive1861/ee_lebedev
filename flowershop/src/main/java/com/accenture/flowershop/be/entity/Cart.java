@@ -3,24 +3,44 @@ package com.accenture.flowershop.be.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+/**
+ * Класс, хранящий позиции пользовательской корзины покупок.
+ * Свойства: id, number, order, flower, sumPrice.
+ */
 @Entity
 @Table(name = "CARTS")
 public class Cart {
 
+    /**
+     * Иднтификатор позиции в корзине.
+     */
     @Id
     @SequenceGenerator( name = "cartsSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     private long id;
+
+    /**
+     * Количество цветов, добавленных в корзину.
+     */
     private int number;
 
+    /**
+     * Заказ, в который входит данная позиция.
+     */
     @ManyToOne
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
 
+    /**
+     * Цветок, добавленный в корзину.
+     */
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="flower_id", nullable = false)
     private Flower flower;
 
+    /**
+     * Суммарная цена за количество добавленных цветов.
+     */
     private BigDecimal sumPrice;
 
     public Cart(){}
@@ -71,14 +91,17 @@ public class Cart {
             newCart.order = order;
             return this;
         }
+
         public Builder flower(Flower flower){
             newCart.flower = flower;
             return this;
         }
+
         public Builder number(int number){
             newCart.number = number;
             return this;
         }
+
         public Builder sumPrice(BigDecimal sumPrice){
             newCart.sumPrice = sumPrice;
             return this;

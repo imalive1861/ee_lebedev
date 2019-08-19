@@ -2,12 +2,35 @@ package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
 
+/**
+ * Класс транспортного уровня, хранящий позиции пользовательской корзины покупок.
+ * Свойства: id, number, order, flower, sumPrice.
+ */
 public class CartDTO {
 
+    /**
+     * Иднтификатор позиции в корзине.
+     */
     private long id;
+
+    /**
+     * Заказ, в который входит данная позиция.
+     */
     private OrderDTO order;
+
+    /**
+     * Цветок, добавленный в корзину.
+     */
     private FlowerDTO flower;
+
+    /**
+     * Количество цветов, добавленных в корзину.
+     */
     private int number;
+
+    /**
+     * Суммарная цена за количество добавленных цветов.
+     */
     private BigDecimal sumPrice;
 
     public CartDTO(){}

@@ -7,6 +7,7 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -71,6 +72,7 @@ public class LoginServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    @Transactional
     private void login(HttpServletRequest request) {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -83,7 +85,7 @@ public class LoginServlet extends HttpServlet {
             hasError = false;
             HttpSession session = request.getSession();
             SessionUtils.storeLoginedUser(session, mapper.map(user, UserDTO.class));
-            SessionUtils.storeUserCart(session, cartService.setCartFromSession(login));
+            SessionUtils.storeUserCart(session, cartService.setCart(login));
             return;
         }
         errorString = "User Name or password invalid";

@@ -13,6 +13,9 @@ import org.dozer.loader.api.BeanMappingBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Конфигурационный класс для инициализации маппера.
+ */
 @Configuration
 public class MapperConfig {
     @Bean

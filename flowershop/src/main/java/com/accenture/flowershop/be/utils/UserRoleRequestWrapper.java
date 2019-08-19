@@ -4,6 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.security.Principal;
 
+/**
+ * Расширение для HTTPServletRequest, которое переопределяет getUserPrincipal () и isUserInRole ().
+ */
 public class UserRoleRequestWrapper extends HttpServletRequestWrapper {
     private String user;
     private String roles;

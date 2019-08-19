@@ -6,8 +6,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Утилиты для проверки авторизации пользователя.
+ */
 public class SecurityUtils {
 
+    /**
+     * Является ли путь, заданный в параметре, защищенным
+     * @param request - объект HttpServletRequest
+     * @return true - если является защищенным, false - если не является защищенным
+     */
     public static boolean isSecurityPage(HttpServletRequest request) {
         String urlPattern = request.getServletPath();
 
@@ -22,6 +30,11 @@ public class SecurityUtils {
         return false;
     }
 
+    /**
+     * Имеет ли пользователь доспуп к запрашиваемому ресурсу.
+     * @param request - объект HttpServletRequest
+     * @return true - если имеет доступ, false - если не имеет доступа
+     */
     public static boolean hasPermission(HttpServletRequest request) {
         String urlPattern = request.getServletPath();
 

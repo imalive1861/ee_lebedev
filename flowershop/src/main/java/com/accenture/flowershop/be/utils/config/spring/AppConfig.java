@@ -25,6 +25,9 @@ import org.springframework.oxm.castor.CastorMarshaller;
 
 import javax.xml.ws.Endpoint;
 
+/**
+ * Конфигурационный класс для инициализации дополнительных модулей.
+ */
 @Configuration
 @PropertySource(value = "classpath:config/config.properties")
 @EnableJpaRepositories("com.accenture.flowershop.be.repository")

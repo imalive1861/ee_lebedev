@@ -8,6 +8,7 @@ import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -123,6 +124,7 @@ public class CustomerServlet extends HttpServlet {
         return flowerDTOs;
     }
 
+    @Transactional
     private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, UserDTO userDTO){
         return cartService.isAddFlowerToCart(userDTO,flowerDTO,numberToCart);
     }

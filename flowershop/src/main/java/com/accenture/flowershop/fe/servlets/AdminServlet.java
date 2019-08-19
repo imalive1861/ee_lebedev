@@ -5,6 +5,7 @@ import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -62,6 +63,7 @@ public class AdminServlet extends HttpServlet {
         doGet(request,response);
     }
 
+    @Transactional
     private void closeOrder(String orderId) {
         if (orderId != null) {
             OrderDTO orderDTO = orderDTOs.get(Long.parseLong(orderId));
