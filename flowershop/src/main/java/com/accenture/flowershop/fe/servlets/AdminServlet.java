@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
@@ -64,15 +64,18 @@ public class AdminServlet extends HttpServlet {
 
     private void closeOrder(String orderId) {
         if (orderId != null) {
-            orderBusinessService.close(Long.parseLong(orderId));
+            OrderDTO orderDTO = orderDTOs.get(Long.parseLong(orderId));
+            orderBusinessService.close(mapper.map(orderDTO, Order.class));
         }
     }
 
+    private Map<Long, OrderDTO> orderDTOs;
+
     private void dataOutput(HttpServletRequest request) {
-        List<OrderDTO> orderDTOs = new ArrayList<>();
+        orderDTOs = new TreeMap<>();
         for (Order o: orderBusinessService.getAll()){
-            orderDTOs.add(mapper.map(o,OrderDTO.class));
+            orderDTOs.put(o.getId(), mapper.map(o,OrderDTO.class));
         }
-        request.setAttribute("orderList", orderDTOs);
+        request.setAttribute("orderList", orderDTOs.values());
     }
 }

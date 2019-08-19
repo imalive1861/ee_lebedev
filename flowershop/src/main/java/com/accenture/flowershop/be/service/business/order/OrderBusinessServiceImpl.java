@@ -26,25 +26,28 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         this.LOG = LOG;
     }
 
+    @Override
     public void save(Order order) {
         orderRepository.saveAndFlush(order);
     }
 
-    public void close(Long orderId){
-        Order order = get(orderId);
+    public void close(Order order){
         if (order.getStatus().equals(OrderStatus.PAID)) {
             order.setDateClose(new Date());
             order.setStatus(OrderStatus.CLOSED);
             orderRepository.saveAndFlush(order);
+            LOG.debug("Order with id = {} was closed = {}",
+                    order.getId(), order.getDateClose());
+            return;
         }
-        LOG.debug("Order with total price = {} date of creation = {} was closed = {}",
-                order.getSumPrice(), order.getDateCreate(), order.getDateClose());
+        LOG.debug("Order with id = {} not closed", order.getId());
     }
     @Override
     public List<Order> getAll() {
         return orderRepository.findAll(Sort.by("dateCreate"));
     }
 
+    @Override
     public Order get(long id) {
             return orderRepository.getOne(id);
     }

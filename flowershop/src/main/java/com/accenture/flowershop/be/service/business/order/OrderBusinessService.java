@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface OrderBusinessService {
     void save(Order order);
-    void close(Long orderId);
+    void close(Order order);
     List<Order> getAll();
     Order get(long id);
 }
