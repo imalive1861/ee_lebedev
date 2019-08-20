@@ -101,13 +101,16 @@ public class OrderServlet extends HttpServlet {
 
         request.setAttribute("errorString", errorString);
 
+        SessionUtils.storeLoginedUser(session,
+                mapper.map(userBusinessService.getByLogin(userDTO.getLogin()),UserDTO.class));
+
         if (hasError) {
             errorString = null;
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         } else {
             cleanCart(session, userDTO);
             hasError = true;
-            response.sendRedirect(request.getContextPath() + "/customer");
+            response.sendRedirect(request.getContextPath() + "/order");
         }
     }
 
@@ -122,7 +125,6 @@ public class OrderServlet extends HttpServlet {
         Order order = mapper.map(orderDTO,Order.class);
         if (checkUserCash(user, order.getSumPrice())) {
             createOrder(user,order);
-            userDTO.setCash(user.getCash());
             hasError = false;
             return;
         }
