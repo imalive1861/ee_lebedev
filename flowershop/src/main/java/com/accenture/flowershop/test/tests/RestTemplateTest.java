@@ -1,25 +1,34 @@
 package com.accenture.flowershop.test.tests;
 
 import com.accenture.flowershop.fe.dto.UserDTO;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
-public class RestTemplateTest {
-    public static void main(String[] args) {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-        UserDTO testUsedLoginAdmin = new UserDTO();
+public class RestTemplateTest {
+
+    private UserDTO testUsedLoginAdmin;
+    private UserDTO testNotUsedLogin;
+
+    @Before
+    public void initUsers() {
+        testUsedLoginAdmin = new UserDTO();
         testUsedLoginAdmin.setLogin("admin");
 
-        UserDTO testNotUsedLogin = new UserDTO();
+        testNotUsedLogin = new UserDTO();
         testNotUsedLogin.setLogin("asklfjsdasfrwqgerhtrlknheoruelfj");
+    }
 
-        if (testLogins(testUsedLoginAdmin) && !testLogins(testNotUsedLogin)){
-            System.out.println("All OK :)");
-        } else {
-            System.out.println("Somethings not right!");
-        }
+    @Test
+    public void testUserLogin() {
+        assertTrue(testLogins(testUsedLoginAdmin));
+        assertFalse(testLogins(testNotUsedLogin));
     }
 
     private static boolean testLogins(UserDTO testLogin) {
