@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <td colspan ="2">
-                <input type="submit" id="reg" value="Registration" disabled/>
+                <input type="submit" id="reg" name="regButton" value="Registration" disabled/>
                 <a href="${pageContext.request.contextPath}/">Cancel</a>
             </td>
         </tr>

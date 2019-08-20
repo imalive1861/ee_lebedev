@@ -19,12 +19,20 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Сервлет для работы с администратором. Используется для просмотра и закрытия заказов.
+ */
 @WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
 
+    /**
+     * Ссылка на бизнес уровень для сущности Order.
+     */
     @Autowired
     private OrderBusinessService orderBusinessService;
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 
@@ -44,6 +52,9 @@ public class AdminServlet extends HttpServlet {
                 config.getServletContext());
     }
 
+    /**
+     * Запрос GET. Проверяет нажаты ли кнопки и выводит данные на форму.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -53,16 +64,24 @@ public class AdminServlet extends HttpServlet {
 
         dataOutput(request);
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/admin.jsp");
+        RequestDispatcher dispatcher =
+                this.getServletContext().getRequestDispatcher("/view/admin.jsp");
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Запрос POST. Перенаправляет запрос на GET.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request,response);
     }
 
+    /**
+     * Отметить заказ как закрытый (CLOSED).
+     * @param orderId - идентификатор заказа
+     */
     @Transactional
     private void closeOrder(String orderId) {
         if (orderId != null) {
@@ -71,8 +90,15 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Карта существующих заказов.
+     */
     private Map<Long, OrderDTO> orderDTOs;
 
+    /**
+     * Заполнение карты существующих заказов и вывод информации о заказах на форму.
+     * @param request - объект HttpServletRequest
+     */
     private void dataOutput(HttpServletRequest request) {
         orderDTOs = new TreeMap<>();
         for (Order o: orderBusinessService.getAll()){

@@ -20,9 +20,14 @@ import java.io.IOException;
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
 
+    /**
+     * Ссылка на бизнес уровень для сущности User.
+     */
     @Autowired
     private UserBusinessService userBusinessService;
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 
@@ -42,14 +47,30 @@ public class RegistrationServlet extends HttpServlet {
                 config.getServletContext());
     }
 
+    /**
+     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
+     */
     private boolean hasError = true;
+    /**
+     * Сообщение об ошибке.
+     */
     private String errorString = null;
+    /**
+     * Сообщение об успешном действии.
+     */
     private String okString = null;
 
+    /**
+     * Запрос POST. Проверяет нажаты ли кнопки.
+     * При наличии ошибки выводит сообщение об ошибке.
+     * При отсутствии ошибки перенаправляет на форму авторизации.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        registration(request);
+        if (request.getParameter("regButton") != null) {
+            registration(request);
+        }
 
         request.setAttribute("errorString", errorString);
         request.setAttribute("okString", okString);
@@ -68,6 +89,9 @@ public class RegistrationServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Запрос GET. Пересылает запрос на форму registration.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("/view/registration.jsp").forward(request, response);

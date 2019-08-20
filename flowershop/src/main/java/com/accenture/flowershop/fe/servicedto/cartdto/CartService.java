@@ -17,7 +17,7 @@ public interface CartService {
      */
     boolean isAddFlowerToCart(UserDTO userDTO, FlowerDTO flowerDTO, int number);
     /**
-     * Очищает пеущий заказ пользователя.
+     * Очищает текущий заказ пользователя.
      * @param login - логин пользователя
      * @return объект OrderDTO
      */

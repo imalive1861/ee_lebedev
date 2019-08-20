@@ -24,15 +24,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Сервлет для работы с покупателем. Используется:
+ * для вывода ассортимента товаров (цветков),
+ * для добавления товара в корзину покупателя.
+ */
 @WebServlet(name = "CustomerServlet", urlPatterns = { "/customer" })
 public class CustomerServlet extends HttpServlet {
 
+    /**
+     * Ссылка на бизнес уровень для сущности Flower.
+     */
     @Autowired
     private FlowerBusinessService flowerBusinessService;
-
+    /**
+     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
+     */
     @Autowired
     private CartService cartService;
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 
@@ -51,13 +63,27 @@ public class CustomerServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
+    /**
+     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
+     */
     private boolean hasError = true;
+    /**
+     * Сообщение об ошибке.
+     */
     private String errorString = null;
 
+    /**
+     * Запрос GET. Проверяет нажаты ли кнопки и выводит данные на форму.
+     * При наличии ошибки выводит сообщение об ошибке.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        checkButtonClick(request);
+        if (request.getParameter("addToCardButton") != null) {
+            addFlowerToCart(request);
+        }
+
+        dataOutput(request);
 
         request.setAttribute("errorString", errorString);
 
@@ -67,33 +93,56 @@ public class CustomerServlet extends HttpServlet {
             hasError = true;
         }
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/view/customer.jsp");
+        RequestDispatcher dispatcher =
+                this.getServletContext().getRequestDispatcher("/view/customer.jsp");
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Запрос POST. Перенаправляет запрос на GET.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request,response);
     }
 
-    private void checkButtonClick(HttpServletRequest request) {
-        Map<Long, FlowerDTO> flowerDTOs = mapFlowerDto(getFlowerDTOs(request));
-        request.setAttribute("flowerList",flowerDTOs.values());
+    /**
+     * Карта цветов.
+     */
+    private Map<Long, FlowerDTO> flowerDTOs;
 
-        HttpSession session = request.getSession();
-        if (request.getParameter("addToCardButton") != null) {
-            if (isAddFlowerToCart(
-                    Integer.parseInt(request.getParameter("numberToCart")),
-                    flowerDTOs.get(Long.parseLong(request.getParameter("flowerId"))),
-                    SessionUtils.getLoginedUser(session))) {
-                hasError = false;
-                return;
-            }
-            errorString = "There are not enough flowers available";
-        }
+    /**
+     * Вывод информации о цветках на форму.
+     * @param request - объект HttpServletRequest
+     */
+    private void dataOutput(HttpServletRequest request) {
+        flowerDTOs = new TreeMap<>();
+        mapFlowerDto(getFlowerDTOs(request));
+        request.setAttribute("flowerList",flowerDTOs.values());
     }
 
+    /**
+     * Добавить цветок в корзину.
+     * @param request - объект HttpServletRequest
+     */
+    private void addFlowerToCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (isAddFlowerToCart(
+                Integer.parseInt(request.getParameter("numberToCart")),
+                flowerDTOs.get(Long.parseLong(request.getParameter("flowerId"))),
+                SessionUtils.getLoginedUser(session))) {
+            hasError = false;
+            return;
+        }
+        errorString = "There are not enough flowers available";
+    }
+
+    /**
+     * Фильтрация и получение информации о цветках из базы данных.
+     * @param request - объект HttpServletRequest
+     * @return список цветков (отфильтрованный, если это нужно)
+     */
     private List<Flower> getFlowerDTOs(HttpServletRequest request) {
         List<Flower> flowerList;
         if (request.getParameter("searchNameClick") != null) {
@@ -113,17 +162,26 @@ public class CustomerServlet extends HttpServlet {
         return flowerList;
     }
 
-    private Map<Long, FlowerDTO> mapFlowerDto(List<Flower> flowerList) {
-        Map<Long, FlowerDTO> flowerDTOs = new TreeMap<>();
+    /**
+     * Заполнение карты цветков.
+     * @param flowerList - список цветков
+     */
+    private void mapFlowerDto(List<Flower> flowerList) {
         for (Flower f : flowerList) {
             flowerDTOs.put(f.getId(), mapper.map(f, FlowerDTO.class));
         }
         if (flowerDTOs.values().isEmpty()) {
             errorString = "Flower not found!";
         }
-        return flowerDTOs;
     }
 
+    /**
+     * Добавление цветка в корзину.
+     * @param numberToCart - количество цветков
+     * @param flowerDTO - объект FlowerDTO
+     * @param userDTO - объект UserDTO
+     * @return true - если цветок добавлен, false - если цветок не добавлен
+     */
     @Transactional
     private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, UserDTO userDTO){
         return cartService.isAddFlowerToCart(userDTO,flowerDTO,numberToCart);

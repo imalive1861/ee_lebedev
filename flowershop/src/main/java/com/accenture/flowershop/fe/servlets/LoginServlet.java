@@ -17,15 +17,25 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+/**
+ * Сервлет, использующийся для авторизации пользователя.
+ */
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
+    /**
+     * Ссылка на бизнес уровень для сущности User.
+     */
     @Autowired
     private UserBusinessService userBusinessService;
-
+    /**
+     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
+     */
     @Autowired
     private CartService cartService;
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 
@@ -44,13 +54,31 @@ public class LoginServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
+    /**
+     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
+     */
     private boolean hasError = true;
+    /**
+     * Сообщение об ошибке.
+     */
     private String errorString = null;
 
+    /**
+     * Запрос POST. Проверяет нажаты ли кнопки.
+     * При наличии ошибки выводит сообщение об ошибке.
+     * При отсутствии ошибки перенаправляет на главную страницу.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        login(request);
+        HttpSession session = request.getSession();
+
+        if (request.getParameter("loginButton") != null) {
+            UserDTO userDTO = login(
+                    request.getParameter("login"),
+                    request.getParameter("password"));
+            storeUserToSession(userDTO, session);
+        }
 
         request.setAttribute("errorString", errorString);
 
@@ -65,6 +93,9 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Запрос GET. Пересылает запрос на форму login.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher =
@@ -72,22 +103,37 @@ public class LoginServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Авторизация пользователя.
+     * @param login - логин
+     * @param password - пароль
+     */
     @Transactional
-    private void login(HttpServletRequest request) {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        if (login == null || password == null || login.length() == 0 || password.length() == 0) {
+    private UserDTO login(String login, String password) {
+        if (login == null
+                || password == null
+                || login.length() == 0
+                || password.length() == 0) {
             errorString = "Required username and password!";
-            return;
+            return null;
         }
         User user = userBusinessService.logIn(login, password);
         if (user != null) {
             hasError = false;
-            HttpSession session = request.getSession();
-            SessionUtils.storeLoginedUser(session, mapper.map(user, UserDTO.class));
-            SessionUtils.storeUserCart(session, cartService.setCart(login));
-            return;
+            return mapper.map(user, UserDTO.class);
         }
         errorString = "User Name or password invalid";
+        return null;
+    }
+
+    /**
+     * Сохранение пользователя и создание корзины пользователя в сессии.
+     * @param session - объект HttpSession
+     */
+    private void storeUserToSession(UserDTO userDTO, HttpSession session) {
+        if (userDTO != null) {
+            SessionUtils.storeLoginedUser(session, userDTO);
+            SessionUtils.storeUserCart(session, cartService.setCart(userDTO.getLogin()));
+        }
     }
 }

@@ -15,9 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Сервлет, использующийся для деавторизации.
+ */
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 public class LogoutServlet extends HttpServlet {
 
+    /**
+     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
+     */
     @Autowired
     private CartService cartService;
 
@@ -36,15 +42,27 @@ public class LogoutServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doGet(request, response);
+    /**
+     * Запрос POST. Перенаправляет запрос на GET.
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * Запрос GET. Деавторизует пользователя и перенаправляет на страницу авторизации.
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         logOut(request);
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 
+    /**
+     * Деавторизация.
+     * @param request - объект HttpServletRequest
+     */
     @Transactional
     private void logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
