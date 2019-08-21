@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     public OrderBusinessServiceImpl(){}
 
     @Override
+    @Transactional
     public void close(Order order){
         if (order.getStatus().equals(OrderStatus.PAID)) {
             order.setDateClose(new Date());

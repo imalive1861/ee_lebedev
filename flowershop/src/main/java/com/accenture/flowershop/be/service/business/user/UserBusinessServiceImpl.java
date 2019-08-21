@@ -8,6 +8,7 @@ import com.accenture.flowershop.services.jms.ProducerTest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -52,6 +53,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     @Override
+    @Transactional
     public void save(User user){
         user.setCash(new BigDecimal(2000.00));
         user.setDiscount(0);
@@ -62,6 +64,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     @Override
+    @Transactional
     public void update(User user) {
         userRepository.saveAndFlush(user);
     }

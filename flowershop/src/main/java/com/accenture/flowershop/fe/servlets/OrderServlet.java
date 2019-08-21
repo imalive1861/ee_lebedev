@@ -10,7 +10,6 @@ import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletConfig;
@@ -119,7 +118,6 @@ public class OrderServlet extends HttpServlet {
      * @param userDTO - объект UserDTO
      * @param orderDTO - объект OrderDTO
      */
-    @Transactional
     private void startCreateOrder(UserDTO userDTO, OrderDTO orderDTO) {
         User user = mapper.map(userDTO, User.class);
         Order order = mapper.map(orderDTO,Order.class);

@@ -7,7 +7,6 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -108,7 +107,6 @@ public class LoginServlet extends HttpServlet {
      * @param login - логин
      * @param password - пароль
      */
-    @Transactional
     private UserDTO login(String login, String password) {
         if (login == null
                 || password == null

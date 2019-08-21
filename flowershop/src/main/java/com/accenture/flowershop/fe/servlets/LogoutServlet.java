@@ -3,7 +3,6 @@ package com.accenture.flowershop.fe.servlets;
 import com.accenture.flowershop.fe.servicedto.cartdto.CartService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletConfig;
@@ -63,7 +62,6 @@ public class LogoutServlet extends HttpServlet {
      * Деавторизация.
      * @param request - объект HttpServletRequest
      */
-    @Transactional
     private void logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         cartService.clear(SessionUtils.getLoginedUser(session).getLogin());
