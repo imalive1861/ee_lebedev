@@ -2,6 +2,8 @@ package com.accenture.flowershop.fe.dto;
 
 import com.accenture.flowershop.fe.enums.UserRoles;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,15 @@ public class UserDTO {
     /**
      * Логин для авторизации.
      */
+    @NotNull(message = "Login cannot be empty!")
+    @Size(min=4, max=20, message = "Login length minimum 4, maximum 20!")
     private String login;
 
     /**
      * Пароль для авторизации.
      */
+    @NotNull(message = "Password cannot be empty!")
+    @Size(min=8, max=20, message = "Password length minimum 8, maximum 20!")
     private String password;
 
     /**

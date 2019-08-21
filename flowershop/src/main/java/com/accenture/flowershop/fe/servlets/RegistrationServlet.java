@@ -14,7 +14,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
+import java.util.Set;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
@@ -53,7 +58,7 @@ public class RegistrationServlet extends HttpServlet {
     /**
      * Сообщение об ошибке.
      */
-    private String errorString = null;
+    private String errorString = "";
     /**
      * Сообщение об успешном действии.
      */
@@ -75,7 +80,7 @@ public class RegistrationServlet extends HttpServlet {
         request.setAttribute("okString", okString);
 
         if (hasError){
-            errorString = null;
+            errorString = "";
             okString = null;
             RequestDispatcher dispatcher =
                     this.getServletContext().getRequestDispatcher("/view/registration.jsp");
@@ -106,31 +111,32 @@ public class RegistrationServlet extends HttpServlet {
         UserDTO userDTO = new UserDTO.Builder()
                 .login(login)
                 .name(name)
+                .password(password)
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .build();
 
-        if (login == null ||        login.length() == 0 ||
-            password == null ||     password.length() == 0 ||
-            name == null ||         name.length() == 0 ||
-            address == null ||      address.length() == 0 ||
-            phoneNumber == null ||  phoneNumber.length() == 0) {
-            errorString = "Fill empty sells!";
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<UserDTO> violation : violations) {
+                String propertyPath = violation.getPropertyPath().toString();
+                String message = violation.getMessage();
+                request.setAttribute("error" + propertyPath, message);
+            }
             return;
         }
+
         if (userBusinessService.existsByLogin(userDTO.getLogin())) {
             request.setAttribute("user", userDTO);
             errorString = "Enter unique login!";
             return;
         }
-        if (password.length() < 8){
-            request.setAttribute("user", userDTO);
-            errorString = "Password must be more than 8 symbols!";
-            return;
-        }
+
         hasError = false;
         request.setAttribute("user", userDTO);
-        userDTO.setPassword(password);
         userBusinessService.save(mapper.map(userDTO, User.class));
         okString = "Registration completed successfully!";
     }

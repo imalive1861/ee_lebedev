@@ -21,11 +21,12 @@
         <tr>
             <td>Login</td>
             <td><input type="text" id="login" name="login" value= "${user.login}" /> </td>
-            <td><div id="somediv"></div></td>
+            <td><div id="somediv"></div><div style="color: red;">${errorlogin}</div></td>
         </tr>
         <tr>
             <td>Password</td>
             <td><input type="text" name="password" value= "${user.password}" /> </td>
+            <td><p style="color: red;">${errorpassword}</p></td>
         </tr>
         <tr>
             <td>Full Name</td>
