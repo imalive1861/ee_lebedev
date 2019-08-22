@@ -4,6 +4,7 @@ import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.utils.config.spring.AppConfig;
 import com.accenture.flowershop.be.utils.config.spring.ApplicationConfig;
 import com.accenture.flowershop.be.utils.config.spring.WebConfig;
+import com.accenture.flowershop.fe.enums.UserRoles;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,22 @@ public class UserBusinessServiceTest {
     public void existsByLogin_randomLogin_falseReturned(){
         boolean random = userBusinessService.existsByLogin("dafsdfasfdfasdfasdfasfadbn");
         assertFalse(random);
+    }
+
+    @Test
+    public void save_newUser_newUserReturned(){
+        User user = new User.Builder()
+                .login("test")
+                .password("testtest")
+                .name("Test")
+                .address("Test")
+                .phoneNumber("Test")
+                .build();
+        userBusinessService.save(user);
+        assertEquals("User \"test\" failed first test!",
+                user.getRole(), UserRoles.CUSTOMER);
+        assertNotNull("User \"test\" failed second test!",
+                userBusinessService.logIn("test","testtest"));
     }
 
     @Test
