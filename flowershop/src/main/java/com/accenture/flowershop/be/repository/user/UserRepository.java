@@ -19,4 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return true если существует, false если не существует
      */
     boolean existsByLogin(String login);
+    /**
+     * Найти пользователя по комбинации логина и пароля.
+     * @param login - логин пользователя
+     * @param password - парольпользователя
+     * @return объект User если найден, null если не найден
+     */
+    User getByLoginAndPassword(String login, String password);
 }

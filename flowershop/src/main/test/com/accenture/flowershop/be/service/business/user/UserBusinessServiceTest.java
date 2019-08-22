@@ -12,8 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.math.BigDecimal;
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -23,27 +21,45 @@ import static org.springframework.test.util.AssertionErrors.*;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ContextConfiguration(classes = {WebConfig.class, ApplicationConfig.class, AppConfig.class})
 @WebAppConfiguration
-public class UserBusinessServiceImplTest {
+public class UserBusinessServiceTest {
 
     @Autowired
     private UserBusinessService userBusinessService;
 
     @Test
     public void logIn_admin_adminUserReturned(){
-        User admin = userBusinessService.getByLogin("admin");
-        assertEquals("Login \"admin\" failed verification!",admin.getLogin(),"admin");
+        User admin = userBusinessService.logIn("admin", "admin123");
+        assertNotNull("Login \"admin\" failed verification!", admin);
     }
 
     @Test
-    public void logIn_randomLogin_nullReturned(){
-        User ololo = userBusinessService.getByLogin("dafsdfasfdfasdfasdfasfadbn");
-        assertNull(ololo);
+    public void logIn_randomLoginAndPassword_nullReturned(){
+        User random = userBusinessService.logIn("dafsdfa","kasdjhfg");
+        assertNull(random);
     }
 
     @Test
-    public void logIn_emptyLogin_nullReturned(){
-        User ololo = userBusinessService.getByLogin("");
-        assertNull(ololo);
+    public void logIn_emptyLoginAndRandomPassword_nullReturned(){
+        User user = userBusinessService.logIn("","asdfsdf");
+        assertNull(user);
+    }
+
+    @Test
+    public void logIn_adminLoginAndEmptyPassword_nullReturned(){
+        User user = userBusinessService.logIn("admin","");
+        assertNull(user);
+    }
+
+    @Test
+    public void logIn_adminLoginAndRandomPassword_nullReturned(){
+        User user = userBusinessService.logIn("admin","asdfsdf");
+        assertNull(user);
+    }
+
+    @Test
+    public void logIn_emptyLoginAndPassword_nullReturned(){
+        User user = userBusinessService.logIn("","");
+        assertNull(user);
     }
 
     @Test
@@ -72,5 +88,23 @@ public class UserBusinessServiceImplTest {
         User user1New = userBusinessService.getByLogin("user1");
         assertEquals("User \"user1\" failed verification!",
                 user1New.getDiscount(), user1.getDiscount());
+    }
+
+    @Test
+    public void getByLogin_admin_adminUserReturned(){
+        User admin = userBusinessService.getByLogin("admin");
+        assertEquals("Login \"admin\" failed verification!",admin.getLogin(),"admin");
+    }
+
+    @Test
+    public void getByLogin_randomLogin_nullReturned(){
+        User user = userBusinessService.getByLogin("dafsdfasfdfasdfasdfasfadbn");
+        assertNull(user);
+    }
+
+    @Test
+    public void getByLogin_emptyLogin_nullReturned(){
+        User user = userBusinessService.getByLogin("");
+        assertNull(user);
     }
 }

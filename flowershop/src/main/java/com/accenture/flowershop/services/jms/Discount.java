@@ -2,16 +2,16 @@ package com.accenture.flowershop.services.jms;
 
 import java.io.Serializable;
 
-public class Sale implements Serializable {
+public class Discount implements Serializable {
     private String customerId;
-    private int sale;
+    private int discount;
 
-    public Sale() {
+    public Discount() {
     }
 
-    public Sale(String customerId, int sale){
+    public Discount(String customerId, int discount){
         this.customerId = customerId;
-        this.sale = sale;
+        this.discount = discount;
     }
 
     public void setCustomerId(String customerId) {
@@ -21,10 +21,10 @@ public class Sale implements Serializable {
         return customerId;
     }
 
-    public void setSale(int sale) {
-        this.sale = sale;
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
-    public int getSale() {
-        return sale;
+    public int getDiscount() {
+        return discount;
     }
 }

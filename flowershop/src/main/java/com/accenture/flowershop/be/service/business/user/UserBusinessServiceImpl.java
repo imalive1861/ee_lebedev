@@ -38,13 +38,13 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     @Override
     public User logIn(String login, String password) {
-        User user = getByLogin(login);
-        if (user != null && user.getPassword().equals(password)){
-            LOG.debug("Customer with login = {} name = {} log in",
-                    user.getLogin(), user.getName());
-            return user;
+        User user = userRepository.getByLoginAndPassword(login, password);
+        if (user != null){
+            LOG.debug("Customer \"{}\" log in.", user.getLogin());
+        } else {
+            LOG.debug("Customer \"{}\" with password \"{}\" not exist!", login, password);
         }
-        return null;
+        return user;
     }
 
     @Override
@@ -60,13 +60,14 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         user.setRole(UserRoles.CUSTOMER);
         user = producerTest.saleRequest(user);
         userRepository.saveAndFlush(user);
-        LOG.debug("Customer with login = {} name = {} was created", user.getLogin(), user.getName());
+        LOG.debug("Customer \"{}\" with login \"{}\" was created.", user, user.getLogin());
     }
 
     @Override
     @Transactional
     public void update(User user) {
         userRepository.saveAndFlush(user);
+        LOG.debug("Customer \"{}\" with login \"{}\" was updated.", user, user.getLogin());
     }
 
     @Override

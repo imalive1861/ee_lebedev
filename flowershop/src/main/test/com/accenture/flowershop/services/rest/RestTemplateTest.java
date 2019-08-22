@@ -1,4 +1,4 @@
-package com.accenture.flowershop.test.tests;
+package com.accenture.flowershop.services.rest;
 
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.junit.Before;

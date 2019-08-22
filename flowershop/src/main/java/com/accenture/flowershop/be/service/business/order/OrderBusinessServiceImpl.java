@@ -38,11 +38,10 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
             order.setDateClose(new Date());
             order.setStatus(OrderStatus.CLOSED);
             orderRepository.saveAndFlush(order);
-            LOG.debug("Order with id = {} was closed = {}",
-                    order.getId(), order.getDateClose());
+            LOG.debug("Order \"{}\" was closed {}", order.getId(), order.getDateClose());
             return;
         }
-        LOG.debug("Order with id = {} not closed", order.getId());
+        LOG.debug("Order \"{}\" not closed", order.getId());
     }
 
     @Override

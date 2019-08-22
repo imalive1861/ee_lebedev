@@ -1,7 +1,7 @@
 package com.accenture.flowershop.test.clients.jms;
 
 import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingService;
-import com.accenture.flowershop.services.jms.Sale;
+import com.accenture.flowershop.services.jms.Discount;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ public class JmsClient {
             Document document = builder.parse(input);
             String customerId = document.getDocumentElement().getAttribute("login");
             Random random = new Random();
-            Sale sale = new Sale(customerId, random.nextInt(10));
-            producer(sale);
+            Discount discount = new Discount(customerId, random.nextInt(10));
+            producer(discount);
         } catch (Exception ej) {
             ej.printStackTrace();
             try {
@@ -41,7 +41,7 @@ public class JmsClient {
         }
     }
 
-    private static void producer(Sale sale) throws JMSException {
+    private static void producer(Discount discount) throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
         Connection connection = connectionFactory.createConnection();
         connection.start();
@@ -50,7 +50,7 @@ public class JmsClient {
         Destination destination = session.createQueue("IN_QUEUE");
         MessageProducer producer = session.createProducer(destination);
         ObjectMessage message = session.createObjectMessage();
-        message.setObject(sale);
+        message.setObject(discount);
         producer.send(message);
         System.out.println("JCG printing@@ '" + message.getObject() + "'");
         connection.close();
