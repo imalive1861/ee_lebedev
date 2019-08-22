@@ -15,8 +15,8 @@ public class Cart {
      * Иднтификатор позиции в корзине.
      */
     @Id
-    @SequenceGenerator( name = "cartsSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
+    @SequenceGenerator( name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartsSeq")
     private long id;
 
     /**
@@ -41,6 +41,7 @@ public class Cart {
     /**
      * Суммарная цена за количество добавленных цветов.
      */
+    @Column(name = "sum_price")
     private BigDecimal sumPrice;
 
     public Cart(){}
