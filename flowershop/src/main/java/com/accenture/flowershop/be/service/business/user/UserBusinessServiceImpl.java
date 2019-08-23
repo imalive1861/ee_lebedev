@@ -58,9 +58,27 @@ public class UserBusinessServiceImpl implements UserBusinessService{
         user.setCash(new BigDecimal(2000.00));
         user.setDiscount(0);
         user.setRole(UserRoles.CUSTOMER);
-        user = producerTest.saleRequest(user);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
+        LOG.debug("Customer \"{}\" have {}% discount before JMS.", user, user.getDiscount());
+        DiscountThread thread = new DiscountThread(user);
+        thread.start();
         LOG.debug("Customer \"{}\" with login \"{}\" was created.", user, user.getLogin());
+    }
+
+    private class DiscountThread extends Thread {
+
+        User user;
+
+        DiscountThread(User user){
+            this.user = user;
+        }
+
+        @Override
+        public void run() {
+            user = producerTest.saleRequest(user);
+            LOG.debug("Customer \"{}\" have {}% discount after JMS.", user, user.getDiscount());
+            update(user);
+        }
     }
 
     @Override

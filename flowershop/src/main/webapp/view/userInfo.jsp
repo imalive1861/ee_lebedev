@@ -17,8 +17,8 @@
 User Name: <b>${loginedUser.name}</b><br/>
 Address: <b>${loginedUser.address}</b><br/>
 Phone Number: <b>${loginedUser.phoneNumber}</b><br/>
-Score: <b>${loginedUser.score}</b><br/>
-Sale: <b>${loginedUser.sale}</b><br/>
+Score: <b>${loginedUser.cash}</b><br/>
+Sale: <b>${loginedUser.discount}</b><br/>
 
 </body>
 </html>
