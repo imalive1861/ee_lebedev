@@ -19,6 +19,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
@@ -110,7 +112,7 @@ public class RegistrationServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phoneNumber");
 
         if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("errorConfirmPassword", "Passwords not equal!");
+            request.setAttribute("errorConfirmPassword", "Passwords do not match!");
             return;
         }
 
@@ -122,22 +124,11 @@ public class RegistrationServlet extends HttpServlet {
                 .phoneNumber(phoneNumber)
                 .build();
 
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<UserDTO> violation : violations) {
-                String propertyPath = violation.getPropertyPath().toString();
-                String message = violation.getMessage();
-                request.setAttribute("error" + propertyPath, message);
+        Map<String,String> errorMap = dataValidation(userDTO);
+        if (!errorMap.isEmpty()) {
+            for (String s: errorMap.keySet()) {
+                request.setAttribute(s, errorMap.get(s));
             }
-            return;
-        }
-
-        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
-            request.setAttribute("user", userDTO);
-            errorString = "Enter unique login!";
             return;
         }
 
@@ -145,5 +136,23 @@ public class RegistrationServlet extends HttpServlet {
         request.setAttribute("user", userDTO);
         userBusinessService.save(mapper.map(userDTO, User.class));
         okString = "Registration completed successfully!";
+    }
+
+    private Map<String, String> dataValidation(UserDTO userDTO) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Map<String,String> errorMap = new HashMap<>();
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<UserDTO> violation : violations) {
+                String propertyPath = "error" + violation.getPropertyPath().toString();
+                String message = violation.getMessage();
+                errorMap.put(propertyPath, message);
+            }
+        }
+        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
+            errorMap.put("errorlogin", "Login is busy, please choose another one!");
+        }
+        return errorMap;
     }
 }

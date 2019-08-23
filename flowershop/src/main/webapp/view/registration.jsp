@@ -21,17 +21,17 @@
         <tr>
             <td>Login</td>
             <td><input type="text" id="login" name="login" value= "${user.login}" /> </td>
-            <td><div id="somediv"></div><div style="color: red;">${errorlogin}</div></td>
+            <td><div id="errorlogin"></div><div style="color: red;">${errorlogin}</div></td>
         </tr>
         <tr>
             <td>New password</td>
-            <td><input type="password" name="newPassword" value= "" /> </td>
-            <td><p style="color: red;">${errorpassword}</p></td>
+            <td><input type="text" id="newPassword" name="newPassword" value= "" /> </td>
+            <td><div id="errorpassword"></div><div style="color: red;">${errorpassword}</div></td>
         </tr>
         <tr>
             <td>Confirm password</td>
-            <td><input type="password" name="confirmPassword" value= "" /> </td>
-            <td><p style="color: red;">${errorConfirmPassword}</p></td>
+            <td><input type="text" name="confirmPassword" value= "" /> </td>
+            <td><div style="color: red;">${errorConfirmPassword}</div></td>
         </tr>
         <tr>
             <td>Full Name</td>

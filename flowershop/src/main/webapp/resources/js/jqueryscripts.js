@@ -11,12 +11,12 @@ $(document).ready(function() {
             success: function(result){
                 if ($.trim(result) == "true") {
                     $("#reg").attr("disabled", true);
-                    $("#somediv").css('color', 'red');
-                    $("#somediv").text("Login is busy, please choose another one!")
+                    $("#errorlogin").css('color', 'red');
+                    $("#errorlogin").text("Login is busy, please choose another one!")
                 } else {
                     $("#reg").attr("disabled", false);
-                    $("#somediv").css('color', 'green');
-                    $("#somediv").text("Login is ok!")
+                    $("#errorlogin").css('color', 'green');
+                    $("#errorlogin").text("Login is ok!")
                 }
             }
         })
