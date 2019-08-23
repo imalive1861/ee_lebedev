@@ -24,9 +24,14 @@
             <td><div id="somediv"></div><div style="color: red;">${errorlogin}</div></td>
         </tr>
         <tr>
-            <td>Password</td>
-            <td><input type="text" name="password" value= "${user.password}" /> </td>
+            <td>New password</td>
+            <td><input type="password" name="newPassword" value= "" /> </td>
             <td><p style="color: red;">${errorpassword}</p></td>
+        </tr>
+        <tr>
+            <td>Confirm password</td>
+            <td><input type="password" name="confirmPassword" value= "" /> </td>
+            <td><p style="color: red;">${errorConfirmPassword}</p></td>
         </tr>
         <tr>
             <td>Full Name</td>

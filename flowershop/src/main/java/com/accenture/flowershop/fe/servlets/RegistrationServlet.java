@@ -103,15 +103,21 @@ public class RegistrationServlet extends HttpServlet {
 
     private void registration(HttpServletRequest request) {
         String login = request.getParameter("login");
-        String password = request.getParameter("password");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
         String name = request.getParameter("name");
         String address = request.getParameter("address");
         String phoneNumber = request.getParameter("phoneNumber");
 
+        if (!newPassword.equals(confirmPassword)) {
+            request.setAttribute("errorConfirmPassword", "Passwords not equal!");
+            return;
+        }
+
         UserDTO userDTO = new UserDTO.Builder()
                 .login(login)
                 .name(name)
-                .password(password)
+                .password(newPassword)
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .build();
