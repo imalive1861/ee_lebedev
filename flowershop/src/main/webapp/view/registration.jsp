@@ -30,8 +30,8 @@
         </tr>
         <tr>
             <td>Confirm password</td>
-            <td><input type="text" name="confirmPassword" value= "" /> </td>
-            <td><div style="color: red;">${errorConfirmPassword}</div></td>
+            <td><input type="text" id="confirmPassword" name="confirmPassword" value= "" /> </td>
+            <td><div id="errorConfirmPassword"></div><div style="color: red;">${errorConfirmPassword}</div></td>
         </tr>
         <tr>
             <td>Full Name</td>
