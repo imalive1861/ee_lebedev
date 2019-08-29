@@ -1,4 +1,4 @@
-package com.accenture.flowershop.fe.servicedto.cartdto;
+package com.accenture.flowershop.fe.service.dto.cartdto;
 
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.OrderDTO;

@@ -1,12 +1,10 @@
-package com.accenture.flowershop.fe.servicedto.cartdto;
+package com.accenture.flowershop.fe.service.dto.cartdto;
 
 import com.accenture.flowershop.fe.dto.CartDTO;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.enums.OrderStatus;
-import org.dozer.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,12 +20,6 @@ import static java.math.RoundingMode.UP;
 public class CartServiceImpl implements CartService {
 
     /**
-     * Маппер.
-     */
-    @Autowired
-    private Mapper mapper;
-
-    /**
      * Карта временных заказов пользователей.
      */
     private Map<String, OrderDTO> cart = new TreeMap<>();
@@ -40,9 +32,9 @@ public class CartServiceImpl implements CartService {
      * @return объект OrderDTO
      */
     private OrderDTO getCartById(String login){
-            if (cart.get(login) != null) {
-                return cart.get(login);
-            }
+        if (cart.get(login) != null) {
+            return cart.get(login);
+        }
         return null;
     }
 
@@ -121,11 +113,9 @@ public class CartServiceImpl implements CartService {
     }
 
     public OrderDTO setCart(String login){
-        if (!cart.containsKey(login)){
-            cart.put(login, new OrderDTO.Builder()
-                    .status(OrderStatus.OPENED)
-                    .build());
-        }
+        cart.putIfAbsent(login, new OrderDTO.Builder()
+                .status(OrderStatus.OPENED)
+                .build());
         return cart.get(login);
     }
 }

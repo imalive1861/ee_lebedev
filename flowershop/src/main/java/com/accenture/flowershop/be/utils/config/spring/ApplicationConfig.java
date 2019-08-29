@@ -64,6 +64,7 @@ public class ApplicationConfig {
         properties.setProperty("hibernate.ejb.naming_strategy","org.hibernate.cfg.ImprovedNamingStrategy");
         properties.setProperty("show_sql", "false");
         properties.setProperty("hibernate.format_sql","true");
+        properties.setProperty("javax.persistence.lock.scope","EXTENDED");
         entityManagerFactory.setJpaProperties(properties);
         return entityManagerFactory;
     }

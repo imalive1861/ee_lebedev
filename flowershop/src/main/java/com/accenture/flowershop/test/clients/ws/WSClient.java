@@ -15,23 +15,24 @@ public class WSClient {
         Timer timer = new Timer();
         timer.schedule(new AddFlowers(), 0, 10 * 60 * 1000);
     }
-}
-class AddFlowers extends TimerTask {
-    public void run() {
-        Random random = new Random();
-        int num = 10 + random.nextInt(30 - 10);
-        try {
-            add(num);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+
+    static class AddFlowers extends TimerTask {
+        public void run() {
+            Random random = new Random();
+            int num = 10 + random.nextInt(30 - 10);
+            try {
+                add(num);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
-    }
-    private void add(int num) throws MalformedURLException{
-        URL wsdlURL = new URL("http://localhost:8080/ws/flowers?wsdl");
-        QName SERVICE_NAME = new QName(
-                "http://ws.services.flowershop.accenture.com/", "FlowersStockWebServiceImplService");
-        Service service = Service.create(wsdlURL, SERVICE_NAME);
-        FlowersStockWebService client = service.getPort(FlowersStockWebService.class);
-        client.increaseFlowersStockSize(num);
+        private void add(int num) throws MalformedURLException{
+            URL wsdlURL = new URL("http://localhost:8080/ws/flowers?wsdl");
+            QName SERVICE_NAME = new QName(
+                    "http://ws.services.flowershop.accenture.com/", "FlowersStockWebServiceImplService");
+            Service service = Service.create(wsdlURL, SERVICE_NAME);
+            FlowersStockWebService client = service.getPort(FlowersStockWebService.class);
+            client.increaseFlowersStockSize(num);
+        }
     }
 }

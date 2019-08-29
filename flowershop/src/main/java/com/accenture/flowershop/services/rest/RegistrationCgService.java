@@ -2,7 +2,7 @@ package com.accenture.flowershop.services.rest;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.servicedto.userdto.UserService;
+import com.accenture.flowershop.fe.service.dto.userdto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
