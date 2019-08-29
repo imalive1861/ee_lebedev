@@ -1,127 +1,106 @@
 package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.entity.User;
-import com.accenture.flowershop.be.utils.config.spring.AppConfig;
-import com.accenture.flowershop.be.utils.config.spring.ApplicationConfig;
-import com.accenture.flowershop.be.utils.config.spring.WebConfig;
-import com.accenture.flowershop.fe.enums.UserRoles;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.springframework.test.util.AssertionErrors.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@ContextConfiguration(classes = {WebConfig.class, ApplicationConfig.class, AppConfig.class})
-@WebAppConfiguration
+@RunWith(MockitoJUnitRunner.class)
 public class UserBusinessServiceTest {
 
-    @Autowired
-    private UserBusinessService userBusinessService;
+    @Mock
+    UserBusinessService ubs;
+
+    private User admin;
+
+    @Before
+    public void init() {
+        admin = new User.Builder()
+                .login("admin")
+                .password("admin123")
+                .build();
+        when(ubs.logIn("admin", "admin123")).thenReturn(admin);
+        when(ubs.existsByLogin("admin")).thenReturn(true);
+        when(ubs.getByLogin("admin")).thenReturn(admin);
+
+    }
 
     @Test
     public void logIn_admin_adminUserReturned(){
-        User admin = userBusinessService.logIn("admin", "admin123");
-        assertNotNull("Login \"admin\" failed verification!", admin);
+        assertEquals(ubs.logIn("admin", "admin123"), admin);
+        verify(ubs).logIn("admin", "admin123");
+
     }
 
     @Test
     public void logIn_randomLoginAndPassword_nullReturned(){
-        User random = userBusinessService.logIn("dafsdfa","kasdjhfg");
-        assertNull(random);
+        assertNull(ubs.logIn("dafsdfa", "kasdjhfg"));
+        verify(ubs).logIn("dafsdfa","kasdjhfg");
     }
 
     @Test
     public void logIn_emptyLoginAndRandomPassword_nullReturned(){
-        User user = userBusinessService.logIn("","asdfsdf");
-        assertNull(user);
+        assertNull(ubs.logIn("", "asdfsdf"));
+        verify(ubs).logIn("","asdfsdf");
     }
 
     @Test
     public void logIn_adminLoginAndEmptyPassword_nullReturned(){
-        User user = userBusinessService.logIn("admin","");
-        assertNull(user);
+        assertNull(ubs.logIn("admin", ""));
+        verify(ubs).logIn("admin","");
     }
 
     @Test
     public void logIn_adminLoginAndRandomPassword_nullReturned(){
-        User user = userBusinessService.logIn("admin","asdfsdf");
-        assertNull(user);
+        assertNull(ubs.logIn("admin","asdfsdf"));
+        verify(ubs).logIn("admin","asdfsdf");
     }
 
     @Test
     public void logIn_emptyLoginAndPassword_nullReturned(){
-        User user = userBusinessService.logIn("","");
-        assertNull(user);
+        assertNull(ubs.logIn("",""));
+        verify(ubs).logIn("","");
     }
 
     @Test
     public void existsByLogin_adminLogin_trueReturned(){
-        boolean admin = userBusinessService.existsByLogin("admin");
-        assertTrue(admin);
+        assertTrue(ubs.existsByLogin("admin"));
+        verify(ubs).existsByLogin("admin");
     }
 
     @Test
     public void existsByLogin_emptyLogin_falseReturned(){
-        boolean empty = userBusinessService.existsByLogin("");
-        assertFalse(empty);
+        assertFalse(ubs.existsByLogin(""));
+        verify(ubs).existsByLogin("");
     }
 
     @Test
     public void existsByLogin_randomLogin_falseReturned(){
-        boolean random = userBusinessService.existsByLogin("dafsdfasfdfasdfasdfasfadbn");
-        assertFalse(random);
-    }
-
-    @Test
-    public void save_newUser_newUserReturned(){
-        User user = new User.Builder()
-                .login("test")
-                .password("testtest")
-                .name("Test")
-                .address("Test")
-                .phoneNumber("Test")
-                .build();
-        userBusinessService.save(user);
-        assertEquals("User \"test\" failed first test!",
-                user.getRole(), UserRoles.CUSTOMER);
-        assertNotNull("User \"test\" failed second test!",
-                userBusinessService.logIn("test","testtest"));
-    }
-
-    @Test
-    public void update_user1DiscountUpdate_user1DiscountReturned(){
-        User user1 = userBusinessService.getByLogin("user1");
-        user1.setDiscount(11);
-        userBusinessService.update(user1);
-        User user1New = userBusinessService.getByLogin("user1");
-        assertEquals("User \"user1\" failed verification!",
-                user1New.getDiscount(), user1.getDiscount());
+        assertFalse(ubs.existsByLogin("dafsdfasfdfasdfasdfasfadbn"));
+        verify(ubs).existsByLogin("dafsdfasfdfasdfasdfasfadbn");
     }
 
     @Test
     public void getByLogin_admin_adminUserReturned(){
-        User admin = userBusinessService.getByLogin("admin");
-        assertEquals("Login \"admin\" failed verification!",admin.getLogin(),"admin");
+        assertEquals(ubs.getByLogin("admin"), admin);
+        verify(ubs).getByLogin("admin");
     }
 
     @Test
     public void getByLogin_randomLogin_nullReturned(){
-        User user = userBusinessService.getByLogin("dafsdfasfdfasdfasdfasfadbn");
-        assertNull(user);
+        assertNull(ubs.getByLogin("sdfafwe"));
+        verify(ubs).getByLogin("sdfafwe");
     }
 
     @Test
     public void getByLogin_emptyLogin_nullReturned(){
-        User user = userBusinessService.getByLogin("");
-        assertNull(user);
+        assertNull(ubs.getByLogin(""));
+        verify(ubs).getByLogin("");
     }
 }
