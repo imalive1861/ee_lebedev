@@ -3,47 +3,51 @@ package com.accenture.flowershop.services.rest;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import javax.ws.rs.BadRequestException;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RestTemplateTest {
 
-    private UserDTO testUsedLoginAdmin;
-    private UserDTO testNotUsedLogin;
+    private UserDTO testValidUserData;
+    private UserDTO testUnvalidUserData;
 
     @Before
     public void initUsers() {
-        testUsedLoginAdmin = new UserDTO();
-        testUsedLoginAdmin.setLogin("admin");
+        testValidUserData = new UserDTO.Builder()
+                .login("ololo")
+                .password("123123123")
+                .build();
 
-        testNotUsedLogin = new UserDTO();
-        testNotUsedLogin.setLogin("asklfjsdasfrwqgerhtrlknheoruelfj");
+        testUnvalidUserData = new UserDTO.Builder()
+                .login("admin")
+                .build();
     }
 
     @Test
-    public void testUserLogin() {
-        assertTrue(testLogins(testUsedLoginAdmin));
-        assertFalse(testLogins(testNotUsedLogin));
+    public void testUsedLogin() {
+        testLogins(testValidUserData);
     }
 
-    private static boolean testLogins(UserDTO testLogin) {
+    @Test(expected = BadRequestException.class)
+    public void testNotUsedLogin() {
+        testLogins(testUnvalidUserData);
+    }
+
+    private void testLogins(UserDTO testLogin) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
         HttpEntity<UserDTO> requestBody = new HttpEntity<>(testLogin, headers);
-        boolean e = restTemplate.postForObject(
-                "http://localhost:8080/rest/reg/checklogin", requestBody, Boolean.class);
-        if (e) {
-            System.out.println("Login \"" + testLogin.getLogin() + "\" is used");
-        } else {
-            System.out.println("Login \"" + testLogin.getLogin() + "\" is not used");
-        }
-        return e;
+        restTemplate.postForObject(
+                "http://localhost:8080/rest/reg/loginValidation", requestBody, String.class);
     }
 }

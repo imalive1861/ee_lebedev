@@ -20,14 +20,6 @@ public class RegistrationCgService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/checklogin")
-    public boolean checkLogin(UserDTO userDTO){
-        return userBusinessService.existsByLogin(userDTO.getLogin());
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/loginValidation")
     public Response loginValidation(UserDTO userDTO){
         String error = userService.loginValidation(userDTO);
