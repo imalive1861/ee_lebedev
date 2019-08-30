@@ -3,8 +3,6 @@ package com.accenture.flowershop.services.rest;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.ws.rs.BadRequestException;
 
-@RunWith(MockitoJUnitRunner.class)
 public class RestTemplateTest {
 
     private UserDTO testValidUserData;

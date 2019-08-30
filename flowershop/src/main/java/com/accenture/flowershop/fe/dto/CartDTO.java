@@ -1,7 +1,5 @@
 package com.accenture.flowershop.fe.dto;
 
-import org.springframework.data.annotation.Version;
-
 import java.math.BigDecimal;
 
 /**

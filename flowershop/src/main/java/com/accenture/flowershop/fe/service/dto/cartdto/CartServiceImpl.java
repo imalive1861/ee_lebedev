@@ -32,7 +32,7 @@ public class CartServiceImpl implements CartService {
      * @return объект OrderDTO
      */
     private OrderDTO getCartById(String login){
-        if (cart.get(login) != null) {
+        if (cart.containsKey(login)) {
             return cart.get(login);
         }
         return null;
@@ -79,6 +79,7 @@ public class CartServiceImpl implements CartService {
         for (CartDTO c: orderDTO.getCarts()) {
             if (c.getFlower().getId() == flowerDTO.getId()) {
                 cartDTO = c;
+                break;
             }
         }
         BigDecimal sumPrice =

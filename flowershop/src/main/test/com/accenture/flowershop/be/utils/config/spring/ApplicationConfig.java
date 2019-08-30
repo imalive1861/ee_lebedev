@@ -1,10 +1,8 @@
 package com.accenture.flowershop.be.utils.config.spring;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -23,7 +21,6 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("com.accenture.flowershop")
-@PropertySource(value = "classpath:testconfig/datasource_test.properties")
 @EnableScheduling
 public class ApplicationConfig {
 
@@ -32,22 +29,13 @@ public class ApplicationConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Value("${db.driver}")
-    private String PROP_DATABASE_DRIVER;
-    @Value("${db.username}")
-    private String PROP_DATABASE_USERNAME;
-    @Value("${db.password}")
-    private String PROP_DATABASE_PASSWORD;
-    @Value("${db.url}")
-    private String PROP_DATABASE_URL;
-
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(PROP_DATABASE_DRIVER);
-        dataSource.setUrl(PROP_DATABASE_URL);
-        dataSource.setUsername(PROP_DATABASE_USERNAME);
-        dataSource.setPassword(PROP_DATABASE_PASSWORD);
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:~/user");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
         return dataSource;
     }
 
