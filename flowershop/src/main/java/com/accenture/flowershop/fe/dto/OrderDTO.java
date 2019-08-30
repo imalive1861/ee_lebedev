@@ -14,6 +14,11 @@ import java.util.List;
 public class OrderDTO {
 
     /**
+     * Поле версии.
+     */
+    private long version;
+
+    /**
      * Иднтификатор заказа.
      */
     private long id;
@@ -49,6 +54,13 @@ public class OrderDTO {
     private List<CartDTO> carts = new ArrayList<>();
 
     public OrderDTO(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

@@ -11,6 +11,11 @@ import java.util.List;
 public class FlowerDTO {
 
     /**
+     * Поле версии.
+     */
+    private long version;
+
+    /**
      * Иднтификатор цветка.
      */
     private long id;
@@ -36,6 +41,13 @@ public class FlowerDTO {
     private List<CartDTO> carts = new ArrayList<>();
 
     public FlowerDTO(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

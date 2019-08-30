@@ -16,6 +16,11 @@ import java.util.List;
 public class UserDTO {
 
     /**
+     * Поле версии.
+     */
+    private long version;
+
+    /**
      * Иднтификатор пользователя.
      */
     private long id;
@@ -70,6 +75,13 @@ public class UserDTO {
     private List<OrderDTO> orders = new ArrayList<>();
 
     public UserDTO(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

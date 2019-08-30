@@ -20,6 +20,12 @@ import java.util.List;
 public class User implements Serializable {
 
     /**
+     * Поле версии.
+     */
+    @Version
+    private long version;
+
+    /**
      * Иднтификатор пользователя.
      */
     @Id
@@ -80,6 +86,13 @@ public class User implements Serializable {
     private List<Order> orders = new ArrayList<>();
 
     public User(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

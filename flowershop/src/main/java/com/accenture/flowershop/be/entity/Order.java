@@ -18,6 +18,12 @@ import java.util.List;
 public class Order {
 
     /**
+     * Поле версии.
+     */
+    @Version
+    private long version;
+
+    /**
      * Иднтификатор заказа.
      */
     @Id
@@ -63,6 +69,13 @@ public class Order {
     private List<Cart> carts = new ArrayList<>();
 
     public Order(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

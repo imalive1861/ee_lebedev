@@ -14,6 +14,12 @@ import java.util.List;
 public class Flower {
 
     /**
+     * Поле версии.
+     */
+    @Version
+    private long version;
+
+    /**
      * Иднтификатор цветка.
      */
     @Id
@@ -43,6 +49,13 @@ public class Flower {
     private List<Cart> carts = new ArrayList<>();
 
     public Flower(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public void setId(long id) {
         this.id = id;

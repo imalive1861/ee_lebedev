@@ -1,5 +1,7 @@
 package com.accenture.flowershop.fe.dto;
 
+import org.springframework.data.annotation.Version;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,6 +9,11 @@ import java.math.BigDecimal;
  * Свойства: id, number, order, flower, sumPrice.
  */
 public class CartDTO {
+
+    /**
+     * Поле версии.
+     */
+    private long version;
 
     /**
      * Иднтификатор позиции в корзине.
@@ -34,6 +41,13 @@ public class CartDTO {
     private BigDecimal sumPrice;
 
     public CartDTO(){}
+
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
 
     public long getId() {
         return id;
