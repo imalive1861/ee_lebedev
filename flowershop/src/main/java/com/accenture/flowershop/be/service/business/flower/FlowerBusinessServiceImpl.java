@@ -36,6 +36,11 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
     }
 
     @Override
+    public void updateAll(List<Flower> flowers) {
+        flowerRepository.saveAll(flowers);
+    }
+
+    @Override
     public Flower get(long id) {
             return flowerRepository.getOne(id);
     }

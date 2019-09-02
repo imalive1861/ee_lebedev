@@ -1,9 +1,8 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.OrderDTO;
-import org.dozer.Mapper;
+import com.accenture.flowershop.fe.service.dto.orderdto.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -15,8 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * Сервлет для работы с администратором. Используется для просмотра и закрытия заказов.
@@ -30,10 +30,10 @@ public class AdminServlet extends HttpServlet {
     @Autowired
     private OrderBusinessService orderBusinessService;
     /**
-     * Маппер.
+     * Вспомогательный сервис.
      */
     @Autowired
-    private Mapper mapper;
+    private OrderService orderService;
 
     public AdminServlet() {
         super();
@@ -83,25 +83,26 @@ public class AdminServlet extends HttpServlet {
      */
     private void closeOrder(String orderId) {
         if (orderId != null) {
-            OrderDTO orderDTO = orderDTOs.get(Long.parseLong(orderId));
-            orderBusinessService.close(mapper.map(orderDTO, Order.class));
+            OrderDTO orderDTO = orderDTOsMap.get(Long.parseLong(orderId));
+            orderBusinessService.close(orderService.fromDto(orderDTO));
         }
     }
 
     /**
      * Карта существующих заказов.
      */
-    private Map<Long, OrderDTO> orderDTOs;
+    private Map<Long, OrderDTO> orderDTOsMap;
 
     /**
      * Заполнение карты существующих заказов и вывод информации о заказах на форму.
      * @param request - объект HttpServletRequest
      */
     private void dataOutput(HttpServletRequest request) {
-        orderDTOs = new TreeMap<>();
-        for (Order o: orderBusinessService.getAll()){
-            orderDTOs.put(o.getId(), mapper.map(o,OrderDTO.class));
-        }
-        request.setAttribute("orderList", orderDTOs.values());
+        List<OrderDTO> orderDTOs = orderService.toDtoList(orderBusinessService.getAll());
+        orderDTOsMap = orderDTOs.stream().collect(Collectors.toMap(
+                OrderDTO::getId,
+                o -> o
+        ));
+        request.setAttribute("orderList", orderDTOs);
     }
 }

@@ -8,7 +8,8 @@ import com.accenture.flowershop.fe.service.dto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import org.dozer.Mapper;
+import com.accenture.flowershop.fe.service.dto.orderdto.OrderService;
+import com.accenture.flowershop.fe.service.dto.userdto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -38,10 +39,15 @@ public class OrderServlet extends HttpServlet {
     @Autowired
     private UserBusinessService userBusinessService;
     /**
-     * Маппер.
+     * Вспомогательный сервис.
      */
     @Autowired
-    private Mapper mapper;
+    private OrderService orderService;
+    /**
+     * Вспомогательный сервис.
+     */
+    @Autowired
+    private UserService userService;
 
     public OrderServlet(){
         super();
@@ -101,7 +107,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("errorString", errorString);
 
         SessionUtils.storeLoginedUser(session,
-                mapper.map(userBusinessService.getByLogin(userDTO.getLogin()),UserDTO.class));
+                userService.toDto(userBusinessService.getByLogin(userDTO.getLogin())));
 
         if (hasError) {
             errorString = null;
@@ -119,8 +125,8 @@ public class OrderServlet extends HttpServlet {
      * @param orderDTO - объект OrderDTO
      */
     private void startCreateOrder(UserDTO userDTO, OrderDTO orderDTO) {
-        User user = mapper.map(userDTO, User.class);
-        Order order = mapper.map(orderDTO,Order.class);
+        User user = userService.fromDto(userDTO);
+        Order order = orderService.fromDto(orderDTO);
         if (checkUserCash(user, order.getSumPrice())) {
             createOrder(user,order);
             hasError = false;

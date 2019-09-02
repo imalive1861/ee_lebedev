@@ -1,9 +1,8 @@
 package com.accenture.flowershop.fe.servlets;
 
-import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import org.dozer.Mapper;
+import com.accenture.flowershop.fe.service.dto.userdto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -14,14 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
@@ -32,10 +25,10 @@ public class RegistrationServlet extends HttpServlet {
     @Autowired
     private UserBusinessService userBusinessService;
     /**
-     * Маппер.
+     * Вспомогательный сервис.
      */
     @Autowired
-    private Mapper mapper;
+    private UserService userService;
 
     public RegistrationServlet(){
         super();
@@ -124,7 +117,7 @@ public class RegistrationServlet extends HttpServlet {
                 .phoneNumber(phoneNumber)
                 .build();
 
-        Map<String,String> errorMap = dataValidation(userDTO);
+        Map<String,String> errorMap = userService.dataValidation(userDTO);
         if (!errorMap.isEmpty()) {
             for (String s: errorMap.keySet()) {
                 request.setAttribute(s, errorMap.get(s));
@@ -134,25 +127,7 @@ public class RegistrationServlet extends HttpServlet {
 
         hasError = false;
         request.setAttribute("user", userDTO);
-        userBusinessService.save(mapper.map(userDTO, User.class));
+        userBusinessService.save(userService.fromDto(userDTO));
         okString = "Registration completed successfully!";
-    }
-
-    private Map<String, String> dataValidation(UserDTO userDTO) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Map<String,String> errorMap = new HashMap<>();
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<UserDTO> violation : violations) {
-                String propertyPath = "error" + violation.getPropertyPath().toString();
-                String message = violation.getMessage();
-                errorMap.put(propertyPath, message);
-            }
-        }
-        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
-            errorMap.put("errorlogin", "Login is busy, please choose another one!");
-        }
-        return errorMap;
     }
 }

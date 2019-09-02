@@ -3,8 +3,10 @@ package com.accenture.flowershop.services.ws;
 import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.WebService;
+import java.util.List;
 
 @WebService(endpointInterface = "com.accenture.flowershop.services.ws.FlowersStockWebService")
 public class FlowersStockWebServiceImpl implements FlowersStockWebService {
@@ -17,10 +19,12 @@ public class FlowersStockWebServiceImpl implements FlowersStockWebService {
     }
 
     @Override
+    @Transactional
     public void increaseFlowersStockSize(int count) {
-        for (Flower f: flowerBusinessService.getAll()){
+        List<Flower> flowers = flowerBusinessService.getAll();
+        for (Flower f: flowers){
             f.setNumber(f.getNumber() + count);
-            flowerBusinessService.update(f);
         }
+        flowerBusinessService.updateAll(flowers);
     }
 }

@@ -5,6 +5,9 @@ import com.accenture.flowershop.be.service.marshgalling.user.UserMarshallingServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.jms.JMSException;
+import java.io.IOException;
+
 @Component
 public class ProducerTest {
 
@@ -26,7 +29,7 @@ public class ProducerTest {
             prod.producer();
             Discount discount = (Discount) cons.consumer();
             user.setDiscount(discount.getDiscount());
-        } catch (Exception e){
+        } catch (IOException | JMSException e){
             e.printStackTrace();
         }
         return user;

@@ -6,7 +6,7 @@ import com.accenture.flowershop.fe.service.dto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
-import org.dozer.Mapper;
+import com.accenture.flowershop.fe.service.dto.flowerdto.FlowerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * Сервлет для работы с покупателем. Используется:
@@ -45,7 +46,7 @@ public class CustomerServlet extends HttpServlet {
      * Маппер.
      */
     @Autowired
-    private Mapper mapper;
+    private FlowerService flowerService;
 
     public CustomerServlet() {
         super();
@@ -109,16 +110,16 @@ public class CustomerServlet extends HttpServlet {
     /**
      * Карта цветов.
      */
-    private Map<Long, FlowerDTO> flowerDTOs;
+    private Map<Long, FlowerDTO> flowerDTOMap;
 
     /**
      * Вывод информации о цветках на форму.
      * @param request - объект HttpServletRequest
      */
     private void dataOutput(HttpServletRequest request) {
-        flowerDTOs = new TreeMap<>();
+        flowerDTOMap = new TreeMap<>();
         mapFlowerDto(getFlowerDTOs(request));
-        request.setAttribute("flowerList",flowerDTOs.values());
+        request.setAttribute("flowerList", flowerDTOMap.values());
     }
 
     /**
@@ -129,7 +130,7 @@ public class CustomerServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (isAddFlowerToCart(
                 Integer.parseInt(request.getParameter("numberToCart")),
-                flowerDTOs.get(Long.parseLong(request.getParameter("flowerId"))),
+                flowerDTOMap.get(Long.parseLong(request.getParameter("flowerId"))),
                 SessionUtils.getLoginedUser(session))) {
             hasError = false;
             return;
@@ -166,12 +167,16 @@ public class CustomerServlet extends HttpServlet {
      * @param flowerList - список цветков
      */
     private void mapFlowerDto(List<Flower> flowerList) {
-        for (Flower f : flowerList) {
-            flowerDTOs.put(f.getId(), mapper.map(f, FlowerDTO.class));
-        }
-        if (flowerDTOs.values().isEmpty()) {
+        List<FlowerDTO> flowerDTOs = flowerService.toDtoList(flowerList);
+        flowerDTOMap = flowerDTOs.stream().collect(Collectors.toMap(
+                FlowerDTO::getId,
+                o -> o
+        ));
+        if (flowerDTOMap.values().isEmpty()) {
             errorString = "Flower not found!";
         }
+
+
     }
 
     /**

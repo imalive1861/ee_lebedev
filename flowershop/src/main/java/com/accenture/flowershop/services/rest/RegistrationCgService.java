@@ -14,6 +14,7 @@ public class RegistrationCgService {
 
     @Autowired
     private UserBusinessService userBusinessService;
+
     @Autowired
     private UserService userService;
 
@@ -23,6 +24,9 @@ public class RegistrationCgService {
     @Path("/loginValidation")
     public Response loginValidation(UserDTO userDTO){
         String error = userService.loginValidation(userDTO);
+        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
+            error = "Login is busy, please choose another one!";
+        }
         if (error.equals("")) {
             return Response.status(200).entity("Login ok! ^_^").build();
         }

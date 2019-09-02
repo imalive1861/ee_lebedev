@@ -9,10 +9,15 @@ import java.util.List;
  */
 public interface FlowerBusinessService {
     /**
-     * Обновить информацию о цветке в базе данных
+     * Обновить информацию о цветке в базе данных.
      * @param flower - объект Flower
      */
     void update(Flower flower);
+    /**
+     * Обновить информацию о всех цветках в базе данных.
+     * @param flowers - список объектов Flower
+     */
+    void updateAll(List<Flower> flowers);
     /**
      * Найти цветок по идентификатору.
      * @param id - идентификатор цветка

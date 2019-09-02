@@ -5,7 +5,7 @@ import com.accenture.flowershop.fe.service.dto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import org.dozer.Mapper;
+import com.accenture.flowershop.fe.service.dto.userdto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Сервлет, использующийся для авторизации пользователя.
@@ -33,10 +34,10 @@ public class LoginServlet extends HttpServlet {
     @Autowired
     private CartService cartService;
     /**
-     * Маппер.
+     * Вспомогательный сервис.
      */
     @Autowired
-    private Mapper mapper;
+    private UserService userService;
 
     public LoginServlet(){
         super();
@@ -108,17 +109,19 @@ public class LoginServlet extends HttpServlet {
      * @param password - пароль
      */
     private UserDTO login(String login, String password) {
-        if (login == null
-                || password == null
-                || login.length() == 0
-                || password.length() == 0) {
+        UserDTO userDTO = new UserDTO.Builder()
+                .login(login)
+                .password(password)
+                .build();
+        Map<String,String> errorMap = userService.dataValidation(userDTO);
+        if (!errorMap.isEmpty()) {
             errorString = "Required username and password!";
             return null;
         }
         User user = userBusinessService.logIn(login, password);
         if (user != null) {
             hasError = false;
-            return mapper.map(user, UserDTO.class);
+            return userService.toDto(user);
         }
         errorString = "User Name or password invalid";
         return null;

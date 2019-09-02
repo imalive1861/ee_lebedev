@@ -8,6 +8,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import com.accenture.flowershop.fe.enums.JmsQueueNames;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,6 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class Prod {
 
-    private static String url = ActiveMQConnection.DEFAULT_BROKER_URL;
-    private static String subject = "OUT_QUEUE";
     private String destinationName;
 
     @Autowired
@@ -32,12 +31,13 @@ public class Prod {
     }
 
     public void producer() throws JMSException {
+        String url = ActiveMQConnection.DEFAULT_BROKER_URL;
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
         Connection connection = connectionFactory.createConnection();
         connection.start();
 
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination destination = session.createQueue(subject);
+        Destination destination = session.createQueue(JmsQueueNames.OUT_QUEUE.name());
         MessageProducer producer = session.createProducer(destination);
         TextMessage message = session.createTextMessage(readXML());
         producer.send(message);
