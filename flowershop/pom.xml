@@ -406,6 +406,10 @@
         <db.url>jdbc:h2:~/user</db.url>
         <db.username>sa</db.username>
         <db.password></db.password>
+        <db.dialect>org.hibernate.dialect.H2Dialect</db.dialect>
+        <db.hbm2ddl.auto>update</db.hbm2ddl.auto>
+        <db.show_sql>false</db.show_sql>
+        <db.format_sql>true</db.format_sql>
         <db.schema>PUBLIC</db.schema>
 
         <flyway.user>${db.username}</flyway.user>

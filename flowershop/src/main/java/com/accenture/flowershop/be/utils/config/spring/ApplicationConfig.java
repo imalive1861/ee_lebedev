@@ -40,6 +40,14 @@ public class ApplicationConfig {
     private String PROP_DATABASE_PASSWORD;
     @Value("${db.url}")
     private String PROP_DATABASE_URL;
+    @Value("${db.dialect}")
+    private String PROP_DATABASE_DIALECT;
+    @Value("${db.hbm2ddl.auto}")
+    private String PROP_DATABASE_HBM2DDL;
+    @Value("${db.show_sql}")
+    private String PROP_DATABASE_SHOW_SQL;
+    @Value("${db.format_sql}")
+    private String PROP_DATABASE_FORMAT_SQL;
 
     @Bean
     public DataSource dataSource(){
@@ -59,12 +67,12 @@ public class ApplicationConfig {
         entityManagerFactory.setPackagesToScan("com.accenture.flowershop");
         entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.ejb.naming_strategy","org.hibernate.cfg.ImprovedNamingStrategy");
-        properties.setProperty("show_sql", "false");
-        properties.setProperty("hibernate.format_sql","true");
-        properties.setProperty("javax.persistence.lock.scope","EXTENDED");
+        properties.setProperty("hibernate.dialect", PROP_DATABASE_DIALECT);
+        properties.setProperty("hibernate.hbm2ddl.auto", PROP_DATABASE_HBM2DDL);
+        properties.setProperty("show_sql", PROP_DATABASE_SHOW_SQL);
+        properties.setProperty("hibernate.format_sql", PROP_DATABASE_FORMAT_SQL);
+        properties.setProperty("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
+        properties.setProperty("javax.persistence.lock.scope", "EXTENDED");
         entityManagerFactory.setJpaProperties(properties);
         return entityManagerFactory;
     }
