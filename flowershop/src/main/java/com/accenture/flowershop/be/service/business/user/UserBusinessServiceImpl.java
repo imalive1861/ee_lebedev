@@ -84,7 +84,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     @Override
     @Transactional
     public void update(User user) {
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         LOG.debug("Customer \"{}\" with login \"{}\" was updated.", user, user.getLogin());
     }
 

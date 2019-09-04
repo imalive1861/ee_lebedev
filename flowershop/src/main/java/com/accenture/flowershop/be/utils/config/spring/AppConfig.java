@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.oxm.castor.CastorMarshaller;
 
 import javax.xml.ws.Endpoint;
@@ -30,7 +29,6 @@ import javax.xml.ws.Endpoint;
  */
 @Configuration
 @PropertySource(value = "classpath:config/config.properties")
-@EnableJpaRepositories("com.accenture.flowershop.be.repository")
 public class AppConfig {
 
     @Value("${filepath.user}")

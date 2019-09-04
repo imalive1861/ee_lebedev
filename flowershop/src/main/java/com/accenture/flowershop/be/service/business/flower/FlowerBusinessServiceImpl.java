@@ -30,7 +30,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     @Override
     public void update(Flower flower){
-        flowerRepository.saveAndFlush(flower);
+        flowerRepository.save(flower);
         LOG.debug("Number of Flower with id = {} has been changed to = {}",
                 flower.getId(), flower.getNumber());
     }
@@ -42,7 +42,7 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService{
 
     @Override
     public Flower get(long id) {
-            return flowerRepository.getOne(id);
+            return flowerRepository.findById(id).get();
     }
 
     @Override

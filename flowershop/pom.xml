@@ -64,11 +64,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
       <artifactId>spring-oxm</artifactId>
       <version>${springframework.version}</version>
     </dependency>
@@ -80,7 +75,7 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
+      <artifactId>spring-data-mongodb</artifactId>
       <version>2.1.10.RELEASE</version>
     </dependency>
     <dependency>
@@ -117,11 +112,6 @@
       <groupId>org.hibernate.javax.persistence</groupId>
       <artifactId>hibernate-jpa-2.1-api</artifactId>
       <version>1.0.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.199</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -397,27 +387,14 @@
 
   <profiles>
     <profile>
-      <id>js-flyway</id>
+      <id>mongodb-profile</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <db.driver>org.h2.Driver</db.driver>
-        <db.url>jdbc:h2:~/user</db.url>
-        <db.username>sa</db.username>
-        <db.password></db.password>
-        <db.dialect>org.hibernate.dialect.H2Dialect</db.dialect>
-        <db.hbm2ddl.auto>update</db.hbm2ddl.auto>
-        <db.show_sql>false</db.show_sql>
-        <db.format_sql>true</db.format_sql>
-        <db.schema>PUBLIC</db.schema>
-
-        <flyway.user>${db.username}</flyway.user>
-        <flyway.password>${db.password}</flyway.password>
-        <flyway.schemas>${db.schema}</flyway.schemas>
-        <flyway.driver>${db.driver}</flyway.driver>
-        <flyway.url>${db.url}</flyway.url>
-        <flyway.locations>db/migration/init/</flyway.locations>
+        <db.name>flowershop</db.name>
+        <db.host>127.0.0.1</db.host>
+        <db.port>27017</db.port>
       </properties>
     </profile>
   </profiles>

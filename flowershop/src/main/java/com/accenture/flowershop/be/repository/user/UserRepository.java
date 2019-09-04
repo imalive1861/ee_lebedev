@@ -1,15 +1,12 @@
 package com.accenture.flowershop.be.repository.user;
 
 import com.accenture.flowershop.be.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-
-import javax.persistence.LockModeType;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * Интерфейс доступа к базе данных для сущности User.
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends MongoRepository<User, Long> {
     /**
      * Найти пользователя по логину.
      * @param login - логин пользователя
@@ -29,11 +26,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return объект User если найден, null если не найден
      */
     User getByLoginAndPassword(String login, String password);
-    /**
-     * Сохранить или обновить данные пользователя.
-     * @param user - объект User
-     * @return объект User
-     */
-    @Lock(LockModeType.PESSIMISTIC_READ)
-    User saveAndFlush(User user);
 }
