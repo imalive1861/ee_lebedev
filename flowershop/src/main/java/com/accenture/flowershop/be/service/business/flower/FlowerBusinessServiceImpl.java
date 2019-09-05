@@ -52,28 +52,14 @@ public class FlowerBusinessServiceImpl implements FlowerBusinessService {
     }
 
     @Override
-    public List<Flower> getFlowerByName(String name) {
-        if (name.equals("")) {
-            return getAll();
-        }
-        return flowerRepository.findAllFlowerByName(name);
-    }
-
-    @Override
-    public List<Flower> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice) {
-        if (minFlowerPrice.equals("") && maxFlowerPrice.equals("")) {
-            return getAll();
-        }
-        if (minFlowerPrice.equals("")) {
-            BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-            return flowerRepository.getFlowerByMaxPrice(max);
-        }
-        if (maxFlowerPrice.equals("")) {
-            BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
-            return flowerRepository.getFlowerByMinPrice(min);
-        }
-        BigDecimal min = new BigDecimal(Double.parseDouble(minFlowerPrice));
-        BigDecimal max = new BigDecimal(Double.parseDouble(maxFlowerPrice));
-        return flowerRepository.getFlowerByMinPriceAndMaxPrice(min, max);
+    public List<Flower> getFlowerByNameOrMinPriceAndMaxPrice(
+            String name,
+            BigDecimal minFlowerPrice,
+            BigDecimal maxFlowerPrice) {
+        return flowerRepository.getFlowerByNameOrMinPriceAndMaxPrice(
+                name,
+                minFlowerPrice,
+                maxFlowerPrice
+        );
     }
 }

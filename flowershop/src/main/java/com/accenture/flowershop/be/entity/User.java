@@ -82,7 +82,7 @@ public class User implements Serializable {
     /**
      * Список заказов, сделанных пользователем.
      */
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public User() {

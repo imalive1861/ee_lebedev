@@ -51,6 +51,15 @@ public class OrderServlet extends HttpServlet {
     @Autowired
     private UserDtoService userDtoService;
 
+    /**
+     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
+     */
+    private boolean hasError = true;
+    /**
+     * Сообщение об ошибке.
+     */
+    private String outputString = null;
+
     public OrderServlet() {
         super();
     }
@@ -66,15 +75,6 @@ public class OrderServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
                 config.getServletContext());
     }
-
-    /**
-     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
-     */
-    private boolean hasError = true;
-    /**
-     * Сообщение об ошибке.
-     */
-    private String outputString = null;
 
     /**
      * Запрос POST. Перенаправляет запрос на GET.
@@ -94,7 +94,6 @@ public class OrderServlet extends HttpServlet {
             outputString = "Cart clean right now!";
         }
         request.setAttribute("errorString", outputString);
-        doGet(request, response);
 
         SessionUtils.storeLoginedUser(session,
                 userDtoService.toDto(userBusinessService.getByLogin(userDTO.getLogin())));

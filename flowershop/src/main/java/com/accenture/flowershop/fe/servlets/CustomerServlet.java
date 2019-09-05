@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +92,15 @@ public class CustomerServlet extends HttpServlet {
         dataOutput(request);
 
         request.setAttribute("errorString", errorString);
+        request.setAttribute("searchFlowerByName", request.getParameter("searchFlowerByName"));
+        request.setAttribute("minFlowerPrice", request.getParameter("minFlowerPrice"));
+        request.setAttribute("maxFlowerPrice", request.getParameter("maxFlowerPrice"));
+
+        if (isNotBlank(request.getParameter("cleanSearchClick"))) {
+            request.setAttribute("searchFlowerByName", "");
+            request.setAttribute("minFlowerPrice", "");
+            request.setAttribute("maxFlowerPrice", "");
+        }
 
         if (hasError) {
             errorString = null;
@@ -147,22 +157,13 @@ public class CustomerServlet extends HttpServlet {
      * @return список цветков (отфильтрованный, если это нужно)
      */
     private List<Flower> getFlowerDTOs(HttpServletRequest request) {
-        List<Flower> flowerList;
-        if (isNotBlank(request.getParameter("searchNameClick"))) {
-
-            flowerList = flowerBusinessService.getFlowerByName(
-                    request.getParameter("searchFlowerByName"));
-
-        } else if (isNotBlank(request.getParameter("searchPriceClick"))) {
-
-            flowerList = flowerBusinessService.getFlowerByPrice(
-                    request.getParameter("minFlowerPrice"),
-                    request.getParameter("maxFlowerPrice"));
-
-        } else {
-            flowerList = flowerBusinessService.getAll();
+        if (isNotBlank(request.getParameter("searchClick"))) {
+            return flowerBusinessService.getFlowerByNameOrMinPriceAndMaxPrice(
+                    request.getParameter("searchFlowerByName"),
+                    checkPrice(request.getParameter("minFlowerPrice")),
+                    checkPrice(request.getParameter("maxFlowerPrice")));
         }
-        return flowerList;
+        return flowerBusinessService.getAll();
     }
 
     /**
@@ -191,5 +192,12 @@ public class CustomerServlet extends HttpServlet {
      */
     private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, UserDTO userDTO) {
         return cartDtoService.isAddFlowerToCart(userDTO, flowerDTO, numberToCart);
+    }
+
+    private BigDecimal checkPrice(String minFlowerPrice) {
+        if (isNotBlank(minFlowerPrice)) {
+            return new BigDecimal(Double.parseDouble(minFlowerPrice));
+        }
+        return null;
     }
 }

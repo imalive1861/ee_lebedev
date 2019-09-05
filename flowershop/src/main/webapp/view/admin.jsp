@@ -28,7 +28,7 @@
                 <c:when test="${order.status eq 'PAID'}">
                     <tr>
                         <td>${order.id}</td>
-                        <td>${order.userId.login}</td>
+                        <td>${order.user.login}</td>
                         <td>${order.sumPrice}</td>
                         <td>${order.dateCreate}</td>
                         <td>${order.dateClose}</td>
@@ -79,7 +79,7 @@
                 <c:when test="${order.status eq 'CLOSED'}">
                     <tr>
                         <td>${order.id}</td>
-                        <td>${order.userId.login}</td>
+                        <td>${order.user.login}</td>
                         <td>${order.sumPrice}</td>
                         <td>${order.dateCreate}</td>
                         <td>${order.dateClose}</td>

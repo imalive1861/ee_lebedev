@@ -2,6 +2,7 @@ package com.accenture.flowershop.be.service.business.flower;
 
 import com.accenture.flowershop.be.entity.Flower;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -38,19 +39,13 @@ public interface FlowerBusinessService {
     List<Flower> getAll();
 
     /**
-     * Найти все цветы по названию.
-     *
-     * @param name - название цветка
-     * @return список цветков
-     */
-    List<Flower> getFlowerByName(String name);
-
-    /**
-     * Найти цветы от минимальной и до максимальной цены.
-     *
+     * @param name           - название цветка
      * @param minFlowerPrice - минимальна цена
      * @param maxFlowerPrice - максимальная цена
-     * @return List<Flower> если найдены, пустой List<Flower> если не найдены
+     * @return список цветков
      */
-    List<Flower> getFlowerByPrice(String minFlowerPrice, String maxFlowerPrice);
+    List<Flower> getFlowerByNameOrMinPriceAndMaxPrice(
+            String name,
+            BigDecimal minFlowerPrice,
+            BigDecimal maxFlowerPrice);
 }

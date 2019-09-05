@@ -83,7 +83,7 @@ public class CartDtoServiceImpl implements CartDtoService {
         OrderDTO orderDTO = getCartById(userDTO.getLogin());
         CartDTO cartDTO = null;
         for (CartDTO c : orderDTO.getCarts()) {
-            if (c.getFlower().getId() == flowerDTO.getId()) {
+            if (c.getFlower().getId().equals(flowerDTO.getId())) {
                 cartDTO = c;
                 break;
             }
