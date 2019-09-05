@@ -8,30 +8,34 @@ import com.accenture.flowershop.fe.enums.OrderStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static java.math.RoundingMode.UP;
 
 /**
- * Реализация интерфейса CartService.
+ * Реализация интерфейса CartDtoService.
  * Свойства: mapper, cart.
  */
 @Service
-public class CartServiceImpl implements CartService {
+public class CartDtoServiceImpl implements CartDtoService {
 
     /**
      * Карта временных заказов пользователей.
      */
     private Map<String, OrderDTO> cart = new TreeMap<>();
 
-    public CartServiceImpl() {}
+    public CartDtoServiceImpl() {
+    }
 
     /**
      * Получить текущий заказ пользователя.
+     *
      * @param login - логин пользователя
      * @return объект OrderDTO
      */
-    private OrderDTO getCartById(String login){
+    private OrderDTO getCartById(String login) {
         if (cart.containsKey(login)) {
             return cart.get(login);
         }
@@ -40,8 +44,9 @@ public class CartServiceImpl implements CartService {
 
     /**
      * Рассчет суммы позиции с учетом скидки пользователя.
-     * @param price - сумма позиции
-     * @param sale - скидка пользователя
+     *
+     * @param price  - сумма позиции
+     * @param sale   - скидка пользователя
      * @param number - количество заказанных цветов
      * @return сумма позиции с учетом скидки пользователя
      */
@@ -56,10 +61,11 @@ public class CartServiceImpl implements CartService {
 
     /**
      * Рассчет суммы заказа пользователя.
+     *
      * @param login - логин пользователя
      * @return сумма заказа пользователя
      */
-    private BigDecimal getAllSumPrice(String login){
+    private BigDecimal getAllSumPrice(String login) {
         BigDecimal sum = new BigDecimal(0.00);
         List<CartDTO> carts = cart.get(login).getCarts();
         if (!carts.isEmpty()) {
@@ -70,20 +76,20 @@ public class CartServiceImpl implements CartService {
         return sum;
     }
 
-    public boolean isAddFlowerToCart(UserDTO userDTO, FlowerDTO flowerDTO, int number){
+    public boolean isAddFlowerToCart(UserDTO userDTO, FlowerDTO flowerDTO, int number) {
         if (number <= 0) {
             return false;
         }
         OrderDTO orderDTO = getCartById(userDTO.getLogin());
         CartDTO cartDTO = null;
-        for (CartDTO c: orderDTO.getCarts()) {
+        for (CartDTO c : orderDTO.getCarts()) {
             if (c.getFlower().getId() == flowerDTO.getId()) {
                 cartDTO = c;
                 break;
             }
         }
         BigDecimal sumPrice =
-                getSumPriceWithDiscount(flowerDTO.getPrice(),userDTO.getDiscount(),number);
+                getSumPriceWithDiscount(flowerDTO.getPrice(), userDTO.getDiscount(), number);
         if (cartDTO == null) {
             cartDTO = new CartDTO.Builder()
                     .order(orderDTO)
@@ -105,7 +111,7 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
-    public OrderDTO clear(String login){
+    public OrderDTO clear(String login) {
         OrderDTO orderDTO = new OrderDTO.Builder()
                 .status(OrderStatus.OPENED)
                 .build();
@@ -113,7 +119,7 @@ public class CartServiceImpl implements CartService {
         return orderDTO;
     }
 
-    public OrderDTO setCart(String login){
+    public OrderDTO setCart(String login) {
         cart.putIfAbsent(login, new OrderDTO.Builder()
                 .status(OrderStatus.OPENED)
                 .build());

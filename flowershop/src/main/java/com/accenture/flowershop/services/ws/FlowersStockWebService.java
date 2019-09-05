@@ -7,5 +7,5 @@ import javax.jws.WebService;
 @WebService
 public interface FlowersStockWebService {
     @WebMethod
-    void increaseFlowersStockSize(@WebParam(name ="countOfFlowers") int count);
+    void increaseFlowersStockSize(@WebParam(name = "countOfFlowers") int count);
 }

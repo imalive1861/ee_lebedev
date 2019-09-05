@@ -17,7 +17,7 @@ public class ProducerTest {
 
     @Autowired
     public ProducerTest(UserMarshallingService marshallingService,
-                        Prod prod, Cons cons){
+                        Prod prod, Cons cons) {
         this.userMarshallingService = marshallingService;
         this.prod = prod;
         this.cons = cons;
@@ -29,7 +29,7 @@ public class ProducerTest {
             prod.producer();
             Discount discount = (Discount) cons.consumer();
             user.setDiscount(discount.getDiscount());
-        } catch (IOException | JMSException e){
+        } catch (IOException | JMSException e) {
             e.printStackTrace();
         }
         return user;

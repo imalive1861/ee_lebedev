@@ -50,7 +50,7 @@ public class ApplicationConfig {
     private String PROP_DATABASE_FORMAT_SQL;
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(PROP_DATABASE_DRIVER);
         dataSource.setUrl(PROP_DATABASE_URL);

@@ -29,11 +29,12 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     @Autowired
     private Logger LOG;
 
-    public OrderBusinessServiceImpl(){}
+    public OrderBusinessServiceImpl() {
+    }
 
     @Override
     @Transactional
-    public void close(Order order){
+    public void close(Order order) {
         if (order.getStatus().equals(OrderStatus.PAID)) {
             order.setDateClose(new Date());
             order.setStatus(OrderStatus.CLOSED);
@@ -50,7 +51,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     }
 
     @Override
-    public Order get(long id) {
-            return orderRepository.getOne(id);
+    public Order get(Long id) {
+        return orderRepository.getOne(id);
     }
 }

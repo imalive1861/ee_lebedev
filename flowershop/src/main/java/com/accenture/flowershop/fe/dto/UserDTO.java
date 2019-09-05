@@ -18,25 +18,25 @@ public class UserDTO {
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор пользователя.
      */
-    private long id;
+    private Long id;
 
     /**
      * Логин для авторизации.
      */
     @NotNull(message = "Login cannot be empty!")
-    @Size(min=4, max=20, message = "Login length minimum 4, maximum 20!")
+    @Size(min = 4, max = 20, message = "Login length minimum 4, maximum 20!")
     private String login;
 
     /**
      * Пароль для авторизации.
      */
     @NotNull(message = "Password cannot be empty!")
-    @Size(min=8, max=20, message = "Password length minimum 8, maximum 20!")
+    @Size(min = 8, max = 20, message = "Password length minimum 8, maximum 20!")
     private String password;
 
     /**
@@ -74,25 +74,29 @@ public class UserDTO {
      */
     private List<OrderDTO> orders = new ArrayList<>();
 
-    public UserDTO(){}
+    public UserDTO() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
+
     public String getLogin() {
         return login;
     }
@@ -100,6 +104,7 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getPassword() {
         return password;
     }
@@ -107,6 +112,7 @@ public class UserDTO {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -114,6 +120,7 @@ public class UserDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+
     public String getAddress() {
         return address;
     }
@@ -121,6 +128,7 @@ public class UserDTO {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -128,6 +136,7 @@ public class UserDTO {
     public void setCash(BigDecimal cash) {
         this.cash = cash;
     }
+
     public BigDecimal getCash() {
         return cash;
     }
@@ -135,6 +144,7 @@ public class UserDTO {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
+
     public int getDiscount() {
         return discount;
     }
@@ -142,6 +152,7 @@ public class UserDTO {
     public void setRole(UserRoles role) {
         this.role = role;
     }
+
     public UserRoles getRole() {
         return role;
     }
@@ -149,6 +160,7 @@ public class UserDTO {
     public void setOrders(List<OrderDTO> orders) {
         this.orders = orders;
     }
+
     public List<OrderDTO> getOrders() {
         return orders;
     }
@@ -160,45 +172,52 @@ public class UserDTO {
             newUserDTO = new UserDTO();
         }
 
-        public Builder login(String login){
+        public Builder login(String login) {
             newUserDTO.login = login;
             return this;
         }
 
-        public Builder password(String password){
+        public Builder password(String password) {
             newUserDTO.password = password;
             return this;
         }
-        public Builder name(String name){
+
+        public Builder name(String name) {
             newUserDTO.name = name;
             return this;
         }
-        public Builder address(String address){
+
+        public Builder address(String address) {
             newUserDTO.address = address;
             return this;
         }
-        public Builder phoneNumber(String phoneNumber){
+
+        public Builder phoneNumber(String phoneNumber) {
             newUserDTO.phoneNumber = phoneNumber;
             return this;
         }
-        public Builder cash(BigDecimal cash){
+
+        public Builder cash(BigDecimal cash) {
             newUserDTO.cash = cash;
             return this;
         }
-        public Builder discount(int discount){
+
+        public Builder discount(int discount) {
             newUserDTO.discount = discount;
             return this;
         }
-        public Builder role(UserRoles role){
+
+        public Builder role(UserRoles role) {
             newUserDTO.role = role;
             return this;
         }
-        public Builder orders(List<OrderDTO> orders){
+
+        public Builder orders(List<OrderDTO> orders) {
             newUserDTO.orders = orders;
             return this;
         }
 
-        public UserDTO build(){
+        public UserDTO build() {
             return newUserDTO;
         }
     }

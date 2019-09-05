@@ -12,6 +12,7 @@ public interface FlowerRepository extends JpaRepository<Flower, Long>, CustomFlo
 
     /**
      * Найти все цветы по названию.
+     *
      * @param name - название цветка
      * @return список цветков
      */

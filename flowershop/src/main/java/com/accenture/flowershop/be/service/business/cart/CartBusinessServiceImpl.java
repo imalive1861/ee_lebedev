@@ -17,10 +17,11 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     @Autowired
     private CartRepository cartRepository;
 
-    public CartBusinessServiceImpl() {}
+    public CartBusinessServiceImpl() {
+    }
 
     @Override
-    public Cart get(long id) {
+    public Cart get(Long id) {
         return cartRepository.getOne(id);
     }
 }

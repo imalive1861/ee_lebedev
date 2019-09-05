@@ -2,7 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.service.dto.userdto.UserService;
+import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
 
@@ -28,9 +30,21 @@ public class RegistrationServlet extends HttpServlet {
      * Вспомогательный сервис.
      */
     @Autowired
-    private UserService userService;
+    private UserDtoService userDtoService;
+    /**
+     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
+     */
+    private boolean hasError = true;
+    /**
+     * Сообщение об ошибке.
+     */
+    private String errorString = "";
+    /**
+     * Сообщение об успешном действии.
+     */
+    private String okString = null;
 
-    public RegistrationServlet(){
+    public RegistrationServlet() {
         super();
     }
 
@@ -47,19 +61,6 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     /**
-     * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
-     */
-    private boolean hasError = true;
-    /**
-     * Сообщение об ошибке.
-     */
-    private String errorString = "";
-    /**
-     * Сообщение об успешном действии.
-     */
-    private String okString = null;
-
-    /**
      * Запрос POST. Проверяет нажаты ли кнопки.
      * При наличии ошибки выводит сообщение об ошибке.
      * При отсутствии ошибки перенаправляет на форму авторизации.
@@ -67,14 +68,14 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (request.getParameter("regButton") != null) {
+        if (isNotBlank(request.getParameter("regButton"))) {
             registration(request);
         }
 
         request.setAttribute("errorString", errorString);
         request.setAttribute("okString", okString);
 
-        if (hasError){
+        if (hasError) {
             errorString = "";
             okString = null;
             RequestDispatcher dispatcher =
@@ -117,9 +118,9 @@ public class RegistrationServlet extends HttpServlet {
                 .phoneNumber(phoneNumber)
                 .build();
 
-        Map<String,String> errorMap = userService.dataValidation(userDTO);
+        Map<String, String> errorMap = userDtoService.dataValidation(userDTO);
         if (!errorMap.isEmpty()) {
-            for (String s: errorMap.keySet()) {
+            for (String s : errorMap.keySet()) {
                 request.setAttribute(s, errorMap.get(s));
             }
             return;
@@ -127,7 +128,7 @@ public class RegistrationServlet extends HttpServlet {
 
         hasError = false;
         request.setAttribute("user", userDTO);
-        userBusinessService.save(userService.fromDto(userDTO));
+        userBusinessService.save(userDtoService.fromDto(userDTO));
         okString = "Registration completed successfully!";
     }
 }

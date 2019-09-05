@@ -17,15 +17,15 @@ public class Flower {
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор цветка.
      */
     @Id
-    @SequenceGenerator( name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flowersSeq")
-    private long id;
+    private Long id;
 
     /**
      * Название цветка.
@@ -45,28 +45,32 @@ public class Flower {
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
      */
-    @OneToMany(mappedBy="flower")
+    @OneToMany(mappedBy = "flower")
     private List<Cart> carts = new ArrayList<>();
 
-    public Flower(){}
+    public Flower() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -74,6 +78,7 @@ public class Flower {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -81,6 +86,7 @@ public class Flower {
     public void setNumber(int number) {
         this.number = number;
     }
+
     public int getNumber() {
         return number;
     }
@@ -88,6 +94,7 @@ public class Flower {
     public void setCarts(List<Cart> carts) {
         this.carts = carts;
     }
+
     public List<Cart> getCarts() {
         return carts;
     }
@@ -99,22 +106,22 @@ public class Flower {
             newFlower = new Flower();
         }
 
-        public Builder name(String name){
+        public Builder name(String name) {
             newFlower.name = name;
             return this;
         }
 
-        public Builder price(BigDecimal price){
+        public Builder price(BigDecimal price) {
             newFlower.price = price;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(int number) {
             newFlower.number = number;
             return this;
         }
 
-        public Flower build(){
+        public Flower build() {
             return newFlower;
         }
     }

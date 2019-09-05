@@ -5,10 +5,14 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 
 import java.util.Map;
 
-public interface UserService {
+public interface UserDtoService {
     String loginValidation(UserDTO userDTO);
+
     String passwordValidation(UserDTO userDTO);
+
     Map<String, String> dataValidation(UserDTO userDTO);
+
     UserDTO toDto(User user);
+
     User fromDto(UserDTO userDTO);
 }

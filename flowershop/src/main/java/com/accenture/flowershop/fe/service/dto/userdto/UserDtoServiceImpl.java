@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserDtoServiceImpl implements UserDtoService {
 
     @Autowired
     private Mapper mapper;
@@ -57,13 +57,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public Map<String, String> dataValidation(UserDTO userDTO) {
-        Map<String,String> errorMap = new HashMap<>();
+        Map<String, String> errorMap = new HashMap<>();
         String errorlogin = loginValidation(userDTO);
         String errorpassword = passwordValidation(userDTO);
         if (!errorlogin.equals("")) {
             errorMap.put("errorlogin", errorlogin);
         }
-        if (!errorpassword.equals("")){
+        if (!errorpassword.equals("")) {
             errorMap.put("errorpassword", errorpassword);
         }
         return errorMap;

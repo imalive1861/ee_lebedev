@@ -9,7 +9,7 @@ public class Discount implements Serializable {
     public Discount() {
     }
 
-    public Discount(String customerId, int discount){
+    public Discount(String customerId, int discount) {
         this.customerId = customerId;
         this.discount = discount;
     }
@@ -17,6 +17,7 @@ public class Discount implements Serializable {
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -24,6 +25,7 @@ public class Discount implements Serializable {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
+
     public int getDiscount() {
         return discount;
     }

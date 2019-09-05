@@ -21,15 +21,15 @@ public class Order {
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор заказа.
      */
     @Id
-    @SequenceGenerator( name = "ordersSeq", sequenceName = "ORDERS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "ordersSeq", sequenceName = "ORDERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordersSeq")
-    private long id;
+    private Long id;
 
     /**
      * Суммарная цена за все позиции заказа.
@@ -60,33 +60,37 @@ public class Order {
      */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
-    public Order(){}
+    public Order() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
     }
+
     public BigDecimal getSumPrice() {
         return sumPrice;
     }
@@ -94,6 +98,7 @@ public class Order {
     public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
+
     public Date getDateCreate() {
         return dateCreate;
     }
@@ -101,6 +106,7 @@ public class Order {
     public void setDateClose(Date dateClose) {
         this.dateClose = dateClose;
     }
+
     public Date getDateClose() {
         return dateClose;
     }
@@ -108,20 +114,23 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
     public OrderStatus getStatus() {
         return status;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
-    public void setUserId(User user) {
-        this.userId = user;
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Cart> getCarts() {
         return carts;
     }
+
     public void setCarts(List<Cart> carts) {
         this.carts = carts;
     }
@@ -133,37 +142,37 @@ public class Order {
             newOrder = new Order();
         }
 
-        public Builder sumPrice(BigDecimal sumPrice){
+        public Builder sumPrice(BigDecimal sumPrice) {
             newOrder.sumPrice = sumPrice;
             return this;
         }
 
-        public Builder dateCreate(Date dateCreate){
+        public Builder dateCreate(Date dateCreate) {
             newOrder.dateCreate = dateCreate;
             return this;
         }
 
-        public Builder dateClose(Date dateClose){
+        public Builder dateClose(Date dateClose) {
             newOrder.dateClose = dateClose;
             return this;
         }
 
-        public Builder status(OrderStatus status){
+        public Builder status(OrderStatus status) {
             newOrder.status = status;
             return this;
         }
 
-        public Builder userId(User userId){
-            newOrder.userId = userId;
+        public Builder userId(User userId) {
+            newOrder.user = userId;
             return this;
         }
 
-        public Builder carts(List<Cart> carts){
+        public Builder carts(List<Cart> carts) {
             newOrder.carts = carts;
             return this;
         }
 
-        public Order build(){
+        public Order build() {
             return newOrder;
         }
     }

@@ -15,15 +15,15 @@ public class Cart {
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор позиции в корзине.
      */
     @Id
-    @SequenceGenerator( name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartsSeq")
-    private long id;
+    private Long id;
 
     /**
      * Количество цветов, добавленных в корзину.
@@ -34,14 +34,14 @@ public class Cart {
      * Заказ, в который входит данная позиция.
      */
     @ManyToOne
-    @JoinColumn(name="order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     /**
      * Цветок, добавленный в корзину.
      */
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name="flower_id", nullable = false)
+    @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 
     /**
@@ -50,25 +50,29 @@ public class Cart {
     @Column(name = "sum_price")
     private BigDecimal sumPrice;
 
-    public Cart(){}
+    public Cart() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
 
     public int getNumber() {
         return number;
     }
+
     public void setNumber(int number) {
         this.number = number;
     }
@@ -76,6 +80,7 @@ public class Cart {
     public Flower getFlower() {
         return flower;
     }
+
     public void setFlower(Flower flower) {
         this.flower = flower;
     }
@@ -83,6 +88,7 @@ public class Cart {
     public Order getOrder() {
         return order;
     }
+
     public void setOrder(Order order) {
         this.order = order;
     }
@@ -90,6 +96,7 @@ public class Cart {
     public BigDecimal getSumPrice() {
         return sumPrice;
     }
+
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
     }
@@ -101,27 +108,27 @@ public class Cart {
             newCart = new Cart();
         }
 
-        public Builder order(Order order){
+        public Builder order(Order order) {
             newCart.order = order;
             return this;
         }
 
-        public Builder flower(Flower flower){
+        public Builder flower(Flower flower) {
             newCart.flower = flower;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(int number) {
             newCart.number = number;
             return this;
         }
 
-        public Builder sumPrice(BigDecimal sumPrice){
+        public Builder sumPrice(BigDecimal sumPrice) {
             newCart.sumPrice = sumPrice;
             return this;
         }
 
-        public Cart build(){
+        public Cart build() {
             return newCart;
         }
     }

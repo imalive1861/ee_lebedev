@@ -13,12 +13,12 @@ public class FlowerDTO {
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор цветка.
      */
-    private long id;
+    private Long id;
 
     /**
      * Название цветка.
@@ -40,25 +40,29 @@ public class FlowerDTO {
      */
     private List<CartDTO> carts = new ArrayList<>();
 
-    public FlowerDTO(){}
+    public FlowerDTO() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -66,6 +70,7 @@ public class FlowerDTO {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -73,6 +78,7 @@ public class FlowerDTO {
     public void setNumber(int number) {
         this.number = number;
     }
+
     public int getNumber() {
         return number;
     }
@@ -80,6 +86,7 @@ public class FlowerDTO {
     public void setCarts(List<CartDTO> carts) {
         this.carts = carts;
     }
+
     public List<CartDTO> getCarts() {
         return carts;
     }
@@ -91,27 +98,27 @@ public class FlowerDTO {
             newFlowerDTO = new FlowerDTO();
         }
 
-        public Builder name(String name){
+        public Builder name(String name) {
             newFlowerDTO.name = name;
             return this;
         }
 
-        public Builder price(BigDecimal price){
+        public Builder price(BigDecimal price) {
             newFlowerDTO.price = price;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(int number) {
             newFlowerDTO.number = number;
             return this;
         }
 
-        public Builder carts(List<CartDTO> carts){
+        public Builder carts(List<CartDTO> carts) {
             newFlowerDTO.carts = carts;
             return this;
         }
 
-        public FlowerDTO build(){
+        public FlowerDTO build() {
             return newFlowerDTO;
         }
     }

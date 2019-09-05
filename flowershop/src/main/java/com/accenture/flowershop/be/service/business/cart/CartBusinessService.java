@@ -8,8 +8,9 @@ import com.accenture.flowershop.be.entity.Cart;
 public interface CartBusinessService {
     /**
      * Конструктор - создание нового объекта с определенными значениями
+     *
      * @param id - идентификатор позиции в корзине
      * @return объект Cart
      */
-    Cart get(long id);
+    Cart get(Long id);
 }

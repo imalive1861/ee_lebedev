@@ -5,8 +5,10 @@ import com.accenture.flowershop.fe.dto.OrderDTO;
 
 import java.util.List;
 
-public interface OrderService {
+public interface OrderDtoService {
     OrderDTO toDto(Order order);
+
     Order fromDto(OrderDTO orderDTO);
+
     List<OrderDTO> toDtoList(List<Order> orders);
 }

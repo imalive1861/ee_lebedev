@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FlowerServiceImpl implements FlowerService {
+public class FlowerDtoServiceImpl implements FlowerDtoService {
 
     @Autowired
     private Mapper mapper;
 
     @Override
     public FlowerDTO toDto(Flower flower) {
-        return mapper.map(flower,FlowerDTO.class);
+        return mapper.map(flower, FlowerDTO.class);
     }
 
     @Override

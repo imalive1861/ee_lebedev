@@ -14,7 +14,7 @@ public class FlowersStockWebServiceImpl implements FlowersStockWebService {
     private FlowerBusinessService flowerBusinessService;
 
     @Autowired
-    public FlowersStockWebServiceImpl(FlowerBusinessService flowerBusinessService){
+    public FlowersStockWebServiceImpl(FlowerBusinessService flowerBusinessService) {
         this.flowerBusinessService = flowerBusinessService;
     }
 
@@ -22,7 +22,7 @@ public class FlowersStockWebServiceImpl implements FlowersStockWebService {
     @Transactional
     public void increaseFlowersStockSize(int count) {
         List<Flower> flowers = flowerBusinessService.getAll();
-        for (Flower f: flowers){
+        for (Flower f : flowers) {
             f.setNumber(f.getNumber() + count);
         }
         flowerBusinessService.updateAll(flowers);

@@ -42,6 +42,7 @@ public class SecurityConfig {
 
     /**
      * Функция получения множества всех доступных ролей.
+     *
      * @return множество всех доступных ролей
      */
     public static Set<String> getAllAppRoles() {
@@ -50,6 +51,7 @@ public class SecurityConfig {
 
     /**
      * Функция получения списока всех доступных ресурсов для роли.
+     *
      * @param role - роль
      * @return список всех доступных ресурсов для роли
      */

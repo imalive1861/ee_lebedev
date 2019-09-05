@@ -25,6 +25,7 @@ public class UserMarshallingServiceImpl implements UserMarshallingService {
 
     /**
      * Конструктор - создание нового объекта с определенными значениями.
+     *
      * @param converter - ссылка на конвертер для маршалинга в/из XML
      */
     @Autowired

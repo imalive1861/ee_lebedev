@@ -7,23 +7,28 @@ import com.accenture.flowershop.fe.dto.UserDTO;
 /**
  * Класс транспортного уровня, который хранит и обрабатывает текущий заказ пользователя.
  */
-public interface CartService {
+public interface CartDtoService {
     /**
      * Добавляет новую позицию в заказе.
-     * @param userDTO - объект UserDTO
+     *
+     * @param userDTO   - объект UserDTO
      * @param flowerDTO - объект FlowerDTO
-     * @param number - количество цветов
+     * @param number    - количество цветов
      * @return true - если позиция добавлена, false - если позиция не добавлена
      */
     boolean isAddFlowerToCart(UserDTO userDTO, FlowerDTO flowerDTO, int number);
+
     /**
      * Очищает текущий заказ пользователя.
+     *
      * @param login - логин пользователя
      * @return объект OrderDTO
      */
     OrderDTO clear(String login);
+
     /**
      * Создает новый временный заказ для пользователя.
+     *
      * @param login - логин пользователя
      * @return объект OrderDTO
      */

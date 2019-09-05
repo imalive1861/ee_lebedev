@@ -2,7 +2,6 @@ package com.accenture.flowershop.be.service.business.user;
 
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.user.UserRepository;
-
 import com.accenture.flowershop.fe.enums.UserRoles;
 import com.accenture.flowershop.services.jms.ProducerTest;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.math.BigDecimal;
  * Реализация интерфейса UserBusinessService.
  */
 @Service
-public class UserBusinessServiceImpl implements UserBusinessService{
+public class UserBusinessServiceImpl implements UserBusinessService {
 
     /**
      * Ссылка на уровень доступа к базе данных для сущности Cart.
@@ -34,12 +33,13 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     @Autowired
     private Logger LOG;
 
-    public UserBusinessServiceImpl() {}
+    public UserBusinessServiceImpl() {
+    }
 
     @Override
     public User logIn(String login, String password) {
         User user = userRepository.getByLoginAndPassword(login, password);
-        if (user != null){
+        if (user != null) {
             LOG.debug("Customer \"{}\" log in.", user.getLogin());
         } else {
             LOG.debug("Customer \"{}\" with password \"{}\" not exist!", login, password);
@@ -48,13 +48,13 @@ public class UserBusinessServiceImpl implements UserBusinessService{
     }
 
     @Override
-    public boolean existsByLogin(String login){
+    public boolean existsByLogin(String login) {
         return userRepository.existsByLogin(login);
     }
 
     @Override
     @Transactional
-    public void save(User user){
+    public void save(User user) {
         user.setCash(new BigDecimal(2000.00));
         user.setDiscount(0);
         user.setRole(UserRoles.CUSTOMER);
@@ -69,7 +69,7 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
         User user;
 
-        DiscountThread(User user){
+        DiscountThread(User user) {
             this.user = user;
         }
 
@@ -90,6 +90,6 @@ public class UserBusinessServiceImpl implements UserBusinessService{
 
     @Override
     public User getByLogin(String login) {
-            return userRepository.getByLogin(login);
+        return userRepository.getByLogin(login);
     }
 }

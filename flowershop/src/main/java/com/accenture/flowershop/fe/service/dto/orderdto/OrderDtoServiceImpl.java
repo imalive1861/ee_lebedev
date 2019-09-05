@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderDtoServiceImpl implements OrderDtoService {
 
     @Autowired
     private Mapper mapper;
 
     @Override
     public OrderDTO toDto(Order order) {
-        return mapper.map(order,OrderDTO.class);
+        return mapper.map(order, OrderDTO.class);
     }
 
     @Override
     public Order fromDto(OrderDTO orderDTO) {
-        return mapper.map(orderDTO,Order.class);
+        return mapper.map(orderDTO, Order.class);
     }
 
     @Override

@@ -23,28 +23,28 @@ public class User implements Serializable {
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор пользователя.
      */
     @Id
-    @SequenceGenerator( name = "usersSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "usersSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
-    private long id;
+    private Long id;
 
     /**
      * Логин для авторизации.
      */
     @NotNull(message = "Login cannot be empty!")
-    @Size(min=4, max=20, message = "Login length minimum 4, maximum 20!")
+    @Size(min = 4, max = 20, message = "Login length minimum 4, maximum 20!")
     private String login;
 
     /**
      * Пароль для авторизации.
      */
     @NotNull(message = "Password cannot be empty!")
-    @Size(min=8, max=20, message = "Password length minimum 8, maximum 20!")
+    @Size(min = 8, max = 20, message = "Password length minimum 8, maximum 20!")
     private String password;
 
     /**
@@ -82,28 +82,32 @@ public class User implements Serializable {
     /**
      * Список заказов, сделанных пользователем.
      */
-    @OneToMany(mappedBy="userId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
-    public User(){}
+    public User() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
+
     public String getLogin() {
         return login;
     }
@@ -111,6 +115,7 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getPassword() {
         return password;
     }
@@ -118,6 +123,7 @@ public class User implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -125,6 +131,7 @@ public class User implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
     public String getAddress() {
         return address;
     }
@@ -132,6 +139,7 @@ public class User implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -139,6 +147,7 @@ public class User implements Serializable {
     public void setCash(BigDecimal cash) {
         this.cash = cash;
     }
+
     public BigDecimal getCash() {
         return cash;
     }
@@ -146,6 +155,7 @@ public class User implements Serializable {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
+
     public int getDiscount() {
         return discount;
     }
@@ -153,6 +163,7 @@ public class User implements Serializable {
     public void setRole(UserRoles role) {
         this.role = role;
     }
+
     public UserRoles getRole() {
         return role;
     }
@@ -160,6 +171,7 @@ public class User implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -171,45 +183,52 @@ public class User implements Serializable {
             newUser = new User();
         }
 
-        public Builder login(String login){
+        public Builder login(String login) {
             newUser.login = login;
             return this;
         }
 
-        public Builder password(String password){
+        public Builder password(String password) {
             newUser.password = password;
             return this;
         }
-        public Builder name(String name){
+
+        public Builder name(String name) {
             newUser.name = name;
             return this;
         }
-        public Builder address(String address){
+
+        public Builder address(String address) {
             newUser.address = address;
             return this;
         }
-        public Builder phoneNumber(String phoneNumber){
+
+        public Builder phoneNumber(String phoneNumber) {
             newUser.phoneNumber = phoneNumber;
             return this;
         }
-        public Builder cash(BigDecimal cash){
+
+        public Builder cash(BigDecimal cash) {
             newUser.cash = cash;
             return this;
         }
-        public Builder discount(int discount){
+
+        public Builder discount(int discount) {
             newUser.discount = discount;
             return this;
         }
-        public Builder role(UserRoles role){
+
+        public Builder role(UserRoles role) {
             newUser.role = role;
             return this;
         }
-        public Builder orders(List<Order> orders){
+
+        public Builder orders(List<Order> orders) {
             newUser.orders = orders;
             return this;
         }
 
-        public User build(){
+        public User build() {
             return newUser;
         }
     }

@@ -2,14 +2,14 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
-import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.enums.OrderStatus;
-import com.accenture.flowershop.fe.service.dto.cartdto.CartService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.OrderDTO;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.service.dto.orderdto.OrderService;
-import com.accenture.flowershop.fe.service.dto.userdto.UserService;
+import com.accenture.flowershop.fe.enums.OrderStatus;
+import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
+import com.accenture.flowershop.fe.service.dto.orderdto.OrderDtoService;
+import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -25,6 +25,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
 
@@ -32,7 +34,7 @@ public class OrderServlet extends HttpServlet {
      * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
      */
     @Autowired
-    private CartService cartService;
+    private CartDtoService cartDtoService;
     /**
      * Ссылка на бизнес уровень для сущности User.
      */
@@ -42,14 +44,14 @@ public class OrderServlet extends HttpServlet {
      * Вспомогательный сервис.
      */
     @Autowired
-    private OrderService orderService;
+    private OrderDtoService orderDtoService;
     /**
      * Вспомогательный сервис.
      */
     @Autowired
-    private UserService userService;
+    private UserDtoService userDtoService;
 
-    public OrderServlet(){
+    public OrderServlet() {
         super();
     }
 
@@ -72,14 +74,39 @@ public class OrderServlet extends HttpServlet {
     /**
      * Сообщение об ошибке.
      */
-    private String errorString = null;
+    private String outputString = null;
 
     /**
      * Запрос POST. Перенаправляет запрос на GET.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserDTO userDTO = SessionUtils.getLoginedUser(session);
+        OrderDTO orderDTO = SessionUtils.getUserCart(session);
+
+        if (isNotBlank(request.getParameter("createOrder"))) {
+            startCreateOrder(userDTO, orderDTO);
+        }
+
+        if (isNotBlank(request.getParameter("cleanCart"))) {
+            cleanCart(session, userDTO);
+            outputString = "Cart clean right now!";
+        }
+        request.setAttribute("errorString", outputString);
         doGet(request, response);
+
+        SessionUtils.storeLoginedUser(session,
+                userDtoService.toDto(userBusinessService.getByLogin(userDTO.getLogin())));
+
+        if (hasError) {
+            outputString = null;
+            request.getRequestDispatcher("/view/order.jsp").forward(request, response);
+        } else {
+            cleanCart(session, userDTO);
+            hasError = true;
+            response.sendRedirect(request.getContextPath() + "/order");
+        }
     }
 
     /**
@@ -90,81 +117,59 @@ public class OrderServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        UserDTO userDTO = SessionUtils.getLoginedUser(session);
-        OrderDTO orderDTO = SessionUtils.getUserCart(session);
-
-        if (request.getParameter("createOrder") != null) {
-            startCreateOrder(userDTO, orderDTO);
-        }
-
-        if (request.getParameter("cleanCart") != null){
-            cleanCart(session, userDTO);
-            errorString = "Cart clean right now!";
-        }
-
-        request.setAttribute("errorString", errorString);
-
-        SessionUtils.storeLoginedUser(session,
-                userService.toDto(userBusinessService.getByLogin(userDTO.getLogin())));
-
-        if (hasError) {
-            errorString = null;
-            request.getRequestDispatcher("/view/order.jsp").forward(request, response);
-        } else {
-            cleanCart(session, userDTO);
-            hasError = true;
-            response.sendRedirect(request.getContextPath() + "/order");
-        }
+        doPost(request, response);
     }
 
     /**
      * Начинает создание заказа.
-     * @param userDTO - объект UserDTO
+     *
+     * @param userDTO  - объект UserDTO
      * @param orderDTO - объект OrderDTO
      */
     private void startCreateOrder(UserDTO userDTO, OrderDTO orderDTO) {
-        User user = userService.fromDto(userDTO);
-        Order order = orderService.fromDto(orderDTO);
+        User user = userDtoService.fromDto(userDTO);
+        Order order = orderDtoService.fromDto(orderDTO);
         if (checkUserCash(user, order.getSumPrice())) {
-            createOrder(user,order);
+            createOrder(user, order);
             hasError = false;
             return;
         }
-        errorString = "Need more gold!";
+        outputString = "Need more gold!";
     }
 
     /**
      * Очищает корзину пользователя.
+     *
      * @param session - объект HttpSession
      * @param userDTO - объект UserDTO
      */
     private void cleanCart(HttpSession session, UserDTO userDTO) {
-        SessionUtils.storeUserCart(session, cartService.clear(userDTO.getLogin()));
+        SessionUtils.storeUserCart(session, cartDtoService.clear(userDTO.getLogin()));
     }
 
     /**
      * Создает заказ.
-     * @param user - объект User
+     *
+     * @param user  - объект User
      * @param order - объект Order
      */
     private void createOrder(User user, Order order) {
         order.setDateCreate(new Date());
         order.setStatus(OrderStatus.PAID);
-        order.setUserId(user);
+        order.setUser(user);
         user.getOrders().add(order);
         userBusinessService.update(user);
     }
 
     /**
      * Проверяет наличие средств у пользователя для совершения покупки.
-     * @param user - объект User
+     *
+     * @param user     - объект User
      * @param sumPrice - суммарная цена заказа
      * @return true - если средств достаточно и платеж совершен,
-     *         false - если средств недостаточно
+     * false - если средств недостаточно
      */
-    private boolean checkUserCash(User user, BigDecimal sumPrice){
+    private boolean checkUserCash(User user, BigDecimal sumPrice) {
         BigDecimal cash = user.getCash();
         if (sumPrice.compareTo(cash) < 0) {
             user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));

@@ -2,7 +2,7 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.service.dto.orderdto.OrderService;
+import com.accenture.flowershop.fe.service.dto.orderdto.OrderDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Сервлет для работы с администратором. Используется для просмотра и закрытия заказов.
@@ -33,7 +35,11 @@ public class AdminServlet extends HttpServlet {
      * Вспомогательный сервис.
      */
     @Autowired
-    private OrderService orderService;
+    private OrderDtoService orderDtoService;
+    /**
+     * Карта существующих заказов.
+     */
+    private Map<Long, OrderDTO> orderDTOsMap;
 
     public AdminServlet() {
         super();
@@ -74,31 +80,28 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request,response);
+        doGet(request, response);
     }
 
     /**
      * Отметить заказ как закрытый (CLOSED).
+     *
      * @param orderId - идентификатор заказа
      */
     private void closeOrder(String orderId) {
-        if (orderId != null) {
+        if (isNotBlank(orderId)) {
             OrderDTO orderDTO = orderDTOsMap.get(Long.parseLong(orderId));
-            orderBusinessService.close(orderService.fromDto(orderDTO));
+            orderBusinessService.close(orderDtoService.fromDto(orderDTO));
         }
     }
 
     /**
-     * Карта существующих заказов.
-     */
-    private Map<Long, OrderDTO> orderDTOsMap;
-
-    /**
      * Заполнение карты существующих заказов и вывод информации о заказах на форму.
+     *
      * @param request - объект HttpServletRequest
      */
     private void dataOutput(HttpServletRequest request) {
-        List<OrderDTO> orderDTOs = orderService.toDtoList(orderBusinessService.getAll());
+        List<OrderDTO> orderDTOs = orderDtoService.toDtoList(orderBusinessService.getAll());
         orderDTOsMap = orderDTOs.stream().collect(Collectors.toMap(
                 OrderDTO::getId,
                 o -> o

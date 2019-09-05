@@ -11,12 +11,12 @@ public class CartDTO {
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор позиции в корзине.
      */
-    private long id;
+    private Long id;
 
     /**
      * Заказ, в который входит данная позиция.
@@ -38,25 +38,29 @@ public class CartDTO {
      */
     private BigDecimal sumPrice;
 
-    public CartDTO(){}
+    public CartDTO() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
 
     public FlowerDTO getFlower() {
         return flower;
     }
+
     public void setFlower(FlowerDTO flower) {
         this.flower = flower;
     }
@@ -64,6 +68,7 @@ public class CartDTO {
     public OrderDTO getOrder() {
         return order;
     }
+
     public void setOrder(OrderDTO order) {
         this.order = order;
     }
@@ -71,6 +76,7 @@ public class CartDTO {
     public int getNumber() {
         return number;
     }
+
     public void setNumber(int number) {
         this.number = number;
     }
@@ -78,6 +84,7 @@ public class CartDTO {
     public BigDecimal getSumPrice() {
         return sumPrice;
     }
+
     public void setSumPrice(BigDecimal sumPrice) {
         this.sumPrice = sumPrice;
     }
@@ -89,24 +96,27 @@ public class CartDTO {
             newCartDTO = new CartDTO();
         }
 
-        public Builder order(OrderDTO order){
+        public Builder order(OrderDTO order) {
             newCartDTO.order = order;
             return this;
         }
-        public Builder flower(FlowerDTO flower){
+
+        public Builder flower(FlowerDTO flower) {
             newCartDTO.flower = flower;
             return this;
         }
-        public Builder number(int number){
+
+        public Builder number(int number) {
             newCartDTO.number = number;
             return this;
         }
-        public Builder sumPrice(BigDecimal sumPrice){
+
+        public Builder sumPrice(BigDecimal sumPrice) {
             newCartDTO.sumPrice = sumPrice;
             return this;
         }
 
-        public CartDTO build(){
+        public CartDTO build() {
             return newCartDTO;
         }
     }
