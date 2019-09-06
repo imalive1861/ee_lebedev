@@ -1,18 +1,10 @@
 package com.accenture.flowershop.fe.service.dto.cartdto;
 
+import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.fe.dto.CartDTO;
-import com.accenture.flowershop.fe.dto.FlowerDTO;
-import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.enums.OrderStatus;
+import org.dozer.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import static java.math.RoundingMode.UP;
 
 /**
  * Реализация интерфейса CartDtoService.
@@ -21,108 +13,16 @@ import static java.math.RoundingMode.UP;
 @Service
 public class CartDtoServiceImpl implements CartDtoService {
 
-    /**
-     * Карта временных заказов пользователей.
-     */
-    private Map<String, OrderDTO> cart = new TreeMap<>();
+    @Autowired
+    private Mapper mapper;
 
-    public CartDtoServiceImpl() {
+    @Override
+    public CartDTO toDto(Cart cart) {
+        return mapper.map(cart, CartDTO.class);
     }
 
-    /**
-     * Получить текущий заказ пользователя.
-     *
-     * @param login - логин пользователя
-     * @return объект OrderDTO
-     */
-    private OrderDTO getCartById(String login) {
-        if (cart.containsKey(login)) {
-            return cart.get(login);
-        }
-        return null;
-    }
-
-    /**
-     * Рассчет суммы позиции с учетом скидки пользователя.
-     *
-     * @param price  - сумма позиции
-     * @param sale   - скидка пользователя
-     * @param number - количество заказанных цветов
-     * @return сумма позиции с учетом скидки пользователя
-     */
-    private BigDecimal getSumPriceWithDiscount(BigDecimal price, int sale, int number) {
-        BigDecimal sum = price.multiply(new BigDecimal(number));
-        BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);
-        newSale = newSale.divide(new BigDecimal(100.00), UP).setScale(2, UP);
-        newSale = newSale.multiply(sum).setScale(2, UP);
-        sum = sum.subtract(newSale).setScale(2, UP);
-        return sum;
-    }
-
-    /**
-     * Рассчет суммы заказа пользователя.
-     *
-     * @param login - логин пользователя
-     * @return сумма заказа пользователя
-     */
-    private BigDecimal getAllSumPrice(String login) {
-        BigDecimal sum = new BigDecimal(0.00);
-        List<CartDTO> carts = cart.get(login).getCarts();
-        if (!carts.isEmpty()) {
-            for (CartDTO c : carts) {
-                sum = sum.add(c.getSumPrice());
-            }
-        }
-        return sum;
-    }
-
-    public boolean isAddFlowerToCart(UserDTO userDTO, FlowerDTO flowerDTO, int number) {
-        if (number <= 0) {
-            return false;
-        }
-        OrderDTO orderDTO = getCartById(userDTO.getLogin());
-        CartDTO cartDTO = null;
-        for (CartDTO c : orderDTO.getCarts()) {
-            if (c.getFlower().getId().equals(flowerDTO.getId())) {
-                cartDTO = c;
-                break;
-            }
-        }
-        BigDecimal sumPrice =
-                getSumPriceWithDiscount(flowerDTO.getPrice(), userDTO.getDiscount(), number);
-        if (cartDTO == null) {
-            cartDTO = new CartDTO.Builder()
-                    .order(orderDTO)
-                    .flower(flowerDTO)
-                    .number(0)
-                    .sumPrice(new BigDecimal(0.00))
-                    .build();
-            this.cart.get(userDTO.getLogin()).getCarts().add(cartDTO);
-        }
-        flowerDTO = cartDTO.getFlower();
-        int i = flowerDTO.getNumber() - number;
-        if (i < 0) {
-            return false;
-        }
-        cartDTO.setNumber(cartDTO.getNumber() + number);
-        flowerDTO.setNumber(i);
-        cartDTO.setSumPrice(cartDTO.getSumPrice().add(sumPrice));
-        orderDTO.setSumPrice(getAllSumPrice(userDTO.getLogin()));
-        return true;
-    }
-
-    public OrderDTO clear(String login) {
-        OrderDTO orderDTO = new OrderDTO.Builder()
-                .status(OrderStatus.OPENED)
-                .build();
-        cart.put(login, orderDTO);
-        return orderDTO;
-    }
-
-    public OrderDTO setCart(String login) {
-        cart.putIfAbsent(login, new OrderDTO.Builder()
-                .status(OrderStatus.OPENED)
-                .build());
-        return cart.get(login);
+    @Override
+    public Cart fromDto(CartDTO cartDTO) {
+        return mapper.map(cartDTO, Cart.class);
     }
 }

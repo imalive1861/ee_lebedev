@@ -162,8 +162,8 @@ public class Order {
             return this;
         }
 
-        public Builder userId(User userId) {
-            newOrder.user = userId;
+        public Builder user(User user) {
+            newOrder.user = user;
             return this;
         }
 

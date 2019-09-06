@@ -7,13 +7,14 @@
 <body>
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
-    <p style="color: red;">${errorString}</p>
+    <p style="color: red;">${outputString}</p>
     <table border="1" cellpadding="5" cellspacing="1" >
         <tr>
             <th>Flower id</th>
             <th>Flower name</th>
             <th>Number</th>
             <th>Sum Price</th>
+            <th>Delete position</th>
         </tr>
         <c:forEach items="${userCart.carts}" var="cart" >
             <tr>
@@ -21,24 +22,27 @@
                 <td>${cart.flower.name}</td>
                 <td>${cart.number}</td>
                 <td>${cart.sumPrice}</td>
+                <td>
+                    <form method="POST" action="${pageContext.request.contextPath}/order">
+                        <input type="submit" name="deletePosition" value= "X" />
+                    </form>
+                </td>
             </tr>
         </c:forEach>
         <tr>
             <c:choose>
                 <c:when test="${userCart.carts.isEmpty()}">
-                    <td colspan="4">Cart is empty</td>
+                    <td colspan="5">Cart is empty</td>
                 </c:when>
                 <c:otherwise>
                     <td>
-                        <form method="GET" action="${pageContext.request.contextPath}/order">
-                            <input type="hidden" name="cleanCart" value="YESURU"/>
-                            <input type="submit" value= "Clean cart" />
+                        <form method="POST" action="${pageContext.request.contextPath}/order">
+                            <input type="submit" name="cleanCart" value= "Clean cart" />
                         </form>
                     </td>
                     <td>
-                        <form method="GET" action="${pageContext.request.contextPath}/order">
-                            <input type="hidden" name="createOrder" value="1"/>
-                            <input type="submit" value= "Create order" />
+                        <form method="POST" action="${pageContext.request.contextPath}/order">
+                            <input type="submit" name="createOrder" value= "Create order" />
                         </form>
                     </td>
                     <td>Total price:</td>

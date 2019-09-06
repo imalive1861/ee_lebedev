@@ -147,8 +147,8 @@ public class OrderDTO {
             return this;
         }
 
-        public Builder userId(UserDTO userId) {
-            newOrderDTO.user = userId;
+        public Builder user(UserDTO user) {
+            newOrderDTO.user = user;
             return this;
         }
 

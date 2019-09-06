@@ -1,12 +1,13 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Flower;
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.FlowerDTO;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
 import com.accenture.flowershop.fe.service.dto.flowerdto.FlowerDtoService;
+import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -50,6 +51,16 @@ public class CustomerServlet extends HttpServlet {
      */
     @Autowired
     private FlowerDtoService flowerDtoService;
+    /**
+     * Ссылка на бизнес уровень для сущности Cart.
+     */
+    @Autowired
+    private CartBusinessService cartBusinessService;
+    /**
+     * Ссылка на транспортный уровень для сущности User.
+     */
+    @Autowired
+    private UserDtoService userDtoService;
     /**
      * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
      */
@@ -143,7 +154,7 @@ public class CustomerServlet extends HttpServlet {
         if (isAddFlowerToCart(
                 Integer.parseInt(request.getParameter("numberToCart")),
                 flowerDTOMap.get(Long.parseLong(request.getParameter("flowerId"))),
-                SessionUtils.getLoginedUser(session))) {
+                SessionUtils.getLoginedUser(session).getLogin())) {
             hasError = false;
             return;
         }
@@ -187,11 +198,14 @@ public class CustomerServlet extends HttpServlet {
      *
      * @param numberToCart - количество цветков
      * @param flowerDTO    - объект FlowerDTO
-     * @param userDTO      - объект UserDTO
+     * @param login        - объект UserDTO
      * @return true - если цветок добавлен, false - если цветок не добавлен
      */
-    private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, UserDTO userDTO) {
-        return cartDtoService.isAddFlowerToCart(userDTO, flowerDTO, numberToCart);
+    private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, String login) {
+        return cartBusinessService.isAddFlowerToCart(
+                login,
+                flowerDtoService.fromDto(flowerDTO),
+                numberToCart);
     }
 
     private BigDecimal checkPrice(String minFlowerPrice) {

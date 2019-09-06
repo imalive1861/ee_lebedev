@@ -1,7 +1,7 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -21,10 +21,10 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
     /**
-     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
+     * Ссылка на бизнес уровень для сущности Cart.
      */
     @Autowired
-    private CartDtoService cartDtoService;
+    private CartBusinessService cartBusinessService;
 
     public LogoutServlet() {
         super();
@@ -65,7 +65,7 @@ public class LogoutServlet extends HttpServlet {
      */
     private void logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        cartDtoService.clear(SessionUtils.getLoginedUser(session).getLogin());
+        cartBusinessService.clear(SessionUtils.getLoginedUser(session).getLogin());
         session.invalidate();
     }
 }

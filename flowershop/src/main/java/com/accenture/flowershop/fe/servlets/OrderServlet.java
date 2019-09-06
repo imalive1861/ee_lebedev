@@ -2,12 +2,10 @@ package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.dto.OrderDTO;
-import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.enums.OrderStatus;
-import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
 import com.accenture.flowershop.fe.service.dto.orderdto.OrderDtoService;
 import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +29,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class OrderServlet extends HttpServlet {
 
     /**
-     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
-     */
-    @Autowired
-    private CartDtoService cartDtoService;
-    /**
      * Ссылка на бизнес уровень для сущности User.
      */
     @Autowired
@@ -46,17 +39,21 @@ public class OrderServlet extends HttpServlet {
     @Autowired
     private OrderDtoService orderDtoService;
     /**
+     * Ссылка на бизнес уровень для сущности Cart.
+     */
+    @Autowired
+    private CartBusinessService cartBusinessService;
+    /**
      * Вспомогательный сервис.
      */
     @Autowired
     private UserDtoService userDtoService;
-
     /**
      * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
      */
     private boolean hasError = true;
     /**
-     * Сообщение об ошибке.
+     * Информационное сообщение.
      */
     private String outputString = null;
 
@@ -82,27 +79,29 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        UserDTO userDTO = SessionUtils.getLoginedUser(session);
-        OrderDTO orderDTO = SessionUtils.getUserCart(session);
+        String login = SessionUtils.getLoginedUser(session).getLogin();
+
+        Order order = cartBusinessService.getCartById(login);
+        request.setAttribute("userCart", orderDtoService.toDto(order));
 
         if (isNotBlank(request.getParameter("createOrder"))) {
-            startCreateOrder(userDTO, orderDTO);
+            startCreateOrder(login);
         }
 
         if (isNotBlank(request.getParameter("cleanCart"))) {
-            cleanCart(session, userDTO);
+            cleanCart(login);
             outputString = "Cart clean right now!";
         }
-        request.setAttribute("errorString", outputString);
+        request.setAttribute("outputString", outputString);
 
         SessionUtils.storeLoginedUser(session,
-                userDtoService.toDto(userBusinessService.getByLogin(userDTO.getLogin())));
+                userDtoService.toDto(userBusinessService.getByLogin(login)));
 
         if (hasError) {
             outputString = null;
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         } else {
-            cleanCart(session, userDTO);
+            cleanCart(login);
             hasError = true;
             response.sendRedirect(request.getContextPath() + "/order");
         }
@@ -122,14 +121,11 @@ public class OrderServlet extends HttpServlet {
     /**
      * Начинает создание заказа.
      *
-     * @param userDTO  - объект UserDTO
-     * @param orderDTO - объект OrderDTO
+     * @param login - логин пользователя
      */
-    private void startCreateOrder(UserDTO userDTO, OrderDTO orderDTO) {
-        User user = userDtoService.fromDto(userDTO);
-        Order order = orderDtoService.fromDto(orderDTO);
-        if (checkUserCash(user, order.getSumPrice())) {
-            createOrder(user, order);
+    private void startCreateOrder(String login) {
+        if (checkUserCash(login)) {
+            createOrder(login);
             hasError = false;
             return;
         }
@@ -139,20 +135,20 @@ public class OrderServlet extends HttpServlet {
     /**
      * Очищает корзину пользователя.
      *
-     * @param session - объект HttpSession
-     * @param userDTO - объект UserDTO
+     * @param login - логин пользователя
      */
-    private void cleanCart(HttpSession session, UserDTO userDTO) {
-        SessionUtils.storeUserCart(session, cartDtoService.clear(userDTO.getLogin()));
+    private void cleanCart(String login) {
+        cartBusinessService.clear(login);
     }
 
     /**
      * Создает заказ.
      *
-     * @param user  - объект User
-     * @param order - объект Order
+     * @param login - логин пользователя
      */
-    private void createOrder(User user, Order order) {
+    private void createOrder(String login) {
+        User user = userBusinessService.getByLogin(login);
+        Order order = cartBusinessService.getCartById(login);
         order.setDateCreate(new Date());
         order.setStatus(OrderStatus.PAID);
         order.setUser(user);
@@ -163,12 +159,12 @@ public class OrderServlet extends HttpServlet {
     /**
      * Проверяет наличие средств у пользователя для совершения покупки.
      *
-     * @param user     - объект User
-     * @param sumPrice - суммарная цена заказа
      * @return true - если средств достаточно и платеж совершен,
      * false - если средств недостаточно
      */
-    private boolean checkUserCash(User user, BigDecimal sumPrice) {
+    private boolean checkUserCash(String login) {
+        User user = userBusinessService.getByLogin(login);
+        BigDecimal sumPrice = cartBusinessService.getCartById(login).getSumPrice();
         BigDecimal cash = user.getCash();
         if (sumPrice.compareTo(cash) < 0) {
             user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));

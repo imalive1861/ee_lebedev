@@ -1,10 +1,11 @@
 package com.accenture.flowershop.fe.servlets;
 
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
+import com.accenture.flowershop.fe.service.dto.orderdto.OrderDtoService;
 import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -37,12 +38,17 @@ public class LoginServlet extends HttpServlet {
      * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
      */
     @Autowired
-    private CartDtoService cartDtoService;
+    private CartBusinessService cartBusinessService;
     /**
      * Вспомогательный сервис.
      */
     @Autowired
     private UserDtoService userDtoService;
+    /**
+     * Вспомогательный сервис.
+     */
+    @Autowired
+    private OrderDtoService orderDtoService;
     /**
      * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
      */
@@ -140,7 +146,7 @@ public class LoginServlet extends HttpServlet {
     private void storeUserToSession(UserDTO userDTO, HttpSession session) {
         if (userDTO != null) {
             SessionUtils.storeLoginedUser(session, userDTO);
-            SessionUtils.storeUserCart(session, cartDtoService.setCart(userDTO.getLogin()));
+            cartBusinessService.setCart(userDTO.getLogin());
         }
     }
 }
