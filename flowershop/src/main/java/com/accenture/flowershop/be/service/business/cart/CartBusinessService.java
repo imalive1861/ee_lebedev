@@ -47,15 +47,21 @@ public interface CartBusinessService {
      * Создает новый временный заказ для пользователя.
      *
      * @param login - логин пользователя
-     * @return объект OrderDTO
      */
-    Order setCart(String login);
+    void setCart(String login);
 
     /**
      * Очищает текущий заказ пользователя.
      *
      * @param login - логин пользователя
-     * @return объект Order
      */
-    Order clear(String login);
+    void clear(String login);
+
+    /**
+     * Удаляет позицию из корзины.
+     *
+     * @param cartId - идентификатор позиции
+     * @param login  - логин пользователя
+     */
+    void deleteFlowerFromCart(Long cartId, String login);
 }

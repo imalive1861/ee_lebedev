@@ -3,6 +3,7 @@ package com.accenture.flowershop.be.service.business.cart;
 import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.entity.Order;
+import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.repository.cart.CartRepository;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.enums.OrderStatus;
@@ -105,9 +106,10 @@ public class CartBusinessServiceImpl implements CartBusinessService {
                 break;
             }
         }
+        User user = userBusinessService.getByLogin(login);
         BigDecimal sumPrice = getSumPriceWithDiscount(
                 flower.getPrice(),
-                userBusinessService.getByLogin(login).getDiscount(),
+                user.getDiscount(),
                 number);
         if (cart == null) {
             cart = new Cart.Builder()
@@ -127,34 +129,38 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         flower.setNumber(i);
         cart.setSumPrice(cart.getSumPrice().add(sumPrice));
         order.setSumPrice(getAllSumPrice(login));
+        user.getOrders().add(order);
         return true;
     }
 
     @Override
-    public Order setCart(String login) {
+    public void setCart(String login) {
         cart.putIfAbsent(login, new Order.Builder()
                 .status(OrderStatus.OPENED)
                 .carts(new ArrayList<>())
                 .build());
-        return cart.get(login);
+        cart.get(login);
     }
 
     @Override
-    public Order clear(String login) {
+    public void clear(String login) {
         Order order = new Order.Builder()
                 .status(OrderStatus.OPENED)
                 .carts(new ArrayList<>())
                 .build();
         cart.put(login, order);
-        return order;
     }
 
-    public void deleteFlowerFromCart(Long cartId, String login) {
-        List<Cart> carts = getCartById(login).getCarts();
+    @Override
+    public void deleteFlowerFromCart(Long flowerId, String login) {
+        Order order = getCartById(login);
+        List<Cart> carts = order.getCarts();
         for (Cart c : carts) {
-            if (c.getId().equals(cartId)) {
+            if (c.getFlower().getId().equals(flowerId)) {
                 carts.remove(c);
+                break;
             }
         }
+        order.setSumPrice(getAllSumPrice(login));
     }
 }

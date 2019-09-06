@@ -15,7 +15,6 @@
         <th colspan="7" align="center">Paid Orders</th>
         </tr>
         <tr>
-            <th>Code</th>
             <th>Customer</th>
             <th>Sum Price</th>
             <th>Date Create</th>
@@ -27,7 +26,6 @@
             <c:choose>
                 <c:when test="${order.status eq 'PAID'}">
                     <tr>
-                        <td>${order.id}</td>
                         <td>${order.user.login}</td>
                         <td>${order.sumPrice}</td>
                         <td>${order.dateCreate}</td>
@@ -67,7 +65,6 @@
         <th colspan="6" align="center">Closed Orders</th>
         </tr>
         <tr>
-            <th>Code</th>
             <th>Customer</th>
             <th>Sum Price</th>
             <th>Date Create</th>
@@ -78,7 +75,6 @@
             <c:choose>
                 <c:when test="${order.status eq 'CLOSED'}">
                     <tr>
-                        <td>${order.id}</td>
                         <td>${order.user.login}</td>
                         <td>${order.sumPrice}</td>
                         <td>${order.dateCreate}</td>

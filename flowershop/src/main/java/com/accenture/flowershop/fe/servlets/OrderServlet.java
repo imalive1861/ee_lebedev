@@ -81,9 +81,6 @@ public class OrderServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String login = SessionUtils.getLoginedUser(session).getLogin();
 
-        Order order = cartBusinessService.getCartById(login);
-        request.setAttribute("userCart", orderDtoService.toDto(order));
-
         if (isNotBlank(request.getParameter("createOrder"))) {
             startCreateOrder(login);
         }
@@ -92,7 +89,18 @@ public class OrderServlet extends HttpServlet {
             cleanCart(login);
             outputString = "Cart clean right now!";
         }
+
+        if (isNotBlank(request.getParameter("deletePosition"))) {
+            String cartId = request.getParameter("flowerId");
+            if (isNotBlank(cartId)) {
+                cartBusinessService.deleteFlowerFromCart(Long.parseLong(cartId), login);
+            }
+            outputString = "Position delete!";
+        }
         request.setAttribute("outputString", outputString);
+
+        Order order = cartBusinessService.getCartById(login);
+        request.setAttribute("userCart", orderDtoService.toDto(order));
 
         SessionUtils.storeLoginedUser(session,
                 userDtoService.toDto(userBusinessService.getByLogin(login)));

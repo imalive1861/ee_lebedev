@@ -10,7 +10,6 @@
     <p style="color: red;">${outputString}</p>
     <table border="1" cellpadding="5" cellspacing="1" >
         <tr>
-            <th>Flower id</th>
             <th>Flower name</th>
             <th>Number</th>
             <th>Sum Price</th>
@@ -18,12 +17,12 @@
         </tr>
         <c:forEach items="${userCart.carts}" var="cart" >
             <tr>
-                <td>${cart.flower.id}</td>
                 <td>${cart.flower.name}</td>
                 <td>${cart.number}</td>
                 <td>${cart.sumPrice}</td>
                 <td>
                     <form method="POST" action="${pageContext.request.contextPath}/order">
+                        <input type="hidden" name="flowerId" value="${cart.flower.id}"/>
                         <input type="submit" name="deletePosition" value= "X" />
                     </form>
                 </td>
@@ -37,26 +36,25 @@
                 <c:otherwise>
                     <td>
                         <form method="POST" action="${pageContext.request.contextPath}/order">
-                            <input type="submit" name="cleanCart" value= "Clean cart" />
-                        </form>
-                    </td>
-                    <td>
-                        <form method="POST" action="${pageContext.request.contextPath}/order">
                             <input type="submit" name="createOrder" value= "Create order" />
                         </form>
                     </td>
                     <td>Total price:</td>
                     <td>${userCart.sumPrice}</td>
+                    <td>
+                        <form method="POST" action="${pageContext.request.contextPath}/order">
+                            <input type="submit" name="cleanCart" value= "Clean cart" />
+                        </form>
+                    </td>
                 </c:otherwise>
             </c:choose>
         </tr>
     </table>
     <table align="right" border cellpadding="5" cellspacing="1">
         <tr>
-        <th colspan="6" align="center">Orders</th>
+        <th colspan="5" align="center">Orders</th>
         </tr>
         <tr>
-            <th>Code</th>
             <th>Customer</th>
             <th>Sum Price</th>
             <th>Date Create</th>
@@ -65,7 +63,6 @@
         </tr>
         <c:forEach items="${loginedUser.orders}" var="order" >
             <tr>
-                <td>${order.id}</td>
                 <td>${order.user.login}</td>
                 <td>${order.sumPrice}</td>
                 <td>${order.dateCreate}</td>
