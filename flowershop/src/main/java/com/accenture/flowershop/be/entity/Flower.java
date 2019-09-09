@@ -48,6 +48,12 @@ public class Flower {
     @OneToMany(mappedBy = "flower")
     private List<Cart> carts = new ArrayList<>();
 
+    /**
+     * Заказы, в которых содержится цветок.
+     */
+    @ManyToMany
+    private List<Order> orders;
+
     public Flower() {
     }
 
@@ -99,6 +105,14 @@ public class Flower {
         return carts;
     }
 
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public static class Builder {
         private Flower newFlower;
 
@@ -118,6 +132,11 @@ public class Flower {
 
         public Builder number(int number) {
             newFlower.number = number;
+            return this;
+        }
+
+        public Builder carts(List<Cart> carts) {
+            newFlower.carts = carts;
             return this;
         }
 

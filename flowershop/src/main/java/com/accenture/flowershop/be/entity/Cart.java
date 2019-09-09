@@ -40,7 +40,7 @@ public class Cart {
     /**
      * Цветок, добавленный в корзину.
      */
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 

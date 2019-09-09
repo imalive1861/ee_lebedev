@@ -65,8 +65,13 @@ public class Order {
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Cart> carts = new ArrayList<>();
+    /**
+     * Цветки, относящиеся к данному заказу.
+     */
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<Flower> flowers = new ArrayList<>();
 
     public Order() {
     }
@@ -133,6 +138,14 @@ public class Order {
 
     public void setCarts(List<Cart> carts) {
         this.carts = carts;
+    }
+
+    public List<Flower> getFlowers() {
+        return flowers;
+    }
+
+    public void setFlowers(List<Flower> flowers) {
+        this.flowers = flowers;
     }
 
     public static class Builder {
