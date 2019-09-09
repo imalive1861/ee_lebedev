@@ -45,10 +45,16 @@ public class Cart {
     private Flower flower;
 
     /**
-     * Суммарная цена за количество добавленных цветов.
+     * Суммарная цена за количество добавленных цветов без скидки.
      */
-    @Column(name = "sum_price")
-    private BigDecimal sumPrice;
+    @Column(name = "sum_price_without_discount")
+    private BigDecimal sumPriceWithoutDiscount;
+
+    /**
+     * Суммарная цена за количество добавленных цветов со скидкой.
+     */
+    @Column(name = "sum_price_with_discount")
+    private BigDecimal sumPriceWithDiscount;
 
     public Cart() {
     }
@@ -93,12 +99,20 @@ public class Cart {
         this.order = order;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
     }
 
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public static class Builder {
@@ -123,8 +137,13 @@ public class Cart {
             return this;
         }
 
-        public Builder sumPrice(BigDecimal sumPrice) {
-            newCart.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newCart.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+            return this;
+        }
+
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newCart.sumPriceWithDiscount = sumPriceWithDiscount;
             return this;
         }
 

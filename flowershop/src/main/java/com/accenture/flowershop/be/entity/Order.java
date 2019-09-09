@@ -32,10 +32,16 @@ public class Order {
     private Long id;
 
     /**
-     * Суммарная цена за все позиции заказа.
+     * Суммарная цена за все позиции заказа со скидкой.
      */
-    @Column(name = "sum_price")
-    private BigDecimal sumPrice;
+    @Column(name = "sum_price_without_discount")
+    private BigDecimal sumPriceWithoutDiscount;
+
+    /**
+     * Суммарная цена за все позиции заказа без скидки.
+     */
+    @Column(name = "sum_price_with_discount")
+    private BigDecimal sumPriceWithDiscount;
 
     /**
      * Дата создания заказа покупателем.
@@ -92,12 +98,20 @@ public class Order {
         return id;
     }
 
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
     }
 
     public void setDateCreate(Date dateCreate) {
@@ -155,8 +169,13 @@ public class Order {
             newOrder = new Order();
         }
 
-        public Builder sumPrice(BigDecimal sumPrice) {
-            newOrder.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newOrder.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+            return this;
+        }
+
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newOrder.sumPriceWithDiscount = sumPriceWithDiscount;
             return this;
         }
 
