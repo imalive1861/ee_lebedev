@@ -29,9 +29,14 @@ public class OrderDTO {
     private UserDTO user;
 
     /**
-     * Суммарная цена за все позиции заказа.
+     * Суммарная цена за все позиции заказа со скидкой.
      */
-    private BigDecimal sumPrice;
+    private BigDecimal sumPriceWithoutDiscount;
+
+    /**
+     * Суммарная цена за все позиции заказа без скидки.
+     */
+    private BigDecimal sumPriceWithDiscount;
 
     /**
      * Дата создания заказа покупателем.
@@ -80,12 +85,20 @@ public class OrderDTO {
         this.user = user;
     }
 
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
     }
 
     public void setDateCreate(Date dateCreate) {
@@ -127,8 +140,13 @@ public class OrderDTO {
             newOrderDTO = new OrderDTO();
         }
 
-        public Builder sumPrice(BigDecimal sumPrice) {
-            newOrderDTO.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newOrderDTO.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+            return this;
+        }
+
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newOrderDTO.sumPriceWithDiscount = sumPriceWithDiscount;
             return this;
         }
 

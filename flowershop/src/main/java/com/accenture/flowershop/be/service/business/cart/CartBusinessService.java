@@ -4,6 +4,7 @@ import com.accenture.flowershop.be.entity.Cart;
 import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.entity.Order;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -19,6 +20,13 @@ public interface CartBusinessService {
     Cart get(Long id);
 
     /**
+     * Получить карту заказов пользователей.
+     *
+     * @return карта заказов пользователей
+     */
+    Map<String, Order> getCart();
+
+    /**
      * Получить текущий заказ пользователя.
      *
      * @param login - логин пользователя
@@ -27,11 +35,21 @@ public interface CartBusinessService {
     Order getCartById(String login);
 
     /**
-     * Получить карту заказов пользователей.
+     * Рассчет суммы позиции с учетом скидки пользователя.
      *
-     * @return карта заказов пользователей
+     * @param price  - сумма позиции
+     * @param sale   - скидка пользователя
+     * @param number - количество заказанных цветов
+     * @return сумма позиции с учетом скидки пользователя
      */
-    Map<String, Order> getCart();
+    BigDecimal getSumPriceWithDiscount(BigDecimal price, int sale, int number);
+
+    /**
+     * Рассчет суммы заказа пользователя.
+     *
+     * @param order - объект Order
+     */
+    void countAllSumPrice(Order order);
 
     /**
      * Добавляет новую позицию в заказе.

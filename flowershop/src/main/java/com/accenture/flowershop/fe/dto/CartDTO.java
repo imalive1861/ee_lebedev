@@ -34,9 +34,14 @@ public class CartDTO {
     private int number;
 
     /**
-     * Суммарная цена за количество добавленных цветов.
+     * Суммарная цена за количество добавленных цветов без скидки.
      */
-    private BigDecimal sumPrice;
+    private BigDecimal sumPriceWithoutDiscount;
+
+    /**
+     * Суммарная цена за количество добавленных цветов со скидкой.
+     */
+    private BigDecimal sumPriceWithDiscount;
 
     public CartDTO() {
     }
@@ -81,12 +86,20 @@ public class CartDTO {
         this.number = number;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
     }
 
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public static class Builder {
@@ -111,8 +124,13 @@ public class CartDTO {
             return this;
         }
 
-        public Builder sumPrice(BigDecimal sumPrice) {
-            newCartDTO.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newCartDTO.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+            return this;
+        }
+
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newCartDTO.sumPriceWithDiscount = sumPriceWithDiscount;
             return this;
         }
 

@@ -47,6 +47,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         return cartRepository.getOne(id);
     }
 
+    @Override
     public Map<String, Order> getCart() {
         return cart;
     }
@@ -59,15 +60,8 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         return null;
     }
 
-    /**
-     * Рассчет суммы позиции с учетом скидки пользователя.
-     *
-     * @param price  - сумма позиции
-     * @param sale   - скидка пользователя
-     * @param number - количество заказанных цветов
-     * @return сумма позиции с учетом скидки пользователя
-     */
-    private BigDecimal getSumPriceWithDiscount(BigDecimal price, int sale, int number) {
+    @Override
+    public BigDecimal getSumPriceWithDiscount(BigDecimal price, int sale, int number) {
         BigDecimal sum = price.multiply(new BigDecimal(number));
         BigDecimal newSale = new BigDecimal(sale).setScale(2, UP);
         newSale = newSale.divide(new BigDecimal(100.00), UP).setScale(2, UP);
@@ -76,21 +70,19 @@ public class CartBusinessServiceImpl implements CartBusinessService {
         return sum;
     }
 
-    /**
-     * Рассчет суммы заказа пользователя.
-     *
-     * @param login - логин пользователя
-     * @return сумма заказа пользователя
-     */
-    private BigDecimal getAllSumPrice(String login) {
-        BigDecimal sum = new BigDecimal(0.00);
-        List<Cart> carts = cart.get(login).getCarts();
+    @Override
+    public void countAllSumPrice(Order order) {
+        BigDecimal sumPriceWithoutDiscount = new BigDecimal(0.00);
+        BigDecimal sumPriceWithDiscount = new BigDecimal(0.00);
+        List<Cart> carts = order.getCarts();
         if (!carts.isEmpty()) {
             for (Cart c : carts) {
-                sum = sum.add(c.getSumPrice());
+                sumPriceWithoutDiscount = sumPriceWithoutDiscount.add(c.getSumPriceWithoutDiscount());
+                sumPriceWithDiscount = sumPriceWithDiscount.add(c.getSumPriceWithDiscount());
             }
         }
-        return sum;
+        order.setSumPriceWithoutDiscount(sumPriceWithoutDiscount);
+        order.setSumPriceWithDiscount(sumPriceWithDiscount);
     }
 
     @Override
@@ -107,16 +99,21 @@ public class CartBusinessServiceImpl implements CartBusinessService {
             }
         }
         User user = userBusinessService.getByLogin(login);
-        BigDecimal sumPrice = getSumPriceWithDiscount(
+        BigDecimal sumPriceWithDiscount = getSumPriceWithDiscount(
                 flower.getPrice(),
                 user.getDiscount(),
+                number);
+        BigDecimal sumPriceWithoutDiscount = getSumPriceWithDiscount(
+                flower.getPrice(),
+                0,
                 number);
         if (cart == null) {
             cart = new Cart.Builder()
                     .order(order)
                     .flower(flower)
                     .number(0)
-                    .sumPrice(new BigDecimal(0.00))
+                    .sumPriceWithoutDiscount(new BigDecimal(0.00))
+                    .sumPriceWithDiscount(new BigDecimal(0.00))
                     .build();
             this.cart.get(login).getCarts().add(cart);
         }
@@ -126,8 +123,9 @@ public class CartBusinessServiceImpl implements CartBusinessService {
             return false;
         }
         cart.setNumber(cart.getNumber() + number);
-        cart.setSumPrice(cart.getSumPrice().add(sumPrice));
-        order.setSumPrice(getAllSumPrice(login));
+        cart.setSumPriceWithoutDiscount(cart.getSumPriceWithoutDiscount().add(sumPriceWithoutDiscount));
+        cart.setSumPriceWithDiscount(cart.getSumPriceWithDiscount().add(sumPriceWithDiscount));
+        countAllSumPrice(order);
         user.getOrders().add(order);
         return true;
     }
@@ -160,6 +158,6 @@ public class CartBusinessServiceImpl implements CartBusinessService {
                 break;
             }
         }
-        order.setSumPrice(getAllSumPrice(login));
+        countAllSumPrice(order);
     }
 }

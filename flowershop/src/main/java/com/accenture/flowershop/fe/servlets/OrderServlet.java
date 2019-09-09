@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -189,14 +190,23 @@ public class OrderServlet extends HttpServlet {
             outputString = "Order has already been paid or closed! O_o";
             return;
         }
-        BigDecimal sumPrice = order.getSumPrice();
+        List<Cart> carts = order.getCarts();
+        for (Cart cart : carts) {
+            cart.setSumPriceWithDiscount(
+                    cartBusinessService.getSumPriceWithDiscount(
+                            cart.getFlower().getPrice(),
+                            user.getDiscount(),
+                            cart.getNumber()));
+        }
+        cartBusinessService.countAllSumPrice(order);
+        BigDecimal sumPrice = order.getSumPriceWithDiscount();
         BigDecimal cash = user.getCash();
         if (sumPrice.compareTo(cash) > 0) {
             outputString = "Need more gold!";
             return;
         }
         user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));
-        for (Cart c : order.getCarts()) {
+        for (Cart c : carts) {
             Flower flower = c.getFlower();
             flower.setNumber(flower.getNumber() - c.getNumber());
             order.getFlowers().add(flower);
