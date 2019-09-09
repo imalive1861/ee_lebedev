@@ -3,6 +3,36 @@
 <html>
 <head>
     <title>Order</title>
+    <style type="text/css">
+    .tabs { width: 100%; padding: 0px; margin: 0 auto; }
+    .tabs>input { display:none; }
+    .tabs>div {
+        display: none;
+        padding: 12px;
+        border: 1px solid #C0C0C0;
+        background: #FFFFFF;
+    }
+    .tabs>label {
+        display: inline-block;
+        padding: 7px;
+        margin: 0 -5px -1px 0;
+        text-align: center;
+        color: #666666;
+        border: 1px solid #C0C0C0;
+        background: #E0E0E0;
+        cursor: pointer;
+    }
+    .tabs>input:checked + label {
+        color: #000000;
+        border: 1px solid #C0C0C0;
+        border-bottom: 1px solid #FFFFFF;
+        background: #FFFFFF;
+    }
+    #tab_1:checked ~ #txt_1,
+    #tab_2:checked ~ #txt_2,
+    #tab_3:checked ~ #txt_3,
+    #tab_4:checked ~ #txt_4 { display: block; }
+    </style>
 </head>
 <body>
     <jsp:include page="_header.jsp"/>
@@ -50,44 +80,110 @@
             </c:choose>
         </tr>
     </table>
-    <table align="right" border cellpadding="5" cellspacing="1">
-        <tr>
-        <th colspan="5" align="center">Orders</th>
-        </tr>
-        <tr>
-            <th>Customer</th>
-            <th>Sum Price</th>
-            <th>Date Create</th>
-            <th>Date Close</th>
-            <th>Status</th>
-        </tr>
-        <c:forEach items="${loginedUser.orders}" var="order" >
-            <tr>
-                <td>${order.user.login}</td>
-                <td>${order.sumPrice}</td>
-                <td>${order.dateCreate}</td>
-                <td>${order.dateClose}</td>
-                <td>${order.status}</td>
-            </tr>
-            <tr align="right">
-                <td colspan="6">
-                    <table border>
-                        <tr>
-                            <th>Flower Name</th>
-                            <th>Number of Flower</th>
-                            <th>Price of Flower</th>
-                        </tr>
-                        <c:forEach items="${order.carts}" var="cart" >
+    <div class="tabs" align="right" >
+        <input type="radio" name="inset" value="" id="tab_1" checked>
+        <label for="tab_1">Opened Orders</label>
+
+        <input type="radio" name="inset" value="" id="tab_2">
+        <label for="tab_2">Paid Orders</label>
+
+        <div id="txt_1">
+            <table border cellpadding="5" cellspacing="1">
+                <tr>
+                <th colspan="6" align="center">Orders</th>
+                </tr>
+                <tr>
+                    <th>Customer</th>
+                    <th>Sum Price</th>
+                    <th>Date Create</th>
+                    <th>Date Close</th>
+                    <th>Status</th>
+                    <th>Pay</th>
+                </tr>
+                <c:forEach items="${loginedUser.orders}" var="order" >
+                    <c:choose>
+                        <c:when test="${order.status eq 'OPENED'}">
                             <tr>
-                                <td>${cart.flower.name}</td>
-                                <td>${cart.number}</td>
-                                <td>${cart.sumPrice}</td>
+                                <td>${order.user.login}</td>
+                                <td>${order.sumPrice}</td>
+                                <td>${order.dateCreate}</td>
+                                <td>${order.dateClose}</td>
+                                <td>${order.status}</td>
+                                <td>
+                                    <form method="POST" action="${pageContext.request.contextPath}/order">
+                                        <input type="hidden" name="orderId" value="${order.id}"/>
+                                        <input type="submit" name="payOrder" value= "Pay" />
+                                    </form>
+                                </td>
                             </tr>
-                        </c:forEach>
-                    </table>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
+                            <tr align="right">
+                                <td colspan="6">
+                                    <table border>
+                                        <tr>
+                                            <th>Flower Name</th>
+                                            <th>Number of Flower</th>
+                                            <th>Price of Flower</th>
+                                        </tr>
+                                        <c:forEach items="${order.carts}" var="cart" >
+                                            <tr>
+                                                <td>${cart.flower.name}</td>
+                                                <td>${cart.number}</td>
+                                                <td>${cart.sumPrice}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </table>
+                                </td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
+            </table>
+        </div>
+        <div id="txt_2">
+            <table border cellpadding="5" cellspacing="1">
+                <tr>
+                <th colspan="5" align="center">Orders</th>
+                </tr>
+                <tr>
+                    <th>Customer</th>
+                    <th>Sum Price</th>
+                    <th>Date Create</th>
+                    <th>Date Close</th>
+                    <th>Status</th>
+                </tr>
+                <c:forEach items="${loginedUser.orders}" var="order" >
+                    <c:choose>
+                        <c:when test="${order.status eq 'PAID'}">
+                            <tr>
+                                <td>${order.user.login}</td>
+                                <td>${order.sumPrice}</td>
+                                <td>${order.dateCreate}</td>
+                                <td>${order.dateClose}</td>
+                                <td>${order.status}</td>
+                            </tr>
+                            <tr align="right">
+                                <td colspan="5">
+                                    <table border>
+                                        <tr>
+                                            <th>Flower Name</th>
+                                            <th>Number of Flower</th>
+                                            <th>Price of Flower</th>
+                                        </tr>
+                                        <c:forEach items="${order.carts}" var="cart" >
+                                            <tr>
+                                                <td>${cart.flower.name}</td>
+                                                <td>${cart.number}</td>
+                                                <td>${cart.sumPrice}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </table>
+                                </td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

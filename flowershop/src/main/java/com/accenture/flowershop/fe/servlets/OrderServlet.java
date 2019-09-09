@@ -1,10 +1,14 @@
 package com.accenture.flowershop.fe.servlets;
 
+import com.accenture.flowershop.be.entity.Cart;
+import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
+import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
+import com.accenture.flowershop.fe.dto.UserDTO;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 import com.accenture.flowershop.fe.service.dto.orderdto.OrderDtoService;
 import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
@@ -44,6 +48,11 @@ public class OrderServlet extends HttpServlet {
     @Autowired
     private CartBusinessService cartBusinessService;
     /**
+     * Ссылка на бизнес уровень для сущности Order.
+     */
+    @Autowired
+    private OrderBusinessService orderBusinessService;
+    /**
      * Вспомогательный сервис.
      */
     @Autowired
@@ -79,10 +88,19 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String login = SessionUtils.getLoginedUser(session).getLogin();
+        UserDTO userDTO = SessionUtils.getLoginedUser(session);
+        User user = userDtoService.fromDto(userDTO);
+        String login = userDTO.getLogin();
 
         if (isNotBlank(request.getParameter("createOrder"))) {
-            startCreateOrder(login);
+            createOrder(user);
+            if (!hasError) {
+                cleanCart(login);
+            }
+        }
+
+        if (isNotBlank(request.getParameter("payOrder"))) {
+            startPayOrder(user, request.getParameter("orderId"));
         }
 
         if (isNotBlank(request.getParameter("cleanCart"))) {
@@ -109,7 +127,6 @@ public class OrderServlet extends HttpServlet {
             outputString = null;
             request.getRequestDispatcher("/view/order.jsp").forward(request, response);
         } else {
-            cleanCart(login);
             hasError = true;
             response.sendRedirect(request.getContextPath() + "/order");
         }
@@ -127,17 +144,66 @@ public class OrderServlet extends HttpServlet {
     }
 
     /**
-     * Начинает создание заказа.
+     * Создает заказ.
      *
-     * @param login - логин пользователя
+     * @param user - объект User
      */
-    private void startCreateOrder(String login) {
-        if (checkUserCash(login)) {
-            createOrder(login);
-            hasError = false;
+    private void createOrder(User user) {
+        Order order = cartBusinessService.getCartById(user.getLogin());
+        order.setDateCreate(new Date());
+        order.setUser(user);
+        user.getOrders().add(order);
+        userBusinessService.update(user);
+        hasError = false;
+    }
+
+    /**
+     * Начинает оплату заказа.
+     */
+    private void startPayOrder(User user, String orderId) {
+        if (!isNotBlank(orderId)) {
+            outputString = "Something went wrong!";
             return;
         }
-        outputString = "Need more gold!";
+        payOrder(user, Long.parseLong(orderId));
+    }
+
+    /**
+     * Оплачивает заказа.
+     *
+     * @param user    - объект User
+     * @param orderId - идентификатор заказа
+     */
+    private void payOrder(User user, Long orderId) {
+        Order order = null;
+        for (Order o : user.getOrders()) {
+            if (orderId.equals(o.getId())) {
+                order = o;
+            }
+        }
+        if (order == null) {
+            outputString = "Order not found!";
+            return;
+        }
+        if (!order.getStatus().equals(OrderStatus.OPENED)) {
+            outputString = "Order has already been paid or closed! O_o";
+            return;
+        }
+        BigDecimal sumPrice = order.getSumPrice();
+        BigDecimal cash = user.getCash();
+        if (sumPrice.compareTo(cash) > 0) {
+            outputString = "Need more gold!";
+            return;
+        }
+        user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));
+        for (Cart c : order.getCarts()) {
+            Flower flower = c.getFlower();
+            flower.setNumber(flower.getNumber() - c.getNumber());
+            order.getFlowers().add(flower);
+        }
+        order.setStatus(OrderStatus.PAID);
+        userBusinessService.update(user);
+        hasError = false;
     }
 
     /**
@@ -147,37 +213,5 @@ public class OrderServlet extends HttpServlet {
      */
     private void cleanCart(String login) {
         cartBusinessService.clear(login);
-    }
-
-    /**
-     * Создает заказ.
-     *
-     * @param login - логин пользователя
-     */
-    private void createOrder(String login) {
-        User user = userBusinessService.getByLogin(login);
-        Order order = cartBusinessService.getCartById(login);
-        order.setDateCreate(new Date());
-        order.setStatus(OrderStatus.PAID);
-        order.setUser(user);
-        user.getOrders().add(order);
-        userBusinessService.update(user);
-    }
-
-    /**
-     * Проверяет наличие средств у пользователя для совершения покупки.
-     *
-     * @return true - если средств достаточно и платеж совершен,
-     * false - если средств недостаточно
-     */
-    private boolean checkUserCash(String login) {
-        User user = userBusinessService.getByLogin(login);
-        BigDecimal sumPrice = cartBusinessService.getCartById(login).getSumPrice();
-        BigDecimal cash = user.getCash();
-        if (sumPrice.compareTo(cash) < 0) {
-            user.setCash(cash.subtract(sumPrice).setScale(2, RoundingMode.UP));
-            return true;
-        }
-        return false;
     }
 }

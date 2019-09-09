@@ -121,12 +121,11 @@ public class CartBusinessServiceImpl implements CartBusinessService {
             this.cart.get(login).getCarts().add(cart);
         }
         flower = cart.getFlower();
-        int i = flower.getNumber() - number;
+        int i = flower.getNumber() - (cart.getNumber() + number);
         if (i < 0) {
             return false;
         }
         cart.setNumber(cart.getNumber() + number);
-        flower.setNumber(i);
         cart.setSumPrice(cart.getSumPrice().add(sumPrice));
         order.setSumPrice(getAllSumPrice(login));
         user.getOrders().add(order);
