@@ -21,10 +21,12 @@
         <tr>
             <td>Login</td>
             <td><input type="text" name="login" value= "${user.login}" /> </td>
+            <td><div style="color: red;">${errorlogin}</div></td>
         </tr>
         <tr>
             <td>Password</td>
             <td><input type="password" name="password" value= "" /> </td>
+            <td><div style="color: red;">${errorpassword}</div></td>
         </tr>
         <tr>
             <td colspan ="2">

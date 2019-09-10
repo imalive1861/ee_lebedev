@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -120,13 +119,8 @@ public class LoginServlet extends HttpServlet {
      * @param password - пароль
      */
     private UserDTO login(String login, String password) {
-        UserDTO userDTO = new UserDTO.Builder()
-                .login(login)
-                .password(password)
-                .build();
-        Map<String, String> errorMap = userDtoService.dataValidation(userDTO);
-        if (!errorMap.isEmpty()) {
-            errorString = "Required username and password!";
+        if (isNotBlank(login) && isNotBlank(password)) {
+            errorString = "Login and/or password cannot be empty!";
             return null;
         }
         User user = userBusinessService.logIn(login, password);
