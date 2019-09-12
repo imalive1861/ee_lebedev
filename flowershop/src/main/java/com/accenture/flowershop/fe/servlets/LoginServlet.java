@@ -119,7 +119,7 @@ public class LoginServlet extends HttpServlet {
      * @param password - пароль
      */
     private UserDTO login(String login, String password) {
-        if (isNotBlank(login) && isNotBlank(password)) {
+        if (!isNotBlank(login) && !isNotBlank(password)) {
             errorString = "Login and/or password cannot be empty!";
             return null;
         }

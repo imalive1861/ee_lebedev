@@ -40,7 +40,7 @@ public class Flower {
     /**
      * Количество цветов.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
@@ -89,11 +89,11 @@ public class Flower {
         return price;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -130,13 +130,8 @@ public class Flower {
             return this;
         }
 
-        public Builder number(int number) {
+        public Builder number(Integer number) {
             newFlower.number = number;
-            return this;
-        }
-
-        public Builder carts(List<Cart> carts) {
-            newFlower.carts = carts;
             return this;
         }
 

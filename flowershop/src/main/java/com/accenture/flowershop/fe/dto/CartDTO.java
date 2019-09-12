@@ -31,7 +31,7 @@ public class CartDTO {
     /**
      * Количество цветов, добавленных в корзину.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Суммарная цена за количество добавленных цветов без скидки.
@@ -78,11 +78,11 @@ public class CartDTO {
         this.order = order;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
@@ -119,7 +119,7 @@ public class CartDTO {
             return this;
         }
 
-        public Builder number(int number) {
+        public Builder number(Integer number) {
             newCartDTO.number = number;
             return this;
         }

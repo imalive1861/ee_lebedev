@@ -62,7 +62,7 @@ public class UserDTO {
     /**
      * Предоставляемая магазином для пользователя скидка на товар.
      */
-    private int discount;
+    private Integer discount;
 
     /**
      * Роль пользователя. (ADMIN или CUSTOMER)
@@ -141,11 +141,11 @@ public class UserDTO {
         return cash;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 
-    public int getDiscount() {
+    public Integer getDiscount() {
         return discount;
     }
 
@@ -202,7 +202,7 @@ public class UserDTO {
             return this;
         }
 
-        public Builder discount(int discount) {
+        public Builder discount(Integer discount) {
             newUserDTO.discount = discount;
             return this;
         }

@@ -38,7 +38,7 @@ public class FlowerBusinessServiceTest {
                 .price(new BigDecimal(1))
                 .build();
         flowerBusinessService.update(flower);
-        assertEquals(flowerBusinessService.get(flower.getId()).getNumber(),333);
+        assertEquals(flowerBusinessService.get(flower.getId()).getNumber().intValue(),333);
     }
 
     /*@Test

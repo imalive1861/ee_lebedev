@@ -28,7 +28,7 @@ public class Cart {
     /**
      * Количество цветов, добавленных в корзину.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Заказ, в который входит данная позиция.
@@ -75,11 +75,11 @@ public class Cart {
         this.id = id;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
@@ -132,7 +132,7 @@ public class Cart {
             return this;
         }
 
-        public Builder number(int number) {
+        public Builder number(Integer number) {
             newCart.number = number;
             return this;
         }

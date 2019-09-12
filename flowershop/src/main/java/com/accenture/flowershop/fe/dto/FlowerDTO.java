@@ -75,11 +75,11 @@ public class FlowerDTO {
         return price;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -108,7 +108,7 @@ public class FlowerDTO {
             return this;
         }
 
-        public Builder number(int number) {
+        public Builder number(Integer number) {
             newFlowerDTO.number = number;
             return this;
         }
