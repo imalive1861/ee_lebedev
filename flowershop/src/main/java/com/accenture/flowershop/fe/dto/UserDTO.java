@@ -5,8 +5,8 @@ import com.accenture.flowershop.fe.enums.UserRoles;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного уровня, хранящий информацию о пользователе.
@@ -72,7 +72,7 @@ public class UserDTO {
     /**
      * Список заказов, сделанных пользователем.
      */
-    private List<OrderDTO> orders = new ArrayList<>();
+    private Set<OrderDTO> orders = new HashSet<>();
 
     public UserDTO() {
     }
@@ -157,11 +157,11 @@ public class UserDTO {
         return role;
     }
 
-    public void setOrders(List<OrderDTO> orders) {
+    public void setOrders(Set<OrderDTO> orders) {
         this.orders = orders;
     }
 
-    public List<OrderDTO> getOrders() {
+    public Set<OrderDTO> getOrders() {
         return orders;
     }
 
@@ -212,7 +212,7 @@ public class UserDTO {
             return this;
         }
 
-        public Builder orders(List<OrderDTO> orders) {
+        public Builder orders(Set<OrderDTO> orders) {
             newUserDTO.orders = orders;
             return this;
         }

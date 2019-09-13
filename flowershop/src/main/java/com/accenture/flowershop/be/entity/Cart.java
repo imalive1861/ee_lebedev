@@ -33,14 +33,14 @@ public class Cart {
     /**
      * Заказ, в который входит данная позиция.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     /**
      * Цветок, добавленный в корзину.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 

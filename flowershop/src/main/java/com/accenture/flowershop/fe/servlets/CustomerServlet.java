@@ -4,7 +4,6 @@ import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.dto.FlowerDTO;
 import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
 import com.accenture.flowershop.fe.service.dto.flowerdto.FlowerDtoService;
 import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
@@ -21,10 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -72,7 +70,7 @@ public class CustomerServlet extends HttpServlet {
     /**
      * Карта цветов.
      */
-    private Map<Long, FlowerDTO> flowerDTOMap;
+    private Set<Flower> flowerSet;
 
     public CustomerServlet() {
         super();
@@ -139,9 +137,9 @@ public class CustomerServlet extends HttpServlet {
      * @param request - объект HttpServletRequest
      */
     private void dataOutput(HttpServletRequest request) {
-        flowerDTOMap = new HashMap<>();
+        flowerSet = new TreeSet<>();
         mapFlowerDto(getFlowerDTOs(request));
-        request.setAttribute("flowerList", flowerDTOMap.values());
+        request.setAttribute("flowerList", flowerDtoService.toDtoList(flowerSet));
     }
 
     /**
@@ -151,9 +149,17 @@ public class CustomerServlet extends HttpServlet {
      */
     private void addFlowerToCart(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        Flower flower = null;
+        Long flowerId = Long.parseLong(request.getParameter("flowerId"));
+        for (Flower f : flowerSet) {
+            if (f.getId().equals(flowerId)) {
+                flower = f;
+                break;
+            }
+        }
         if (isAddFlowerToCart(
                 Integer.parseInt(request.getParameter("numberToCart")),
-                flowerDTOMap.get(Long.parseLong(request.getParameter("flowerId"))),
+                flower,
                 SessionUtils.getLoginedUser(session).getLogin())) {
             hasError = false;
             return;
@@ -183,12 +189,8 @@ public class CustomerServlet extends HttpServlet {
      * @param flowerList - список цветков
      */
     private void mapFlowerDto(List<Flower> flowerList) {
-        List<FlowerDTO> flowerDTOs = flowerDtoService.toDtoList(flowerList);
-        flowerDTOMap = flowerDTOs.stream().collect(Collectors.toMap(
-                FlowerDTO::getId,
-                o -> o
-        ));
-        if (flowerDTOMap.values().isEmpty()) {
+        flowerSet = new TreeSet<>(flowerList);
+        if (flowerSet.isEmpty()) {
             errorString = "Flower not found!";
         }
     }
@@ -197,14 +199,14 @@ public class CustomerServlet extends HttpServlet {
      * Добавление цветка в корзину.
      *
      * @param numberToCart - количество цветков
-     * @param flowerDTO    - объект FlowerDTO
-     * @param login        - объект UserDTO
+     * @param flower       - объект FlowerDTO
+     * @param login        - логин пользователя
      * @return true - если цветок добавлен, false - если цветок не добавлен
      */
-    private boolean isAddFlowerToCart(int numberToCart, FlowerDTO flowerDTO, String login) {
+    private boolean isAddFlowerToCart(int numberToCart, Flower flower, String login) {
         return cartBusinessService.isAddFlowerToCart(
                 login,
-                flowerDtoService.fromDto(flowerDTO),
+                flower,
                 numberToCart);
     }
 

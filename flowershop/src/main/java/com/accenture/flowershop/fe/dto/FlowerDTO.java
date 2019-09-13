@@ -1,14 +1,14 @@
 package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного уровня, содержащий информацию о цветке.
  * Свойства: id, name, price, number, carts.
  */
-public class FlowerDTO {
+public class FlowerDTO implements Comparable {
 
     /**
      * Поле версии.
@@ -33,12 +33,12 @@ public class FlowerDTO {
     /**
      * Количество цветов.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
      */
-    private List<CartDTO> carts = new ArrayList<>();
+    private Set<CartDTO> carts = new HashSet<>();
 
     public FlowerDTO() {
     }
@@ -83,12 +83,18 @@ public class FlowerDTO {
         return number;
     }
 
-    public void setCarts(List<CartDTO> carts) {
+    public void setCarts(Set<CartDTO> carts) {
         this.carts = carts;
     }
 
-    public List<CartDTO> getCarts() {
+    public Set<CartDTO> getCarts() {
         return carts;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        FlowerDTO flower = (FlowerDTO) o;
+        return this.name.compareTo(flower.name);
     }
 
     public static class Builder {
@@ -113,7 +119,7 @@ public class FlowerDTO {
             return this;
         }
 
-        public Builder carts(List<CartDTO> carts) {
+        public Builder carts(Set<CartDTO> carts) {
             newFlowerDTO.carts = carts;
             return this;
         }

@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс, хранящий информацию о пользователе.
@@ -82,8 +82,9 @@ public class User implements Serializable {
     /**
      * Список заказов, сделанных пользователем.
      */
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    private Set<Order> orders = new HashSet<>();
 
     public User() {
     }
@@ -168,11 +169,11 @@ public class User implements Serializable {
         return role;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
@@ -223,7 +224,7 @@ public class User implements Serializable {
             return this;
         }
 
-        public Builder orders(List<Order> orders) {
+        public Builder orders(Set<Order> orders) {
             newUser.orders = orders;
             return this;
         }

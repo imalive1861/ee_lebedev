@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -190,7 +190,7 @@ public class OrderServlet extends HttpServlet {
             outputString = "Order has already been paid or closed! O_o";
             return;
         }
-        List<Cart> carts = order.getCarts();
+        Set<Cart> carts = order.getCarts();
         for (Cart cart : carts) {
             cart.setSumPriceWithDiscount(
                     cartBusinessService.getSumPriceWithDiscount(
@@ -209,7 +209,6 @@ public class OrderServlet extends HttpServlet {
         for (Cart c : carts) {
             Flower flower = c.getFlower();
             flower.setNumber(flower.getNumber() - c.getNumber());
-            order.getFlowers().add(flower);
         }
         order.setStatus(OrderStatus.PAID);
         userBusinessService.update(user);

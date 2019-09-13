@@ -2,8 +2,8 @@ package com.accenture.flowershop.be.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс, содержащий информацию о цветке.
@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "FLOWERS")
-public class Flower {
+public class Flower implements Comparable {
 
     /**
      * Поле версии.
@@ -45,14 +45,8 @@ public class Flower {
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
      */
-    @OneToMany(mappedBy = "flower")
-    private List<Cart> carts = new ArrayList<>();
-
-    /**
-     * Заказы, в которых содержится цветок.
-     */
-    @ManyToMany
-    private List<Order> orders;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flower")
+    private Set<Cart> carts = new HashSet<>();
 
     public Flower() {
     }
@@ -97,20 +91,18 @@ public class Flower {
         return number;
     }
 
-    public void setCarts(List<Cart> carts) {
+    public void setCarts(Set<Cart> carts) {
         this.carts = carts;
     }
 
-    public List<Cart> getCarts() {
+    public Set<Cart> getCarts() {
         return carts;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
+    @Override
+    public int compareTo(Object o) {
+        Flower flower = (Flower) o;
+        return this.name.compareTo(flower.name);
     }
 
     public static class Builder {

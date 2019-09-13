@@ -4,9 +4,9 @@ import com.accenture.flowershop.fe.enums.OrderStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -64,20 +64,15 @@ public class Order {
     /**
      * Покупатель, который создал заказ.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Cart> carts = new ArrayList<>();
-    /**
-     * Цветки, относящиеся к данному заказу.
-     */
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Flower> flowers = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.MERGE)
+    private Set<Cart> carts = new HashSet<>();
 
     public Order() {
     }
@@ -146,20 +141,12 @@ public class Order {
         this.user = user;
     }
 
-    public List<Cart> getCarts() {
+    public Set<Cart> getCarts() {
         return carts;
     }
 
-    public void setCarts(List<Cart> carts) {
+    public void setCarts(Set<Cart> carts) {
         this.carts = carts;
-    }
-
-    public List<Flower> getFlowers() {
-        return flowers;
-    }
-
-    public void setFlowers(List<Flower> flowers) {
-        this.flowers = flowers;
     }
 
     public static class Builder {
@@ -199,7 +186,7 @@ public class Order {
             return this;
         }
 
-        public Builder carts(List<Cart> carts) {
+        public Builder carts(Set<Cart> carts) {
             newOrder.carts = carts;
             return this;
         }

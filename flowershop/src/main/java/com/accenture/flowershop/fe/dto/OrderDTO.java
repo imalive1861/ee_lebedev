@@ -3,9 +3,9 @@ package com.accenture.flowershop.fe.dto;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного уровня, хранящий информацию о заказе.
@@ -56,7 +56,7 @@ public class OrderDTO {
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    private List<CartDTO> carts = new ArrayList<>();
+    private Set<CartDTO> carts = new HashSet<>();
 
     public OrderDTO() {
     }
@@ -125,11 +125,11 @@ public class OrderDTO {
         return status;
     }
 
-    public void setCarts(List<CartDTO> carts) {
+    public void setCarts(Set<CartDTO> carts) {
         this.carts = carts;
     }
 
-    public List<CartDTO> getCarts() {
+    public Set<CartDTO> getCarts() {
         return carts;
     }
 
@@ -170,7 +170,7 @@ public class OrderDTO {
             return this;
         }
 
-        public Builder carts(List<CartDTO> carts) {
+        public Builder carts(Set<CartDTO> carts) {
             newOrderDTO.carts = carts;
             return this;
         }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class FlowerDtoServiceImpl implements FlowerDtoService {
     }
 
     @Override
-    public List<FlowerDTO> toDtoList(List<Flower> flowers) {
+    public List<FlowerDTO> toDtoList(Set<Flower> flowers) {
         return flowers.stream().map(this::toDto).collect(Collectors.toList());
     }
 }

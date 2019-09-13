@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static java.math.RoundingMode.UP;
 
@@ -74,7 +74,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     public void countAllSumPrice(Order order) {
         BigDecimal sumPriceWithoutDiscount = new BigDecimal(0.00);
         BigDecimal sumPriceWithDiscount = new BigDecimal(0.00);
-        List<Cart> carts = order.getCarts();
+        Set<Cart> carts = order.getCarts();
         if (!carts.isEmpty()) {
             for (Cart c : carts) {
                 sumPriceWithoutDiscount = sumPriceWithoutDiscount.add(c.getSumPriceWithoutDiscount());
@@ -134,7 +134,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     public void setCart(String login) {
         cart.putIfAbsent(login, new Order.Builder()
                 .status(OrderStatus.OPENED)
-                .carts(new ArrayList<>())
+                .carts(new HashSet<>())
                 .build());
         cart.get(login);
     }
@@ -143,7 +143,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     public void clear(String login) {
         Order order = new Order.Builder()
                 .status(OrderStatus.OPENED)
-                .carts(new ArrayList<>())
+                .carts(new HashSet<>())
                 .build();
         cart.put(login, order);
     }
@@ -151,7 +151,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     @Override
     public void deleteFlowerFromCart(Long flowerId, String login) {
         Order order = getCartById(login);
-        List<Cart> carts = order.getCarts();
+        Set<Cart> carts = order.getCarts();
         for (Cart c : carts) {
             if (c.getFlower().getId().equals(flowerId)) {
                 carts.remove(c);
