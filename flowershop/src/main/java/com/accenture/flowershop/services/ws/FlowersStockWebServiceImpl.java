@@ -8,9 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.jws.WebService;
 import java.util.List;
 
+/**
+ * Реализация интерфейса FlowersStockWebService.
+ */
 @WebService(endpointInterface = "com.accenture.flowershop.services.ws.FlowersStockWebService")
 public class FlowersStockWebServiceImpl implements FlowersStockWebService {
 
+    /**
+     * Ссылка на бизнес уровень для сущности Flower.
+     */
     private FlowerBusinessService flowerBusinessService;
 
     @Autowired

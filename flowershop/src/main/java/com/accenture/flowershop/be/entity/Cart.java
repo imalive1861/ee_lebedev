@@ -40,7 +40,8 @@ public class Cart {
     /**
      * Цветок, добавленный в корзину.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 

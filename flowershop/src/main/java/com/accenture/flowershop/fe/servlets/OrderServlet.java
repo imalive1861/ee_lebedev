@@ -34,6 +34,16 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class OrderServlet extends HttpServlet {
 
     /**
+     * Ссылка на бизнес уровень для сущности Cart.
+     */
+    @Autowired
+    private CartBusinessService cartBusinessService;
+    /**
+     * Ссылка на бизнес уровень для сущности Cart.
+     */
+    @Autowired
+    private OrderBusinessService orderBusinessService;
+    /**
      * Ссылка на бизнес уровень для сущности User.
      */
     @Autowired
@@ -43,16 +53,6 @@ public class OrderServlet extends HttpServlet {
      */
     @Autowired
     private OrderDtoService orderDtoService;
-    /**
-     * Ссылка на бизнес уровень для сущности Cart.
-     */
-    @Autowired
-    private CartBusinessService cartBusinessService;
-    /**
-     * Ссылка на бизнес уровень для сущности Order.
-     */
-    @Autowired
-    private OrderBusinessService orderBusinessService;
     /**
      * Вспомогательный сервис.
      */
@@ -151,11 +151,13 @@ public class OrderServlet extends HttpServlet {
      */
     private void createOrder(User user) {
         Order order = cartBusinessService.getCartById(user.getLogin());
-        order.setDateCreate(new Date());
-        order.setUser(user);
-        user.getOrders().add(order);
-        userBusinessService.update(user);
-        hasError = false;
+        if (!order.getCarts().isEmpty()) {
+            order.setDateCreate(new Date());
+            order.setUser(user);
+            user.getOrders().add(order);
+            orderBusinessService.update(order);
+            hasError = false;
+        }
     }
 
     /**
@@ -211,7 +213,7 @@ public class OrderServlet extends HttpServlet {
             flower.setNumber(flower.getNumber() - c.getNumber());
         }
         order.setStatus(OrderStatus.PAID);
-        userBusinessService.update(user);
+        orderBusinessService.update(order);
         hasError = false;
     }
 

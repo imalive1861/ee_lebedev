@@ -12,9 +12,10 @@ import javax.persistence.LockModeType;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * Сохранить или обновить данные потльзователя.
+     *
      * @param order - объект Order
      * @return объект Order
      */
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     Order saveAndFlush(Order order);
 }

@@ -30,7 +30,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     @Autowired
     private CartRepository cartRepository;
     /**
-     *
+     * Ссылка на бизнес уровень для сущности User.
      */
     @Autowired
     private UserBusinessService userBusinessService;
@@ -115,7 +115,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
                     .sumPriceWithoutDiscount(new BigDecimal(0.00))
                     .sumPriceWithDiscount(new BigDecimal(0.00))
                     .build();
-            this.cart.get(login).getCarts().add(cart);
+            order.getCarts().add(cart);
         }
         flower = cart.getFlower();
         int i = flower.getNumber() - (cart.getNumber() + number);

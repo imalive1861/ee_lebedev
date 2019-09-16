@@ -29,4 +29,11 @@ public interface OrderBusinessService {
      * @return объект Order
      */
     Order get(Long id);
+
+    /**
+     * Обновить информацию о заказе.
+     *
+     * @param order - объект Order
+     */
+    void update(Order order);
 }

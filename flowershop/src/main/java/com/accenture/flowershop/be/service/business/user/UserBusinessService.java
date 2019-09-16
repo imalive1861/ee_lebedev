@@ -16,13 +16,6 @@ public interface UserBusinessService {
     User logIn(String login, String password);
 
     /**
-     * Обновить информацию о пользователе.
-     *
-     * @param user - объект User
-     */
-    void update(User user);
-
-    /**
      * Проверить, существует ли пользователь с данным логином.
      *
      * @param login - логин потльзователя

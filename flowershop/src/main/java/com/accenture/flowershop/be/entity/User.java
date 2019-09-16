@@ -82,8 +82,7 @@ public class User implements Serializable {
     /**
      * Список заказов, сделанных пользователем.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Order> orders = new HashSet<>();
 
     public User() {

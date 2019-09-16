@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
  * Класс, хранящий информацию о заказе.
  * Свойства: id, sumPrice, dateCreate, dateClose, status, userId.
@@ -64,14 +63,15 @@ public class Order {
     /**
      * Покупатель, который создал заказ.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private Set<Cart> carts = new HashSet<>();
 
     public Order() {

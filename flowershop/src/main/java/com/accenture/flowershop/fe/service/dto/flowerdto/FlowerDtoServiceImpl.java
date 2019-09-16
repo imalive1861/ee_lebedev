@@ -10,9 +10,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса FlowerDtoService.
+ * Свойства: mapper.
+ */
 @Service
 public class FlowerDtoServiceImpl implements FlowerDtoService {
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 

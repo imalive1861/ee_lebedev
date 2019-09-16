@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса OrderDtoService.
+ * Свойства: mapper.
+ */
 @Service
 public class OrderDtoServiceImpl implements OrderDtoService {
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 

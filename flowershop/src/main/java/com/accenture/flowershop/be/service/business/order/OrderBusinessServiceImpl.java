@@ -38,7 +38,7 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
         if (order.getStatus().equals(OrderStatus.PAID)) {
             order.setDateClose(new Date());
             order.setStatus(OrderStatus.CLOSED);
-            orderRepository.saveAndFlush(order);
+            update(order);
             LOG.debug("Order \"{}\" was closed {}", order.getId(), order.getDateClose());
             return;
         }
@@ -53,5 +53,11 @@ public class OrderBusinessServiceImpl implements OrderBusinessService {
     @Override
     public Order get(Long id) {
         return orderRepository.getOne(id);
+    }
+
+    @Override
+    @Transactional
+    public void update(Order order) {
+        orderRepository.saveAndFlush(order);
     }
 }

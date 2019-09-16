@@ -42,7 +42,7 @@ public class RegistrationServlet extends HttpServlet {
     /**
      * Сообщение об успешном действии.
      */
-    private String okString = null;
+    private String okString = "";
 
     public RegistrationServlet() {
         super();
@@ -97,6 +97,11 @@ public class RegistrationServlet extends HttpServlet {
         request.getRequestDispatcher("/view/registration.jsp").forward(request, response);
     }
 
+    /**
+     * Регистрация пользователя.
+     *
+     * @param request - объект HttpServletRequest
+     */
     private void registration(HttpServletRequest request) {
         String login = request.getParameter("login");
         String newPassword = request.getParameter("newPassword");

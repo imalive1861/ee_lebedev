@@ -4,9 +4,7 @@ import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
 import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
-import com.accenture.flowershop.fe.service.dto.cartdto.CartDtoService;
 import com.accenture.flowershop.fe.service.dto.flowerdto.FlowerDtoService;
-import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -40,11 +38,6 @@ public class CustomerServlet extends HttpServlet {
     @Autowired
     private FlowerBusinessService flowerBusinessService;
     /**
-     * Ссылка на транспортный уровень для работы с временной корзиной покупателя.
-     */
-    @Autowired
-    private CartDtoService cartDtoService;
-    /**
      * Маппер.
      */
     @Autowired
@@ -54,11 +47,6 @@ public class CustomerServlet extends HttpServlet {
      */
     @Autowired
     private CartBusinessService cartBusinessService;
-    /**
-     * Ссылка на транспортный уровень для сущности User.
-     */
-    @Autowired
-    private UserDtoService userDtoService;
     /**
      * Наличие ошибки. Пока true переход на другую страницу не осуществляется.
      */
@@ -210,9 +198,15 @@ public class CustomerServlet extends HttpServlet {
                 numberToCart);
     }
 
-    private BigDecimal checkPrice(String minFlowerPrice) {
-        if (isNotBlank(minFlowerPrice)) {
-            return new BigDecimal(Double.parseDouble(minFlowerPrice));
+    /**
+     * Проверка входных данных по цене цветка.
+     *
+     * @param flowerPrice - цена цветка
+     * @return цена цветка, если верно введена
+     */
+    private BigDecimal checkPrice(String flowerPrice) {
+        if (isNotBlank(flowerPrice)) {
+            return new BigDecimal(Double.parseDouble(flowerPrice));
         }
         return null;
     }

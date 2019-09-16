@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 /**
  * Реализация интерфейса CartDtoService.
- * Свойства: mapper, cart.
+ * Свойства: mapper.
  */
 @Service
 public class CartDtoServiceImpl implements CartDtoService {
-
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 

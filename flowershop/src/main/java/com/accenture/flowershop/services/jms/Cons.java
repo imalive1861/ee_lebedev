@@ -7,13 +7,22 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.*;
 
+/**
+ * Класс, использующийся для получения сообщения через JMS.
+ */
 @Component
 public class Cons {
 
     public Cons() {
     }
 
-    public Object consumer() throws JMSException {
+    /**
+     * Получает сообщение от JMS.
+     *
+     * @return - полученный объект
+     * @throws JMSException - возникает из-за ошибки в получении сообщения
+     */
+    Object consumer() throws JMSException {
         String url = ActiveMQConnection.DEFAULT_BROKER_URL;
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
         Connection connection = connectionFactory.createConnection();

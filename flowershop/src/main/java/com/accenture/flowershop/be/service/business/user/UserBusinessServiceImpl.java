@@ -65,6 +65,9 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         LOG.debug("Customer \"{}\" with login \"{}\" was created.", user, user.getLogin());
     }
 
+    /**
+     * Класс, использующийся для отправки запроса на скидку через JMS.
+     */
     private class DiscountThread extends Thread {
 
         User user;
@@ -77,15 +80,8 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         public void run() {
             user = producerTest.saleRequest(user);
             LOG.debug("Customer \"{}\" have {}% discount after JMS.", user, user.getDiscount());
-            update(user);
+            userRepository.saveAndFlush(user);
         }
-    }
-
-    @Override
-    @Transactional
-    public void update(User user) {
-        userRepository.saveAndFlush(user);
-        LOG.debug("Customer \"{}\" with login \"{}\" was updated.", user, user.getLogin());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.accenture.flowershop.services.rest;
 
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
-import com.accenture.flowershop.fe.service.dto.userdto.UserDtoService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,15 +13,25 @@ import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+/**
+ * Класс, реализующий RESTfull сервисы для валидации данных при регистрации.
+ */
 @Path("/reg")
 public class RegistrationCgService {
 
+    /**
+     * Ссылка на бизнес уровень для сущности User.
+     */
     @Autowired
     private UserBusinessService userBusinessService;
 
-    @Autowired
-    private UserDtoService userDtoService;
-
+    /**
+     * Валидация логина.
+     *
+     * @param text - логин
+     * @return HTTP ответ, если логин ок - код 200,
+     * если логин не ок - код 400
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,9 +48,16 @@ public class RegistrationCgService {
         if (userBusinessService.existsByLogin(login)) {
             return Response.status(400).entity("Login is busy, please choose another one!").build();
         }
-        return Response.status(200).entity(login + "  -  Login ok! ^_^").build();
+        return Response.status(200).entity("Login ok! ^_^").build();
     }
 
+    /**
+     * Валидация пароля.
+     *
+     * @param text - пароль
+     * @return HTTP ответ, если пароль ок - код 200,
+     * если пароль не ок - код 400
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,6 +71,6 @@ public class RegistrationCgService {
         if (password.length() < 8 || password.length() > 20) {
             return Response.status(400).entity("Password length minimum 8, maximum 20!").build();
         }
-        return Response.status(200).entity(password + "  -  Password ok! ^_^").build();
+        return Response.status(200).entity("Password ok! ^_^").build();
     }
 }

@@ -1,6 +1,7 @@
 package com.accenture.flowershop.fe.service.dto.userdto;
 
 import com.accenture.flowershop.be.entity.User;
+import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.fe.dto.UserDTO;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,65 +15,48 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Реализация интерфейса UserDtoService.
+ * Свойства: userBusinessService, mapper.
+ */
 @Service
 public class UserDtoServiceImpl implements UserDtoService {
-
+    /**
+     * Ссылка на бизнес уровень для сущности User.
+     */
+    @Autowired
+    private UserBusinessService userBusinessService;
+    /**
+     * Маппер.
+     */
     @Autowired
     private Mapper mapper;
 
     @Override
-    public String loginValidation(UserDTO userDTO) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        String error = "";
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<UserDTO> violation : violations) {
-                String propertyPath = violation.getPropertyPath().toString();
-                if (propertyPath.equals("login")) {
-                    error = violation.getMessage();
-                    break;
-                }
-            }
-        }
-        return error;
-    }
-
-    @Override
-    public String passwordValidation(UserDTO userDTO) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        String error = "";
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<UserDTO> violation : violations) {
-                String propertyPath = violation.getPropertyPath().toString();
-                if (propertyPath.equals("password")) {
-                    error = violation.getMessage();
-                    break;
-                }
-            }
-        }
-        return error;
-    }
-
     public Map<String, String> dataValidation(UserDTO userDTO) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
         Map<String, String> errorMap = new HashMap<>();
-        String errorlogin = loginValidation(userDTO);
-        String errorpassword = passwordValidation(userDTO);
-        if (!errorlogin.equals("")) {
-            errorMap.put("errorlogin", errorlogin);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<UserDTO> violation : violations) {
+                String propertyPath = violation.getPropertyPath().toString();
+                String error = violation.getMessage();
+                errorMap.put("error" + propertyPath, error);
+            }
         }
-        if (!errorpassword.equals("")) {
-            errorMap.put("errorpassword", errorpassword);
+        if (userBusinessService.existsByLogin(userDTO.getLogin())) {
+            errorMap.put("errorlogin", "Login is busy, please choose another one!");
         }
         return errorMap;
     }
 
+    @Override
     public UserDTO toDto(User user) {
         return mapper.map(user, UserDTO.class);
     }
 
+    @Override
     public User fromDto(UserDTO userDTO) {
         return mapper.map(userDTO, User.class);
     }
