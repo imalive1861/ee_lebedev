@@ -30,6 +30,7 @@ public class MapperConfig {
             }
         };
     }
+
     @Bean
     public DozerBeanMapper beanMapper() {
         DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();

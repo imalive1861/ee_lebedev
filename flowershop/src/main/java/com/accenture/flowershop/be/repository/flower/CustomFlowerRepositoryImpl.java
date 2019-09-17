@@ -2,6 +2,7 @@ package com.accenture.flowershop.be.repository.flower;
 
 import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.entity.QFlower;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -20,29 +21,19 @@ public class CustomFlowerRepositoryImpl implements CustomFlowerRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<Flower> getFlowerByMinPriceAndMaxPrice(BigDecimal min, BigDecimal max) {
+    public List<Flower> getFlowerByNameOrMinPriceAndMaxPrice(String name, BigDecimal min, BigDecimal max) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QFlower flower = QFlower.flower;
-        return queryFactory.selectFrom(flower)
-                .where(flower.price.goe(min).and(flower.price.loe(max)))
-                .fetch();
-    }
-
-    @Override
-    public List getFlowerByMinPrice(BigDecimal min) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QFlower flower = QFlower.flower;
-        return queryFactory.selectFrom(flower)
-                .where(flower.price.goe(min))
-                .fetch();
-    }
-
-    @Override
-    public List getFlowerByMaxPrice(BigDecimal max) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QFlower flower = QFlower.flower;
-        return queryFactory.selectFrom(flower)
-                .where(flower.price.loe(max))
-                .fetch();
+        JPAQuery<Flower> path = queryFactory.selectFrom(flower);
+        if (!"".equals(name)) {
+            path = path.where(flower.name.containsIgnoreCase(name));
+        }
+        if (min != null) {
+            path = path.where(flower.price.goe(min));
+        }
+        if (max != null) {
+            path = path.where(flower.price.loe(max));
+        }
+        return path.fetch();
     }
 }

@@ -16,7 +16,7 @@ import java.io.IOException;
  * Сервлет, использующийся для перенаправления на главную страницу,
  * соответствующую роли пользователя.
  */
-@WebServlet(name = "HomeServlet", urlPatterns = { "/", "/index" })
+@WebServlet(name = "HomeServlet", urlPatterns = {"/", "/index"})
 public class HomeServlet extends HttpServlet {
 
     public HomeServlet() {
@@ -40,7 +40,7 @@ public class HomeServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserDTO userDTO = SessionUtils.getLoginedUser(request.getSession());
-        if (userDTO.getRole().name().equals("ADMIN")){
+        if (userDTO.getRole().name().equals("ADMIN")) {
             response.sendRedirect(request.getContextPath() + "/admin");
         } else {
             response.sendRedirect(request.getContextPath() + "/customer");
@@ -52,6 +52,6 @@ public class HomeServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request,response);
+        doGet(request, response);
     }
 }

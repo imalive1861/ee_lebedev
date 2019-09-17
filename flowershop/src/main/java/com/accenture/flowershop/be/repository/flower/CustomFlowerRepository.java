@@ -8,22 +8,12 @@ import java.util.List;
  */
 public interface CustomFlowerRepository<T> {
     /**
-     * Найти цветы от минимальной и до максимальной цены.
-     * @param min - минимальна цена
-     * @param max - максимальная цена
+     * Найти цветки по имени и/или минимальной и максимальной заданных стоимостях.
+     *
+     * @param name - название цветка
+     * @param min  - минимальна цена
+     * @param max  - максимальная цена
      * @return List<Flower> если найдены, пустой List<Flower> если не найдены
      */
-    List<T> getFlowerByMinPriceAndMaxPrice(BigDecimal min,BigDecimal max);
-    /**
-     * Найти цветы только дороже минимальной цены.
-     * @param min - минимальна цена
-     * @return List<Flower> если найдены, пустой List<Flower> если не найдены
-     */
-    List<T> getFlowerByMinPrice(BigDecimal min);
-    /**
-     * Найти цветы только дешевле максимальной цены.
-     * @param max - максимальная цена
-     * @return List<Flower> если найдены, пустой List<Flower> если не найдены
-     */
-    List<T> getFlowerByMaxPrice(BigDecimal max);
+    List<T> getFlowerByNameOrMinPriceAndMaxPrice(String name, BigDecimal min, BigDecimal max);
 }

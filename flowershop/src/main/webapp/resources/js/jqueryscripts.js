@@ -3,8 +3,8 @@ $(document).ready(function() {
     let check2 = false;
     let check3 = false;
     $('#login').blur(function() {
-        var val1 = $("#login").val();
-        var data = {login: val1};
+        var login = $("#login").val();
+        var data = {login};
         $.ajax({
             url: "rest/reg/loginValidation",
             type:"POST",
@@ -26,8 +26,8 @@ $(document).ready(function() {
         })
     });
     $('#newPassword').blur(function() {
-        var val2 = $("#newPassword").val();
-        var data = {password: val2};
+        var password = $("#newPassword").val();
+        var data = {password};
         $.ajax({
             url: "rest/reg/passwordValidation",
             type:"POST",

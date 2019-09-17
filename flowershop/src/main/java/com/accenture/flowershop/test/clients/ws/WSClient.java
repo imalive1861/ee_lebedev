@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class WSClient {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Timer timer = new Timer();
         timer.schedule(new AddFlowers(), 0, 10 * 60 * 1000);
     }
@@ -26,7 +26,8 @@ public class WSClient {
                 e.printStackTrace();
             }
         }
-        private void add(int num) throws MalformedURLException{
+
+        private void add(int num) throws MalformedURLException {
             URL wsdlURL = new URL("http://localhost:8080/ws/flowers?wsdl");
             QName SERVICE_NAME = new QName(
                     "http://ws.services.flowershop.accenture.com/", "FlowersStockWebServiceImplService");

@@ -12,23 +12,21 @@
     <jsp:include page="_menu.jsp"/>
     <a href="${pageContext.request.contextPath}/order">Go to Cart</a><br/>
     <p style="color: red;">${errorString}</p>
-    Search<br/>
+    <b>Search</b>
+    <br/>
     <form method="GET" action="${pageContext.request.contextPath}/customer">
-        Enter name of flower: <input type="text" name="searchFlowerByName" value=""/>
-        <input type="hidden" name="searchNameClick" value="submit"/>
-        <input type="submit" value= "Search" />
-    </form>
-    <form method="GET" action="${pageContext.request.contextPath}/customer">
+        Enter name of flower: <input type="text" name="searchFlowerByName" value="${searchFlowerByName}"/>
         <br/>
-        Min price: <input type="number" name="minFlowerPrice" value=""/>
-        Max price: <input type="number" name="maxFlowerPrice" value=""/>
-        <input type="hidden" name="searchPriceClick" value="submit"/>
-        <input type="submit" value= "Search" />
+        Min price: <input type="number" name="minFlowerPrice" value="${minFlowerPrice}"/>
+        Max price: <input type="number" name="maxFlowerPrice" value="${maxFlowerPrice}"/>
+        <br/>
+        <br/>
+        <input type="submit" name="searchClick" value= "Search" />
+        <input type="submit" name="cleanSearchClick" value= "Clean search form" />
     </form>
     <br/>
     <table border="1" cellpadding="5" cellspacing="1" >
        <tr>
-          <th>Code</th>
           <th>Name</th>
           <th>Price</th>
           <th>Number</th>
@@ -37,7 +35,6 @@
        </tr>
        <c:forEach items="${flowerList}" var="flower" >
           <tr>
-             <td>${flower.id}</td>
              <td>${flower.name}</td>
              <td>${flower.price}</td>
              <td>${flower.number}</td>

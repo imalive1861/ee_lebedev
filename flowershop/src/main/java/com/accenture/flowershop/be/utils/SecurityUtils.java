@@ -13,6 +13,7 @@ public class SecurityUtils {
 
     /**
      * Является ли путь, заданный в параметре, защищенным
+     *
      * @param request - объект HttpServletRequest
      * @return true - если является защищенным, false - если не является защищенным
      */
@@ -32,6 +33,7 @@ public class SecurityUtils {
 
     /**
      * Имеет ли пользователь доспуп к запрашиваемому ресурсу.
+     *
      * @param request - объект HttpServletRequest
      * @return true - если имеет доступ, false - если не имеет доступа
      */

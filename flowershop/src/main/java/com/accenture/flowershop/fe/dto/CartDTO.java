@@ -11,12 +11,12 @@ public class CartDTO {
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор позиции в корзине.
      */
-    private long id;
+    private Long id;
 
     /**
      * Заказ, в который входит данная позиция.
@@ -31,32 +31,41 @@ public class CartDTO {
     /**
      * Количество цветов, добавленных в корзину.
      */
-    private int number;
+    private Integer number;
 
     /**
-     * Суммарная цена за количество добавленных цветов.
+     * Суммарная цена за количество добавленных цветов без скидки.
      */
-    private BigDecimal sumPrice;
+    private BigDecimal sumPriceWithoutDiscount;
 
-    public CartDTO(){}
+    /**
+     * Суммарная цена за количество добавленных цветов со скидкой.
+     */
+    private BigDecimal sumPriceWithDiscount;
 
-    public long getVersion() {
+    public CartDTO() {
+    }
+
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
 
     public FlowerDTO getFlower() {
         return flower;
     }
+
     public void setFlower(FlowerDTO flower) {
         this.flower = flower;
     }
@@ -64,22 +73,33 @@ public class CartDTO {
     public OrderDTO getOrder() {
         return order;
     }
+
     public void setOrder(OrderDTO order) {
         this.order = order;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
-    public void setNumber(int number) {
+
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
     }
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public static class Builder {
@@ -89,24 +109,32 @@ public class CartDTO {
             newCartDTO = new CartDTO();
         }
 
-        public Builder order(OrderDTO order){
+        public Builder order(OrderDTO order) {
             newCartDTO.order = order;
             return this;
         }
-        public Builder flower(FlowerDTO flower){
+
+        public Builder flower(FlowerDTO flower) {
             newCartDTO.flower = flower;
             return this;
         }
-        public Builder number(int number){
+
+        public Builder number(Integer number) {
             newCartDTO.number = number;
             return this;
         }
-        public Builder sumPrice(BigDecimal sumPrice){
-            newCartDTO.sumPrice = sumPrice;
+
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newCartDTO.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
             return this;
         }
 
-        public CartDTO build(){
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newCartDTO.sumPriceWithDiscount = sumPriceWithDiscount;
+            return this;
+        }
+
+        public CartDTO build() {
             return newCartDTO;
         }
     }

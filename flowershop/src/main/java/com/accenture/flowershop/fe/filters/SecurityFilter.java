@@ -1,9 +1,9 @@
 package com.accenture.flowershop.fe.filters;
 
 import com.accenture.flowershop.be.utils.SecurityUtils;
+import com.accenture.flowershop.be.utils.SessionUtils;
 import com.accenture.flowershop.be.utils.UserRoleRequestWrapper;
 import com.accenture.flowershop.fe.dto.UserDTO;
-import com.accenture.flowershop.be.utils.SessionUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -17,9 +17,11 @@ import java.io.IOException;
 @WebFilter(filterName = "SecurityFilter", urlPatterns = "/*")
 public class SecurityFilter implements Filter {
 
-    public SecurityFilter(){}
+    public SecurityFilter() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
@@ -60,5 +62,6 @@ public class SecurityFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    public void init(FilterConfig config) throws ServletException {}
+    public void init(FilterConfig config) throws ServletException {
+    }
 }

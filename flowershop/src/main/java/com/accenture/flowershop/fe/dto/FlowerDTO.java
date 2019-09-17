@@ -1,24 +1,24 @@
 package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного уровня, содержащий информацию о цветке.
  * Свойства: id, name, price, number, carts.
  */
-public class FlowerDTO {
+public class FlowerDTO implements Comparable {
 
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор цветка.
      */
-    private long id;
+    private Long id;
 
     /**
      * Название цветка.
@@ -33,32 +33,36 @@ public class FlowerDTO {
     /**
      * Количество цветов.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
      */
-    private List<CartDTO> carts = new ArrayList<>();
+    private Set<CartDTO> carts = new HashSet<>();
 
-    public FlowerDTO(){}
+    public FlowerDTO() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -66,22 +70,31 @@ public class FlowerDTO {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
-    public int getNumber() {
+
+    public Integer getNumber() {
         return number;
     }
 
-    public void setCarts(List<CartDTO> carts) {
+    public void setCarts(Set<CartDTO> carts) {
         this.carts = carts;
     }
-    public List<CartDTO> getCarts() {
+
+    public Set<CartDTO> getCarts() {
         return carts;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        FlowerDTO flower = (FlowerDTO) o;
+        return this.name.compareTo(flower.name);
     }
 
     public static class Builder {
@@ -91,27 +104,27 @@ public class FlowerDTO {
             newFlowerDTO = new FlowerDTO();
         }
 
-        public Builder name(String name){
+        public Builder name(String name) {
             newFlowerDTO.name = name;
             return this;
         }
 
-        public Builder price(BigDecimal price){
+        public Builder price(BigDecimal price) {
             newFlowerDTO.price = price;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(Integer number) {
             newFlowerDTO.number = number;
             return this;
         }
 
-        public Builder carts(List<CartDTO> carts){
+        public Builder carts(Set<CartDTO> carts) {
             newFlowerDTO.carts = carts;
             return this;
         }
 
-        public FlowerDTO build(){
+        public FlowerDTO build() {
             return newFlowerDTO;
         }
     }

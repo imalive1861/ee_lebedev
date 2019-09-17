@@ -3,9 +3,9 @@ package com.accenture.flowershop.fe.dto;
 import com.accenture.flowershop.fe.enums.OrderStatus;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного уровня, хранящий информацию о заказе.
@@ -16,22 +16,27 @@ public class OrderDTO {
     /**
      * Поле версии.
      */
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор заказа.
      */
-    private long id;
+    private Long id;
 
     /**
      * Покупатель, который создал заказ.
      */
-    private UserDTO userId;
+    private UserDTO user;
 
     /**
-     * Суммарная цена за все позиции заказа.
+     * Суммарная цена за все позиции заказа со скидкой.
      */
-    private BigDecimal sumPrice;
+    private BigDecimal sumPriceWithoutDiscount;
+
+    /**
+     * Суммарная цена за все позиции заказа без скидки.
+     */
+    private BigDecimal sumPriceWithDiscount;
 
     /**
      * Дата создания заказа покупателем.
@@ -51,41 +56,55 @@ public class OrderDTO {
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    private List<CartDTO> carts = new ArrayList<>();
+    private Set<CartDTO> carts = new HashSet<>();
 
-    public OrderDTO(){}
+    public OrderDTO() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public UserDTO getUserId() {
-        return userId;
-    }
-    public void setUserId(UserDTO user) {
-        this.userId = user;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    }
+
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
     }
 
     public void setDateCreate(Date dateCreate) {
         this.dateCreate = dateCreate;
     }
+
     public Date getDateCreate() {
         return dateCreate;
     }
@@ -93,6 +112,7 @@ public class OrderDTO {
     public void setDateClose(Date dateClose) {
         this.dateClose = dateClose;
     }
+
     public Date getDateClose() {
         return dateClose;
     }
@@ -100,14 +120,16 @@ public class OrderDTO {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
     public OrderStatus getStatus() {
         return status;
     }
 
-    public void setCarts(List<CartDTO> carts) {
+    public void setCarts(Set<CartDTO> carts) {
         this.carts = carts;
     }
-    public List<CartDTO> getCarts() {
+
+    public Set<CartDTO> getCarts() {
         return carts;
     }
 
@@ -118,37 +140,42 @@ public class OrderDTO {
             newOrderDTO = new OrderDTO();
         }
 
-        public Builder sumPrice(BigDecimal sumPrice){
-            newOrderDTO.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newOrderDTO.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
             return this;
         }
 
-        public Builder dateCreate(Date dateCreate){
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newOrderDTO.sumPriceWithDiscount = sumPriceWithDiscount;
+            return this;
+        }
+
+        public Builder dateCreate(Date dateCreate) {
             newOrderDTO.dateCreate = dateCreate;
             return this;
         }
 
-        public Builder dateClose(Date dateClose){
+        public Builder dateClose(Date dateClose) {
             newOrderDTO.dateClose = dateClose;
             return this;
         }
 
-        public Builder status(OrderStatus status){
+        public Builder status(OrderStatus status) {
             newOrderDTO.status = status;
             return this;
         }
 
-        public Builder userId(UserDTO userId){
-            newOrderDTO.userId = userId;
+        public Builder user(UserDTO user) {
+            newOrderDTO.user = user;
             return this;
         }
 
-        public Builder carts(List<CartDTO> carts){
+        public Builder carts(Set<CartDTO> carts) {
             newOrderDTO.carts = carts;
             return this;
         }
 
-        public OrderDTO build(){
+        public OrderDTO build() {
             return newOrderDTO;
         }
     }

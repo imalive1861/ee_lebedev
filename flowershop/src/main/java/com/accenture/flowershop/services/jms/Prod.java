@@ -1,28 +1,26 @@
 package com.accenture.flowershop.services.jms;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import com.accenture.flowershop.fe.enums.JmsQueueNames;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.jms.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Класс, использующийся для отправки сообщения через JMS.
+ */
 @Component
 public class Prod {
-
+    /**
+     * Путь расположения XML файла отправляемого объекта.
+     */
     private String destinationName;
 
     @Autowired
@@ -30,7 +28,12 @@ public class Prod {
         this.destinationName = destinationName;
     }
 
-    public void producer() throws JMSException {
+    /**
+     * Отправляет сообщение по JMS.
+     *
+     * @throws JMSException - возникает из-за ошибки в отправке сообщения
+     */
+    void producer() throws JMSException {
         String url = ActiveMQConnection.DEFAULT_BROKER_URL;
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
         Connection connection = connectionFactory.createConnection();
@@ -45,7 +48,12 @@ public class Prod {
         connection.close();
     }
 
-    private String readXML(){
+    /**
+     * Читает XML файл.
+     *
+     * @return текст, прочитанный из файла
+     */
+    private String readXML() {
         StringBuilder text = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(

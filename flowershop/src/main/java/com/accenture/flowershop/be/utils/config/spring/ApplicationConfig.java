@@ -1,50 +1,87 @@
 package com.accenture.flowershop.be.utils.config.spring;
 
-import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * Конфигурационный класс для инициализации контекста веб-приложения.
  */
 @Configuration
-@EnableMongoRepositories("com.accenture.flowershop.be.repository")
+@EnableTransactionManagement
 @ComponentScan("com.accenture.flowershop")
 @PropertySource(value = "classpath:db/migration/datasource.properties")
 @EnableScheduling
-public class ApplicationConfig extends AbstractMongoConfiguration {
+public class ApplicationConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Value("${db.name}")
-    private String PROP_DATABASE_NAME;//"flowershop"
-    @Value("${db.host}")
-    private String PROP_DATABASE_HOST;//"127.0.0.1"
-    @Value("${db.port}")
-    private int PROP_DATABASE_PORT;//27017
+    @Value("${db.driver}")
+    private String PROP_DATABASE_DRIVER;
+    @Value("${db.username}")
+    private String PROP_DATABASE_USERNAME;
+    @Value("${db.password}")
+    private String PROP_DATABASE_PASSWORD;
+    @Value("${db.url}")
+    private String PROP_DATABASE_URL;
+    @Value("${db.dialect}")
+    private String PROP_DATABASE_DIALECT;
+    @Value("${db.hbm2ddl.auto}")
+    private String PROP_DATABASE_HBM2DDL;
+    @Value("${db.show_sql}")
+    private String PROP_DATABASE_SHOW_SQL;
+    @Value("${db.format_sql}")
+    private String PROP_DATABASE_FORMAT_SQL;
 
-    @Override
-    protected String getDatabaseName() {
-        return PROP_DATABASE_NAME;
+    @Bean
+    public DataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(PROP_DATABASE_DRIVER);
+        dataSource.setUrl(PROP_DATABASE_URL);
+        dataSource.setUsername(PROP_DATABASE_USERNAME);
+        dataSource.setPassword(PROP_DATABASE_PASSWORD);
+        return dataSource;
     }
 
-    @Override
-    public MongoClient mongoClient() {
-        return new MongoClient(PROP_DATABASE_HOST, PROP_DATABASE_PORT);
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactory =
+                new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setPackagesToScan("com.accenture.flowershop");
+        entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", PROP_DATABASE_DIALECT);
+        properties.setProperty("hibernate.hbm2ddl.auto", PROP_DATABASE_HBM2DDL);
+        properties.setProperty("show_sql", PROP_DATABASE_SHOW_SQL);
+        properties.setProperty("hibernate.format_sql", PROP_DATABASE_FORMAT_SQL);
+        properties.setProperty("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
+        properties.setProperty("javax.persistence.lock.scope", "EXTENDED");
+        entityManagerFactory.setJpaProperties(properties);
+        return entityManagerFactory;
     }
 
-    @Override
-    protected String getMappingBasePackage() {
-        return "com.accenture.flowershop";
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager tm = new JpaTransactionManager();
+        tm.setEntityManagerFactory(entityManagerFactory().getObject());
+        tm.setDataSource(dataSource());
+        return tm;
     }
 }

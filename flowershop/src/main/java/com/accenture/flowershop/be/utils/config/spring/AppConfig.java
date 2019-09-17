@@ -36,11 +36,11 @@ public class AppConfig {
 
     @Bean
     public ProducerTest producerTest() {
-        return new ProducerTest(userMarshallingService(),prod(),cons());
+        return new ProducerTest(userMarshallingService(), prod(), cons());
     }
 
     @Bean
-    public Prod prod(){
+    public Prod prod() {
         return new Prod(userXML);
     }
 
@@ -57,7 +57,7 @@ public class AppConfig {
     }
 
     @Bean
-    public XMLConverter xmlConverter(){
+    public XMLConverter xmlConverter() {
         XMLConverter converter = new XMLConverter();
         converter.setMarshaller(castorMarshaller());
         converter.setUnmarshaller(castorMarshaller());
@@ -73,7 +73,7 @@ public class AppConfig {
     }
 
     @Bean
-    public Logger logger(){
+    public Logger logger() {
         return LoggerFactory.getLogger("com.accenture.flowershop");
     }
 
@@ -83,7 +83,7 @@ public class AppConfig {
     }
 
     @Bean
-    public FlowerBusinessService flowerBusinessService(){
+    public FlowerBusinessService flowerBusinessService() {
         return new FlowerBusinessServiceImpl();
     }
 

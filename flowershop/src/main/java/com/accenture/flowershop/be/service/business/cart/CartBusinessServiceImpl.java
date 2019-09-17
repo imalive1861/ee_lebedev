@@ -21,6 +21,6 @@ public class CartBusinessServiceImpl implements CartBusinessService {
 
     @Override
     public Cart get(long id) {
-        return cartRepository.findById(id).get();
+        return cartRepository.getOne(id);
     }
 }

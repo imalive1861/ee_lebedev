@@ -2,8 +2,8 @@ package com.accenture.flowershop.be.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс, содержащий информацию о цветке.
@@ -11,21 +11,21 @@ import java.util.List;
  */
 @Entity
 @Table(name = "FLOWERS")
-public class Flower {
+public class Flower implements Comparable {
 
     /**
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор цветка.
      */
     @Id
-    @SequenceGenerator( name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flowersSeq")
-    private long id;
+    private Long id;
 
     /**
      * Название цветка.
@@ -40,33 +40,37 @@ public class Flower {
     /**
      * Количество цветов.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Позиции корзины, в которых собержится ссылка на данный цветок.
      */
-    @OneToMany(mappedBy="flower")
-    private List<Cart> carts = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flower")
+    private Set<Cart> carts = new HashSet<>();
 
-    public Flower(){}
+    public Flower() {
+    }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -74,22 +78,31 @@ public class Flower {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
-    public int getNumber() {
+
+    public Integer getNumber() {
         return number;
     }
 
-    public void setCarts(List<Cart> carts) {
+    public void setCarts(Set<Cart> carts) {
         this.carts = carts;
     }
-    public List<Cart> getCarts() {
+
+    public Set<Cart> getCarts() {
         return carts;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Flower flower = (Flower) o;
+        return this.name.compareTo(flower.name);
     }
 
     public static class Builder {
@@ -99,22 +112,22 @@ public class Flower {
             newFlower = new Flower();
         }
 
-        public Builder name(String name){
+        public Builder name(String name) {
             newFlower.name = name;
             return this;
         }
 
-        public Builder price(BigDecimal price){
+        public Builder price(BigDecimal price) {
             newFlower.price = price;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(Integer number) {
             newFlower.number = number;
             return this;
         }
 
-        public Flower build(){
+        public Flower build() {
             return newFlower;
         }
     }

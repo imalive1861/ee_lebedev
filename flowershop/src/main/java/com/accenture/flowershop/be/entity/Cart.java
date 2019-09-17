@@ -15,67 +15,79 @@ public class Cart {
      * Поле версии.
      */
     @Version
-    private long version;
+    private Long version;
 
     /**
      * Иднтификатор позиции в корзине.
      */
     @Id
-    @SequenceGenerator( name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartsSeq")
-    private long id;
+    private Long id;
 
     /**
      * Количество цветов, добавленных в корзину.
      */
-    private int number;
+    private Integer number;
 
     /**
      * Заказ, в который входит данная позиция.
      */
-    @ManyToOne
-    @JoinColumn(name="order_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     /**
      * Цветок, добавленный в корзину.
      */
-    @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name="flower_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
+    @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 
     /**
-     * Суммарная цена за количество добавленных цветов.
+     * Суммарная цена за количество добавленных цветов без скидки.
      */
-    @Column(name = "sum_price")
-    private BigDecimal sumPrice;
+    @Column(name = "sum_price_without_discount")
+    private BigDecimal sumPriceWithoutDiscount;
 
-    public Cart(){}
+    /**
+     * Суммарная цена за количество добавленных цветов со скидкой.
+     */
+    @Column(name = "sum_price_with_discount")
+    private BigDecimal sumPriceWithDiscount;
 
-    public long getVersion() {
+    public Cart() {
+    }
+
+    public Long getVersion() {
         return version;
     }
-    public void setVersion(long version) {
+
+    public void setVersion(Long version) {
         this.version = version;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
-    public void setNumber(int number) {
+
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
     public Flower getFlower() {
         return flower;
     }
+
     public void setFlower(Flower flower) {
         this.flower = flower;
     }
@@ -83,15 +95,25 @@ public class Cart {
     public Order getOrder() {
         return order;
     }
+
     public void setOrder(Order order) {
         this.order = order;
     }
 
-    public BigDecimal getSumPrice() {
-        return sumPrice;
+    public BigDecimal getSumPriceWithoutDiscount() {
+        return sumPriceWithoutDiscount;
     }
-    public void setSumPrice(BigDecimal sumPrice) {
-        this.sumPrice = sumPrice;
+
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    }
+
+    public BigDecimal getSumPriceWithDiscount() {
+        return sumPriceWithDiscount;
+    }
+
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public static class Builder {
@@ -101,27 +123,32 @@ public class Cart {
             newCart = new Cart();
         }
 
-        public Builder order(Order order){
+        public Builder order(Order order) {
             newCart.order = order;
             return this;
         }
 
-        public Builder flower(Flower flower){
+        public Builder flower(Flower flower) {
             newCart.flower = flower;
             return this;
         }
 
-        public Builder number(int number){
+        public Builder number(Integer number) {
             newCart.number = number;
             return this;
         }
 
-        public Builder sumPrice(BigDecimal sumPrice){
-            newCart.sumPrice = sumPrice;
+        public Builder sumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+            newCart.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
             return this;
         }
 
-        public Cart build(){
+        public Builder sumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+            newCart.sumPriceWithDiscount = sumPriceWithDiscount;
+            return this;
+        }
+
+        public Cart build() {
             return newCart;
         }
     }

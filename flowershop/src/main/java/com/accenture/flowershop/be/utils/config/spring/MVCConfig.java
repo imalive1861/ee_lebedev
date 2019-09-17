@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackages = { "com.accenture.flowershop" })
+@ComponentScan(basePackages = {"com.accenture.flowershop"})
 public class MVCConfig implements WebMvcConfigurer {
 
     @Bean
