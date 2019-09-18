@@ -1,8 +1,13 @@
 package com.accenture.flowershop.be.entity;
 
 import com.accenture.flowershop.fe.enums.UserRoles;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -15,8 +20,7 @@ import java.util.Set;
  * Свойства: id, login, password, name, address,
  * phoneNumber, cash, discount, role, orders.
  */
-@Entity
-@Table(name = "USERS")
+@Document(collection = "users")
 public class User implements Serializable {
 
     /**
@@ -29,9 +33,7 @@ public class User implements Serializable {
      * Иднтификатор пользователя.
      */
     @Id
-    @SequenceGenerator(name = "usersSeq", sequenceName = "USERS_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
-    private Long id;
+    private String id;
 
     /**
      * Логин для авторизации.
@@ -60,7 +62,6 @@ public class User implements Serializable {
     /**
      * Номер телефона пользователя.
      */
-    @Column(name = "phone_number")
     private String phoneNumber;
 
     /**
@@ -82,7 +83,7 @@ public class User implements Serializable {
     /**
      * Список заказов, сделанных пользователем.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @Transient
     private Set<Order> orders = new HashSet<>();
 
     public User() {
@@ -96,84 +97,84 @@ public class User implements Serializable {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLogin() {
         return login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setCash(BigDecimal cash) {
-        this.cash = cash;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public BigDecimal getCash() {
         return cash;
     }
 
-    public void setDiscount(Integer discount) {
-        this.discount = discount;
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
     }
 
     public Integer getDiscount() {
         return discount;
     }
 
-    public void setRole(UserRoles role) {
-        this.role = role;
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 
     public UserRoles getRole() {
         return role;
     }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 
     public Set<Order> getOrders() {
         return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     public static class Builder {

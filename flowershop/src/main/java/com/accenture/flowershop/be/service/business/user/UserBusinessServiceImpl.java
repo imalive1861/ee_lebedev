@@ -65,6 +65,16 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         LOG.debug("Customer \"{}\" with login \"{}\" was created.", user, user.getLogin());
     }
 
+    @Override
+    public User getByLogin(String login) {
+        return userRepository.getByLogin(login);
+    }
+
+    @Override
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
     /**
      * Класс, использующийся для отправки запроса на скидку через JMS.
      */
@@ -82,10 +92,5 @@ public class UserBusinessServiceImpl implements UserBusinessService {
             LOG.debug("Customer \"{}\" have {}% discount after JMS.", user, user.getDiscount());
             userRepository.save(user);
         }
-    }
-
-    @Override
-    public User getByLogin(String login) {
-        return userRepository.getByLogin(login);
     }
 }

@@ -39,7 +39,7 @@ public class AdminServlet extends HttpServlet {
     /**
      * Карта существующих заказов.
      */
-    private Map<Long, OrderDTO> orderDTOsMap;
+    private Map<String, OrderDTO> orderDTOsMap;
 
     public AdminServlet() {
         super();
@@ -90,7 +90,7 @@ public class AdminServlet extends HttpServlet {
      */
     private void closeOrder(String orderId) {
         if (isNotBlank(orderId)) {
-            OrderDTO orderDTO = orderDTOsMap.get(Long.parseLong(orderId));
+            OrderDTO orderDTO = orderDTOsMap.get(orderId);
             orderBusinessService.close(orderDtoService.fromDto(orderDTO));
         }
     }

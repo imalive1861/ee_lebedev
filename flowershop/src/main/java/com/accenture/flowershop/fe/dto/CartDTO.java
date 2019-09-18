@@ -16,7 +16,7 @@ public class CartDTO {
     /**
      * Иднтификатор позиции в корзине.
      */
-    private Long id;
+    private String id;
 
     /**
      * Заказ, в который входит данная позиция.
@@ -54,11 +54,11 @@ public class CartDTO {
         this.version = version;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

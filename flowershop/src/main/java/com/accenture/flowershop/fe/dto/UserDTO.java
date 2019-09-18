@@ -23,7 +23,7 @@ public class UserDTO {
     /**
      * Иднтификатор пользователя.
      */
-    private Long id;
+    private String id;
 
     /**
      * Логин для авторизации.
@@ -85,84 +85,84 @@ public class UserDTO {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLogin() {
         return login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setCash(BigDecimal cash) {
-        this.cash = cash;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public BigDecimal getCash() {
         return cash;
     }
 
-    public void setDiscount(Integer discount) {
-        this.discount = discount;
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
     }
 
     public Integer getDiscount() {
         return discount;
     }
 
-    public void setRole(UserRoles role) {
-        this.role = role;
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 
     public UserRoles getRole() {
         return role;
     }
 
-    public void setOrders(Set<OrderDTO> orders) {
-        this.orders = orders;
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 
     public Set<OrderDTO> getOrders() {
         return orders;
+    }
+
+    public void setOrders(Set<OrderDTO> orders) {
+        this.orders = orders;
     }
 
     public static class Builder {

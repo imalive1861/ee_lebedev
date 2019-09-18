@@ -21,7 +21,7 @@ public class OrderDTO {
     /**
      * Иднтификатор заказа.
      */
-    private Long id;
+    private String id;
 
     /**
      * Покупатель, который создал заказ.
@@ -69,12 +69,12 @@ public class OrderDTO {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
-    public Long getId() {
-        return id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public UserDTO getUser() {
@@ -85,52 +85,52 @@ public class OrderDTO {
         this.user = user;
     }
 
-    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
-        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
-    }
-
     public BigDecimal getSumPriceWithoutDiscount() {
         return sumPriceWithoutDiscount;
     }
 
-    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
-        this.sumPriceWithDiscount = sumPriceWithDiscount;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
     }
 
     public BigDecimal getSumPriceWithDiscount() {
         return sumPriceWithDiscount;
     }
 
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public Date getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateClose(Date dateClose) {
-        this.dateClose = dateClose;
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
     public Date getDateClose() {
         return dateClose;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public void setDateClose(Date dateClose) {
+        this.dateClose = dateClose;
     }
 
     public OrderStatus getStatus() {
         return status;
     }
 
-    public void setCarts(Set<CartDTO> carts) {
-        this.carts = carts;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public Set<CartDTO> getCarts() {
         return carts;
+    }
+
+    public void setCarts(Set<CartDTO> carts) {
+        this.carts = carts;
     }
 
     public static class Builder {

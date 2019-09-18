@@ -149,7 +149,7 @@ public class CartBusinessServiceImpl implements CartBusinessService {
     }
 
     @Override
-    public void deleteFlowerFromCart(Long flowerId, String login) {
+    public void deleteFlowerFromCart(String flowerId, String login) {
         Order order = getCartById(login);
         Set<Cart> carts = order.getCarts();
         for (Cart c : carts) {
@@ -159,5 +159,10 @@ public class CartBusinessServiceImpl implements CartBusinessService {
             }
         }
         countAllSumPrice(order);
+    }
+
+    @Override
+    public void updateAll(Set<Cart> carts) {
+        cartRepository.saveAll(carts);
     }
 }

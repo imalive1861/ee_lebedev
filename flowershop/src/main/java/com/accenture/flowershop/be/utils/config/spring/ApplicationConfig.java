@@ -1,6 +1,7 @@
 package com.accenture.flowershop.be.utils.config.spring;
 
 import com.mongodb.MongoClient;
+import io.github.kaiso.relmongo.config.EnableRelMongo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,16 +16,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * Конфигурационный класс для инициализации контекста веб-приложения.
  */
 @Configuration
+@EnableRelMongo
 @EnableMongoRepositories("com.accenture.flowershop.be.repository")
 @ComponentScan("com.accenture.flowershop")
 @PropertySource(value = "classpath:db/migration/datasource.properties")
 @EnableScheduling
 public class ApplicationConfig extends AbstractMongoConfiguration {
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
 
     @Value("${db.name}")
     private String PROP_DATABASE_NAME;//"flowershop"
@@ -32,6 +29,11 @@ public class ApplicationConfig extends AbstractMongoConfiguration {
     private String PROP_DATABASE_HOST;//"127.0.0.1"
     @Value("${db.port}")
     private int PROP_DATABASE_PORT;//27017
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
     @Override
     protected String getDatabaseName() {

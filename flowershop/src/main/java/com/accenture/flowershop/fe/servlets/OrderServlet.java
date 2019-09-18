@@ -5,6 +5,7 @@ import com.accenture.flowershop.be.entity.Flower;
 import com.accenture.flowershop.be.entity.Order;
 import com.accenture.flowershop.be.entity.User;
 import com.accenture.flowershop.be.service.business.cart.CartBusinessService;
+import com.accenture.flowershop.be.service.business.flower.FlowerBusinessService;
 import com.accenture.flowershop.be.service.business.order.OrderBusinessService;
 import com.accenture.flowershop.be.service.business.user.UserBusinessService;
 import com.accenture.flowershop.be.utils.SessionUtils;
@@ -48,6 +49,11 @@ public class OrderServlet extends HttpServlet {
      */
     @Autowired
     private UserBusinessService userBusinessService;
+    /**
+     * Ссылка на бизнес уровень для сущности User.
+     */
+    @Autowired
+    private FlowerBusinessService flowerBusinessService;
     /**
      * Вспомогательный сервис.
      */
@@ -112,7 +118,7 @@ public class OrderServlet extends HttpServlet {
         if (isNotBlank(request.getParameter("deletePosition"))) {
             String cartId = request.getParameter("flowerId");
             if (isNotBlank(cartId)) {
-                cartBusinessService.deleteFlowerFromCart(Long.parseLong(cartId), login);
+                cartBusinessService.deleteFlowerFromCart(cartId, login);
             }
             outputString = "Position delete!";
         }
@@ -155,7 +161,9 @@ public class OrderServlet extends HttpServlet {
             order.setDateCreate(new Date());
             order.setUser(user);
             user.getOrders().add(order);
-            orderBusinessService.update(order);
+            orderBusinessService.save(order);
+            userBusinessService.update(user);
+            cartBusinessService.updateAll(order.getCarts());
             hasError = false;
         }
     }
@@ -168,7 +176,7 @@ public class OrderServlet extends HttpServlet {
             outputString = "Something went wrong!";
             return;
         }
-        payOrder(user, Long.parseLong(orderId));
+        payOrder(user, orderId);
     }
 
     /**
@@ -177,7 +185,7 @@ public class OrderServlet extends HttpServlet {
      * @param user    - объект User
      * @param orderId - идентификатор заказа
      */
-    private void payOrder(User user, Long orderId) {
+    private void payOrder(User user, String orderId) {
         Order order = null;
         for (Order o : user.getOrders()) {
             if (orderId.equals(o.getId())) {
@@ -213,7 +221,7 @@ public class OrderServlet extends HttpServlet {
             flower.setNumber(flower.getNumber() - c.getNumber());
         }
         order.setStatus(OrderStatus.PAID);
-        orderBusinessService.update(order);
+        orderBusinessService.save(order);
         hasError = false;
     }
 

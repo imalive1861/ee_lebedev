@@ -138,7 +138,7 @@ public class CustomerServlet extends HttpServlet {
     private void addFlowerToCart(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Flower flower = null;
-        Long flowerId = Long.parseLong(request.getParameter("flowerId"));
+        String flowerId = request.getParameter("flowerId");
         for (Flower f : flowerSet) {
             if (f.getId().equals(flowerId)) {
                 flower = f;

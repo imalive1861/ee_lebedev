@@ -1,16 +1,18 @@
 package com.accenture.flowershop.be.entity;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Entity;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Класс, содержащий информацию о цветке.
  * Свойства: id, name, price, number, carts.
  */
 @Entity
-@Table(name = "FLOWERS")
+@Document(collection = "flowers")
 public class Flower implements Comparable {
 
     /**
@@ -23,9 +25,7 @@ public class Flower implements Comparable {
      * Иднтификатор цветка.
      */
     @Id
-    @SequenceGenerator(name = "flowersSeq", sequenceName = "FLOWERS_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flowersSeq")
-    private Long id;
+    private String id;
 
     /**
      * Название цветка.
@@ -42,12 +42,6 @@ public class Flower implements Comparable {
      */
     private Integer number;
 
-    /**
-     * Позиции корзины, в которых собержится ссылка на данный цветок.
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flower")
-    private Set<Cart> carts = new HashSet<>();
-
     public Flower() {
     }
 
@@ -59,44 +53,36 @@ public class Flower implements Comparable {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Integer getNumber() {
         return number;
     }
 
-    public void setCarts(Set<Cart> carts) {
-        this.carts = carts;
-    }
-
-    public Set<Cart> getCarts() {
-        return carts;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     @Override

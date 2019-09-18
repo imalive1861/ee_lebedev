@@ -1,8 +1,6 @@
 package com.accenture.flowershop.fe.dto;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Класс транспортного уровня, содержащий информацию о цветке.
@@ -18,7 +16,7 @@ public class FlowerDTO implements Comparable {
     /**
      * Иднтификатор цветка.
      */
-    private Long id;
+    private String id;
 
     /**
      * Название цветка.
@@ -35,11 +33,6 @@ public class FlowerDTO implements Comparable {
      */
     private Integer number;
 
-    /**
-     * Позиции корзины, в которых собержится ссылка на данный цветок.
-     */
-    private Set<CartDTO> carts = new HashSet<>();
-
     public FlowerDTO() {
     }
 
@@ -51,44 +44,36 @@ public class FlowerDTO implements Comparable {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Integer getNumber() {
         return number;
     }
 
-    public void setCarts(Set<CartDTO> carts) {
-        this.carts = carts;
-    }
-
-    public Set<CartDTO> getCarts() {
-        return carts;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     @Override
@@ -116,11 +101,6 @@ public class FlowerDTO implements Comparable {
 
         public Builder number(Integer number) {
             newFlowerDTO.number = number;
-            return this;
-        }
-
-        public Builder carts(Set<CartDTO> carts) {
-            newFlowerDTO.carts = carts;
             return this;
         }
 

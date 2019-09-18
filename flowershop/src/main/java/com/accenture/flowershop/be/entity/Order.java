@@ -1,8 +1,14 @@
 package com.accenture.flowershop.be.entity;
 
 import com.accenture.flowershop.fe.enums.OrderStatus;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -12,8 +18,7 @@ import java.util.Set;
  * Класс, хранящий информацию о заказе.
  * Свойства: id, sumPrice, dateCreate, dateClose, status, userId.
  */
-@Entity
-@Table(name = "ORDERS")
+@Document(collection = "orders")
 public class Order {
 
     /**
@@ -26,32 +31,26 @@ public class Order {
      * Иднтификатор заказа.
      */
     @Id
-    @SequenceGenerator(name = "ordersSeq", sequenceName = "ORDERS_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordersSeq")
-    private Long id;
+    private String id;
 
     /**
      * Суммарная цена за все позиции заказа со скидкой.
      */
-    @Column(name = "sum_price_without_discount")
     private BigDecimal sumPriceWithoutDiscount;
 
     /**
      * Суммарная цена за все позиции заказа без скидки.
      */
-    @Column(name = "sum_price_with_discount")
     private BigDecimal sumPriceWithDiscount;
 
     /**
      * Дата создания заказа покупателем.
      */
-    @Column(name = "date_create")
     private Date dateCreate;
 
     /**
      * Дата закрытия заказа администратором.
      */
-    @Column(name = "date_close")
     private Date dateClose;
 
     /**
@@ -63,15 +62,13 @@ public class Order {
     /**
      * Покупатель, который создал заказ.
      */
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id", nullable = false)
+    @DBRef
     private User user;
 
     /**
      * Позиции корзины, относящиеся к данному заказу.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+    @Transient
     private Set<Cart> carts = new HashSet<>();
 
     public Order() {
@@ -85,52 +82,52 @@ public class Order {
         this.version = version;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
-        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public BigDecimal getSumPriceWithoutDiscount() {
         return sumPriceWithoutDiscount;
     }
 
-    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
-        this.sumPriceWithDiscount = sumPriceWithDiscount;
+    public void setSumPriceWithoutDiscount(BigDecimal sumPriceWithoutDiscount) {
+        this.sumPriceWithoutDiscount = sumPriceWithoutDiscount;
     }
 
     public BigDecimal getSumPriceWithDiscount() {
         return sumPriceWithDiscount;
     }
 
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
+    public void setSumPriceWithDiscount(BigDecimal sumPriceWithDiscount) {
+        this.sumPriceWithDiscount = sumPriceWithDiscount;
     }
 
     public Date getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateClose(Date dateClose) {
-        this.dateClose = dateClose;
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
     public Date getDateClose() {
         return dateClose;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public void setDateClose(Date dateClose) {
+        this.dateClose = dateClose;
     }
 
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public User getUser() {

@@ -37,4 +37,6 @@ public interface UserBusinessService {
      * @return объект User если найден, null если не найден
      */
     User getByLogin(String login);
+
+    void update(User user);
 }

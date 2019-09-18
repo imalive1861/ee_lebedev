@@ -6,6 +6,7 @@ import com.accenture.flowershop.be.entity.Order;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Интерфейс бизнес логики для сущности Cart.
@@ -25,6 +26,13 @@ public interface CartBusinessService {
      * @return карта заказов пользователей
      */
     Map<String, Order> getCart();
+
+    /**
+     * Создает новый временный заказ для пользователя.
+     *
+     * @param login - логин пользователя
+     */
+    void setCart(String login);
 
     /**
      * Получить текущий заказ пользователя.
@@ -62,13 +70,6 @@ public interface CartBusinessService {
     boolean isAddFlowerToCart(String login, Flower flower, int number);
 
     /**
-     * Создает новый временный заказ для пользователя.
-     *
-     * @param login - логин пользователя
-     */
-    void setCart(String login);
-
-    /**
      * Очищает текущий заказ пользователя.
      *
      * @param login - логин пользователя
@@ -81,5 +82,7 @@ public interface CartBusinessService {
      * @param cartId - идентификатор позиции
      * @param login  - логин пользователя
      */
-    void deleteFlowerFromCart(Long cartId, String login);
+    void deleteFlowerFromCart(String cartId, String login);
+
+    void updateAll(Set<Cart> carts);
 }

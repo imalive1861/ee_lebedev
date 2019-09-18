@@ -1,14 +1,17 @@
 package com.accenture.flowershop.be.entity;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.math.BigDecimal;
 
 /**
  * Класс, хранящий позиции пользовательской корзины покупок.
  * Свойства: id, number, order, flower, sumPrice.
  */
-@Entity
-@Table(name = "CARTS")
+@Document(collection = "carts")
 public class Cart {
 
     /**
@@ -21,9 +24,7 @@ public class Cart {
      * Иднтификатор позиции в корзине.
      */
     @Id
-    @SequenceGenerator(name = "cartsSeq", sequenceName = "CARTS_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartsSeq")
-    private Long id;
+    private String id;
 
     /**
      * Количество цветов, добавленных в корзину.
@@ -33,28 +34,23 @@ public class Cart {
     /**
      * Заказ, в который входит данная позиция.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @DBRef(lazy = true)
     private Order order;
 
     /**
      * Цветок, добавленный в корзину.
      */
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
-    @JoinColumn(name = "flower_id", nullable = false)
+    @DBRef(lazy = true)
     private Flower flower;
 
     /**
      * Суммарная цена за количество добавленных цветов без скидки.
      */
-    @Column(name = "sum_price_without_discount")
     private BigDecimal sumPriceWithoutDiscount;
 
     /**
      * Суммарная цена за количество добавленных цветов со скидкой.
      */
-    @Column(name = "sum_price_with_discount")
     private BigDecimal sumPriceWithDiscount;
 
     public Cart() {
@@ -68,11 +64,11 @@ public class Cart {
         this.version = version;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

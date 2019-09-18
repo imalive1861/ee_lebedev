@@ -35,5 +35,5 @@ public interface OrderBusinessService {
      *
      * @param order - объект Order
      */
-    void update(Order order);
+    void save(Order order);
 }
