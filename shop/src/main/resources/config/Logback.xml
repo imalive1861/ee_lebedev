@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.accenture.flowershop" level="debug"/>
+    <logger name="com.accenture.flowershop.shop" level="debug"/>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>

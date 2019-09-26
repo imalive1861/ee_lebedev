@@ -5,7 +5,7 @@
     <description>
         Spring OXM and Castor
     </description>
-    <class name="com.accenture.flowershop.fe.dto.UserDTO">
+    <class name="com.accenture.flowershop.shop.fe.dto.UserDTO">
         <map-to xml="user" />
         <field name="login" type="string"/>
         <field name="password" type="string"/>

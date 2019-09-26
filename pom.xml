@@ -10,7 +10,7 @@
 
     <modules>
         <module>shop</module>
-        <module>gateway-service</module>
+        <module>stock</module>
     </modules>
 
     <packaging>pom</packaging>
