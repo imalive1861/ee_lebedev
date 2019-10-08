@@ -1,6 +1,6 @@
 package com.accenture.flowershop.shop.test.clients.ws;
 
-import com.accenture.flowershop.shop.services.ws.FlowersStockWebService;import com.accenture.flowershop.shop.services.ws.FlowersStockWebService;
+import com.accenture.flowershop.shop.services.ws.FlowersStockWebService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
