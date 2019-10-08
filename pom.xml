@@ -11,6 +11,7 @@
     <modules>
         <module>shop</module>
         <module>stock</module>
+        <module>discount</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,7 +1,6 @@
-package com.accenture.flowershop.shop.test.clients.jms;
+package com.accenture.flowershop.discount.jms;
 
-import com.accenture.flowershop.shop.services.jms.Discount;
-import com.accenture.flowershop.shop.services.jms.Discount;import org.apache.activemq.ActiveMQConnection;
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.w3c.dom.Document;
 
@@ -24,8 +23,8 @@ public class ConsumerStartThread extends Thread {
             Document document = builder.parse(input);
             String customerId = document.getDocumentElement().getAttribute("login");
             Random random = new Random();
-            Discount discount = new Discount(customerId, random.nextInt(10));
-            ProducerStartThread thread = new ProducerStartThread(discount);
+            ProducerStartThread thread =
+                    new ProducerStartThread(customerId, String.valueOf(random.nextInt(10)));
             thread.start();
         } catch (Exception ex) {
             ex.printStackTrace();

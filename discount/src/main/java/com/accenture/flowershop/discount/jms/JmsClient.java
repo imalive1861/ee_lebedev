@@ -1,4 +1,4 @@
-package com.accenture.flowershop.shop.test.clients.jms;
+package com.accenture.flowershop.discount.jms;
 
 public class JmsClient {
 

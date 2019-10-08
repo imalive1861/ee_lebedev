@@ -1,24 +1,25 @@
-package com.accenture.flowershop.shop.test.clients.jms;
+package com.accenture.flowershop.discount.jms;
 
-import com.accenture.flowershop.shop.services.jms.Discount;
-import com.accenture.flowershop.shop.services.jms.Discount;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.w3c.dom.Document;
 
 import javax.jms.*;
 
 public class ProducerStartThread extends Thread {
 
-    private Discount discount;
+    private String customerId;
+    private String discount;
 
-    ProducerStartThread(Discount discount) {
+    ProducerStartThread(String customerId, String discount) {
+        this.customerId = customerId;
         this.discount = discount;
     }
 
     @Override
     public void run() {
         try {
-            producer(discount);
+            producer(customerId, discount);
             ConsumerStartThread thread = new ConsumerStartThread();
             thread.start();
         } catch (JMSException e) {
@@ -26,7 +27,7 @@ public class ProducerStartThread extends Thread {
         }
     }
 
-    private static void producer(Discount discount) throws JMSException {
+    private static void producer(String customerId, String discount) throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
         Connection connection = connectionFactory.createConnection();
         connection.start();
@@ -35,7 +36,8 @@ public class ProducerStartThread extends Thread {
         Destination destination = session.createQueue("IN_QUEUE");
         MessageProducer producer = session.createProducer(destination);
         ObjectMessage message = session.createObjectMessage();
-        message.setObject(discount);
+        message.setStringProperty("login", customerId);
+        message.setStringProperty("discount", discount);
         producer.send(message);
         System.out.println("JCG printing@@ '" + message.getObject() + "'");
         connection.close();

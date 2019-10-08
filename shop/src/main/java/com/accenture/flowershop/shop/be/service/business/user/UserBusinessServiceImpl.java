@@ -4,7 +4,7 @@ import com.accenture.flowershop.shop.be.entity.User;
 import com.accenture.flowershop.shop.be.repository.user.UserRepository;
 import com.accenture.flowershop.shop.fe.enums.UserRoles;
 import com.accenture.flowershop.shop.services.jms.ProducerTest;
-import com.accenture.flowershop.shop.be.entity.User;import com.accenture.flowershop.shop.be.repository.user.UserRepository;import com.accenture.flowershop.shop.fe.enums.UserRoles;import com.accenture.flowershop.shop.services.jms.ProducerTest;import org.slf4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +65,11 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         LOG.debug("Customer \"{}\" with login \"{}\" was created.", user, user.getLogin());
     }
 
+    @Override
+    public User getByLogin(String login) {
+        return userRepository.getByLogin(login);
+    }
+
     /**
      * Класс, использующийся для отправки запроса на скидку через JMS.
      */
@@ -82,10 +87,5 @@ public class UserBusinessServiceImpl implements UserBusinessService {
             LOG.debug("Customer \"{}\" have {}% discount after JMS.", user, user.getDiscount());
             userRepository.saveAndFlush(user);
         }
-    }
-
-    @Override
-    public User getByLogin(String login) {
-        return userRepository.getByLogin(login);
     }
 }
