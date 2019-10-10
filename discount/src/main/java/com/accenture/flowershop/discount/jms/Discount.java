@@ -1,4 +1,4 @@
-package com.accenture.flowershop.shop.services.jms;
+package com.accenture.flowershop.discount.jms;
 
 import java.io.Serializable;
 
@@ -37,27 +37,5 @@ public class Discount implements Serializable {
 
     public int getDiscount() {
         return discount;
-    }
-
-    public static class Builder {
-        private Discount newDiscount;
-
-        public Builder() {
-            newDiscount = new Discount();
-        }
-
-        public Builder customerId(String customerId) {
-            newDiscount.customerId = customerId;
-            return this;
-        }
-
-        public Builder discount(Integer discount) {
-            newDiscount.discount = discount;
-            return this;
-        }
-
-        public Discount build() {
-            return newDiscount;
-        }
     }
 }

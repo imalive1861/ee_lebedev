@@ -13,24 +13,6 @@ import java.util.Random;
 
 public class ConsumerStartThread extends Thread {
 
-    @Override
-    public void run() {
-        try {
-            String text = consumer();
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            ByteArrayInputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-            Document document = builder.parse(input);
-            String customerId = document.getDocumentElement().getAttribute("login");
-            Random random = new Random();
-            ProducerStartThread thread =
-                    new ProducerStartThread(customerId, String.valueOf(random.nextInt(10)));
-            thread.start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private static String consumer() throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
         Connection connection = connectionFactory.createConnection();
@@ -48,5 +30,28 @@ public class ConsumerStartThread extends Thread {
         }
         connection.close();
         return text;
+    }
+
+    @Override
+    public void run() {
+        try {
+            String text = consumer();
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            ByteArrayInputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+            Document document = builder.parse(input);
+            document.getDocumentElement().normalize();
+            Random random = new Random();
+            int d = random.nextInt(10);
+            String customerId = document.getElementsByTagName("login").item(0).getTextContent();
+            Discount discount = new Discount(customerId, d);
+            System.out.println("Received object '" + discount + "' " +
+                    " with login: " + customerId + " and discount: " + d);
+            ProducerStartThread thread = new ProducerStartThread(discount);
+            thread.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

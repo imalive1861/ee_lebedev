@@ -22,7 +22,7 @@ public class Cons {
      * @return - полученный объект
      * @throws JMSException - возникает из-за ошибки в получении сообщения
      */
-    Object consumer() throws JMSException {
+    Discount consumer() throws JMSException {
         String url = ActiveMQConnection.DEFAULT_BROKER_URL;
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
         Connection connection = connectionFactory.createConnection();
@@ -32,10 +32,15 @@ public class Cons {
         Destination destination = session.createQueue(JmsQueueNames.IN_QUEUE.name());
         MessageConsumer consumer = session.createConsumer(destination);
         Message message = consumer.receive();
-        Object obj = null;
+        Discount obj = null;
         if (message instanceof ObjectMessage) {
             ObjectMessage objMessage = (ObjectMessage) message;
-            obj = objMessage.getObject();
+            String login = objMessage.getObject().toString();
+            Integer discount = objMessage.getIntProperty("discount");
+            obj = new Discount.Builder()
+                    .customerId(login)
+                    .discount(discount)
+                    .build();
             System.out.println("Received message '" + objMessage.getObject() + "'");
         }
         connection.close();

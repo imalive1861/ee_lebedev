@@ -44,8 +44,10 @@ public class ProducerTest {
         try {
             userMarshallingService.marshallingObjectToXML(user);
             prod.producer();
-            Discount discount = (Discount) cons.consumer();
-            user.setDiscount(discount.getDiscount());
+            Discount discount = cons.consumer();
+            if (user.getLogin().equals(discount.getCustomerId())) {
+                user.setDiscount(discount.getDiscount());
+            }
         } catch (IOException | JMSException e) {
             e.printStackTrace();
         }
