@@ -2,7 +2,7 @@ package com.accenture.flowershop.shop.be.service.marshgalling.user;
 
 import com.accenture.flowershop.shop.be.entity.User;
 import com.accenture.flowershop.shop.be.utils.marshalling.XMLConverter;
-import com.accenture.flowershop.shop.be.entity.User;import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,6 +36,11 @@ public class UserMarshallingServiceImpl implements UserMarshallingService {
     @Override
     public void marshallingObjectToXML(User user) throws IOException {
         converter.convertFromObjectToXML(user, userXmlPath);
+    }
+
+    @Override
+    public String convertFromObjectToXmlString(User user) throws IOException {
+        return converter.convertFromObjectToXmlDocument(user);
     }
 
     @Override

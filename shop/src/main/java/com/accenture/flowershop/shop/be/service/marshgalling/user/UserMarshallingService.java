@@ -1,7 +1,6 @@
 package com.accenture.flowershop.shop.be.service.marshgalling.user;
 
 import com.accenture.flowershop.shop.be.entity.User;
-import com.accenture.flowershop.shop.be.entity.User;
 
 import java.io.IOException;
 
@@ -16,6 +15,13 @@ public interface UserMarshallingService {
      * @throws IOException - если путь некорректен
      */
     void marshallingObjectToXML(User user) throws IOException;
+
+    /**
+     * @param user
+     * @return
+     * @throws IOException
+     */
+    String convertFromObjectToXmlString(User user) throws IOException;
 
     /**
      * Демаршалинг сущности User.

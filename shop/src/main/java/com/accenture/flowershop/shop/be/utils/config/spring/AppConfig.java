@@ -43,7 +43,7 @@ public class AppConfig {
 
     @Bean
     public Prod prod() {
-        return new Prod(userXML);
+        return new Prod();
     }
 
     @Bean
