@@ -1,18 +1,21 @@
-package com.accenture.flowershop.discount.jms;
+package com.accenture.flowershop.discount.entity;
 
-import java.io.Serializable;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * Вспомогательный класс, испозующийся для передачи ответа на запрос скидки для пользователя.
  */
-public class Discount implements Serializable {
+@XStreamAlias("Discount")
+public class Discount {
     /**
      * Идентификатор пользователя.
      */
+    @XStreamAlias("customerId")
     private String customerId;
     /**
      * Скидка.
      */
+    @XStreamAlias("discount")
     private int discount;
 
     public Discount() {
@@ -23,19 +26,19 @@ public class Discount implements Serializable {
         this.discount = discount;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
     public String getCustomerId() {
         return customerId;
     }
 
-    public void setDiscount(int discount) {
-        this.discount = discount;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public int getDiscount() {
         return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }

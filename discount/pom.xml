@@ -40,6 +40,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.0.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.11.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -78,7 +83,7 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>com.accenture.flowershop.discount.jms.JmsClient</mainClass>
+                                <mainClass>com.accenture.flowershop.discount.StartApplication</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
@@ -113,7 +118,7 @@
                         </descriptorRefs>
                         <archive>
                             <manifest>
-                                <mainClass>com.accenture.flowershop.discount.jms.JmsClient</mainClass>
+                                <mainClass>com.accenture.flowershop.discount.StartApplication</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
