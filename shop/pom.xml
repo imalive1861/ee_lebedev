@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <tomcat.version>7.0.94</tomcat.version>
+        <tomcat.version>7.0.107</tomcat.version>
         <springframework.version>5.2.3.RELEASE</springframework.version>
         <org.hibernate.version>5.4.3.Final</org.hibernate.version>
         <cxf.version>3.0.8</cxf.version>
