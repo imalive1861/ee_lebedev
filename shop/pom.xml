@@ -20,7 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <tomcat.version>7.0.94</tomcat.version>
-        <springframework.version>5.2.3.RELEASE</springframework.version>
+        <springframework.version>5.3.18</springframework.version>
         <org.hibernate.version>5.4.3.Final</org.hibernate.version>
         <cxf.version>3.0.8</cxf.version>
         <jersey.version>2.29</jersey.version>
